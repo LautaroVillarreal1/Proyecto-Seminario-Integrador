@@ -1,14 +1,144 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  generator client {
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // ajustar según motor de BD real
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  idUsuario         Int      @id @default(autoincrement()) // tipo asumido
+  nombre            String
+  apellido          String
+  correoElectronico String
+  contraseñaHash    String
+  idRol             Int
+  rol               Rol      @relation(fields: [idRol], references: [idRol])
+  remitos           Remito[]
+}
+
+model Rol {
+  idRol    Int       @id @default(autoincrement()) // tipo asumido
+  nombre   String
+  // Valores indicados en el DER: Admin, EP (Encargado de Producción), RE (Responsable de entrega)
+  usuarios Usuario[]
+}
+
+model Cliente {
+  idCliente         Int       @id @default(autoincrement()) // tipo asumido
+  nombre            String
+  descripcion       String
+  direccion         String // "direccion(calle numero)" en el DER
+  correoElectronico String
+  numeroDeTelefono  String
+  idProvincia       Int
+  provincia         Provincia @relation(fields: [idProvincia], references: [idProvincia])
+  remitos           Remito[]
+}
+
+model Provincia {
+  idProvincia Int      @id @default(autoincrement()) // tipo asumido
+  nombre      String
+  descripcion String
+  idCiudad    Int
+  ciudad      Ciudad   @relation("ProvinciaToCiudad", fields: [idCiudad], references: [idCiudad])
+  ciudades    Ciudad[] @relation("CiudadToProvincia")
+  clientes    Cliente[]
+}
+
+model Ciudad {
+  idCiudad     Int         @id @default(autoincrement()) // tipo asumido
+  nombre       String
+  descripcion  String
+  codigoPostal String
+  idProvincia  Int
+  provincia    Provincia   @relation("CiudadToProvincia", fields: [idProvincia], references: [idProvincia])
+  provincias   Provincia[] @relation("ProvinciaToCiudad")
+  // Nota: el DER muestra FK en ambos sentidos (Provincia->Ciudad y Ciudad->Provincia),
+  // se transcribieron ambas relaciones tal cual figuran.
+}
+
+model Estado {
+  idEstado    Int      @id @default(autoincrement()) // tipo asumido
+  nombre      String
+  descripcion String
+  // Valores indicados en el DER: Aceptado, EnPreparación, Anulado, ListoParaEntrega, Firmado, Cobrado, Rechazado
+  remitos     Remito[]
+}
+
+model Categoria {
+  idCategoria Int        @id @default(autoincrement()) // tipo asumido
+  nombre      String
+  // Valores indicados en el DER: Yogur, Mermelada, Kefir, Dulce solido, Postre, Dulce de Leche
+  productos   Producto[]
+}
+
+model UnidadDeMedida {
+  idUnidadDeMedida Int        @id @default(autoincrement()) // tipo asumido
+  nombre           String
+  productos        Producto[]
+  insumos          Insumo[]
+}
+
+model Receta {
+  idReceta        Int           @id @default(autoincrement()) // tipo asumido
+  descripcion     String
+  idDetalleReceta Int
+  detalleReceta   DetalleReceta @relation(fields: [idDetalleReceta], references: [idDetalleReceta])
+  productos       Producto[]
+}
+
+model DetalleReceta {
+  idDetalleReceta Int      @id @default(autoincrement()) // tipo asumido
+  cantidad        Int // tipo asumido
+  idInsumo        Int
+  insumo          Insumo   @relation(fields: [idInsumo], references: [idInsumo])
+  recetas         Receta[]
+}
+
+model Insumo {
+  idInsumo         Int             @id @default(autoincrement()) // tipo asumido
+  nombre           String
+  descripcion      String
+  idUnidadDeMedida Int
+  unidadDeMedida   UnidadDeMedida  @relation(fields: [idUnidadDeMedida], references: [idUnidadDeMedida])
+  detalleRecetas   DetalleReceta[]
+}
+
+model Producto {
+  idProducto       Int             @id @default(autoincrement()) // tipo asumido
+  nombre           String
+  precioUnitario   Decimal // tipo asumido
+  descripcion      String
+  peso             Float // tipo asumido
+  idUnidadDeMedida Int
+  unidadDeMedida   UnidadDeMedida  @relation(fields: [idUnidadDeMedida], references: [idUnidadDeMedida])
+  idreceta         Int
+  receta           Receta          @relation(fields: [idreceta], references: [idReceta])
+  idCategoria      Int
+  categoria        Categoria       @relation(fields: [idCategoria], references: [idCategoria])
+  detalleRemitos   DetalleRemito[]
+}
+
+model DetalleRemito {
+  idDetalleRemito Int        @id @default(autoincrement()) // tipo asumido
+  subTotal        Decimal // tipo asumido
+  idProducto      Int
+  producto        Producto   @relation(fields: [idProducto], references: [idProducto])
+  remitos         Remito[]
+}
+
+model Remito {
+  idRemito        Int           @id @default(autoincrement()) // tipo asumido
+  idDetalleRemito Int
+  detalleRemito   DetalleRemito @relation(fields: [idDetalleRemito], references: [idDetalleRemito])
+  fechaEntrega    DateTime // tipo asumido
+  horaEntrega     DateTime // tipo asumido
+  idUsuario       Int
+  usuario         Usuario       @relation(fields: [idUsuario], references: [idUsuario])
+  idEstado        Int
+  estado          Estado        @relation(fields: [idEstado], references: [idEstado])
+  idCliente       Int
+  cliente         Cliente       @relation(fields: [idCliente], references: [idCliente])
 }
