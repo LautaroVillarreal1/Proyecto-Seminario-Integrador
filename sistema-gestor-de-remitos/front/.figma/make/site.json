@@ -1,0 +1,10 @@
+{
+  "description": "Streamline order management for consumer goods with real-time tracking, delivery updates, and payment processing for sales representatives and business owners.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
