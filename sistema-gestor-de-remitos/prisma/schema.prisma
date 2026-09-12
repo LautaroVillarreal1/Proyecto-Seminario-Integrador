@@ -4,14 +4,16 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Usuario {
   idUsuario         Int      @id @default(autoincrement()) // tipo asumido
   nombre            String
   apellido          String
-  correoElectronico String
-  contraseñaHash    String
+  correoElectronico String   @unique
+  passwordHash      String
+  activo            Boolean  @default(true)
   idRol             Int
   rol               Rol      @relation(fields: [idRol], references: [idRol])
   remitos           Remito[]
@@ -31,18 +33,20 @@ model Cliente {
   direccion         String // "direccion(calle numero)" en el DER
   correoElectronico String
   numeroDeTelefono  String
+  latitud           Float?
+  longitud          Float?
   idProvincia       Int
   provincia         Provincia @relation(fields: [idProvincia], references: [idProvincia])
   remitos           Remito[]
 }
 
 model Provincia {
-  idProvincia Int      @id @default(autoincrement()) // tipo asumido
+  idProvincia Int       @id @default(autoincrement()) // tipo asumido
   nombre      String
   descripcion String
-  idCiudad    Int
-  ciudad      Ciudad   @relation("ProvinciaToCiudad", fields: [idCiudad], references: [idCiudad])
-  ciudades    Ciudad[] @relation("CiudadToProvincia")
+  idCiudad    Int?
+  ciudad      Ciudad?   @relation("ProvinciaToCiudad", fields: [idCiudad], references: [idCiudad])
+  ciudades    Ciudad[]  @relation("CiudadToProvincia")
   clientes    Cliente[]
 }
 
@@ -81,25 +85,33 @@ model UnidadDeMedida {
 }
 
 model Receta {
-  idReceta        Int           @id @default(autoincrement()) // tipo asumido
-  descripcion     String
-  idDetalleReceta Int
-  detalleReceta   DetalleReceta @relation(fields: [idDetalleReceta], references: [idDetalleReceta])
-  productos       Producto[]
+  idReceta          Int             @id @default(autoincrement())
+  descripcion       String
+  rendimiento       Float           @default(1)
+  unidadRendimiento String          @default("unidad")
+  tiempoPrepMin     Int             @default(0)
+  instrucciones     String?
+  productos         Producto[]
+  detalles          DetalleReceta[]
 }
 
 model DetalleReceta {
-  idDetalleReceta Int      @id @default(autoincrement()) // tipo asumido
-  cantidad        Int // tipo asumido
+  idDetalleReceta Int    @id @default(autoincrement())
+  cantidad        Float
+  idReceta        Int
+  receta          Receta @relation(fields: [idReceta], references: [idReceta], onDelete: Cascade)
   idInsumo        Int
-  insumo          Insumo   @relation(fields: [idInsumo], references: [idInsumo])
-  recetas         Receta[]
+  insumo          Insumo @relation(fields: [idInsumo], references: [idInsumo])
 }
 
 model Insumo {
   idInsumo         Int             @id @default(autoincrement()) // tipo asumido
   nombre           String
   descripcion      String
+  stockActual      Float           @default(0)
+  stockMinimo      Float           @default(0)
+  costoUnitario    Decimal         @default(0)
+  proveedor        String?
   idUnidadDeMedida Int
   unidadDeMedida   UnidadDeMedida  @relation(fields: [idUnidadDeMedida], references: [idUnidadDeMedida])
   detalleRecetas   DetalleReceta[]
@@ -111,33 +123,41 @@ model Producto {
   precioUnitario   Decimal // tipo asumido
   descripcion      String
   peso             Float // tipo asumido
+  stockActual      Float           @default(0)
+  stockMinimo      Float           @default(0)
+  activo           Boolean         @default(true)
   idUnidadDeMedida Int
   unidadDeMedida   UnidadDeMedida  @relation(fields: [idUnidadDeMedida], references: [idUnidadDeMedida])
-  idreceta         Int
-  receta           Receta          @relation(fields: [idreceta], references: [idReceta])
+  idreceta         Int?
+  receta           Receta?         @relation(fields: [idreceta], references: [idReceta])
   idCategoria      Int
   categoria        Categoria       @relation(fields: [idCategoria], references: [idCategoria])
   detalleRemitos   DetalleRemito[]
 }
 
 model DetalleRemito {
-  idDetalleRemito Int        @id @default(autoincrement()) // tipo asumido
-  subTotal        Decimal // tipo asumido
+  idDetalleRemito Int      @id @default(autoincrement())
+  subTotal        Decimal
+  cantidad        Int      @default(1)
   idProducto      Int
-  producto        Producto   @relation(fields: [idProducto], references: [idProducto])
-  remitos         Remito[]
+  producto        Producto @relation(fields: [idProducto], references: [idProducto])
+  idRemito        Int
+  remito          Remito   @relation(fields: [idRemito], references: [idRemito], onDelete: Cascade)
 }
 
 model Remito {
-  idRemito        Int           @id @default(autoincrement()) // tipo asumido
-  idDetalleRemito Int
-  detalleRemito   DetalleRemito @relation(fields: [idDetalleRemito], references: [idDetalleRemito])
-  fechaEntrega    DateTime // tipo asumido
-  horaEntrega     DateTime // tipo asumido
-  idUsuario       Int
-  usuario         Usuario       @relation(fields: [idUsuario], references: [idUsuario])
-  idEstado        Int
-  estado          Estado        @relation(fields: [idEstado], references: [idEstado])
-  idCliente       Int
-  cliente         Cliente       @relation(fields: [idCliente], references: [idCliente])
+  idRemito         Int             @id @default(autoincrement())
+  fechaEntrega     DateTime // tipo asumido
+  horaEntrega      DateTime // tipo asumido
+  idUsuario        Int
+  usuario          Usuario         @relation(fields: [idUsuario], references: [idUsuario])
+  idEstado         Int
+  estado           Estado          @relation(fields: [idEstado], references: [idEstado])
+  idCliente        Int
+  cliente          Cliente         @relation(fields: [idCliente], references: [idCliente])
+  observacion      String?
+  inconveniente    String?
+  formaPago        String?
+  fechaEntregaReal DateTime?
+  detalles         DetalleRemito[]
 }

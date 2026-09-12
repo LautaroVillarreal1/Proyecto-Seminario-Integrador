@@ -31,6 +31,37 @@
 $ npm install
 ```
 
+## Base de datos y ejecución local
+
+El proyecto usa PostgreSQL y Prisma. En Windows, instalá Docker Desktop o PostgreSQL 17 antes de continuar.
+
+Con Docker Desktop iniciado:
+
+```bash
+npm run db:up
+npm run db:setup
+npm run start:dev
+```
+
+El seed crea los roles, estados, categorías, unidades, geografía básica y un usuario administrador:
+
+```text
+correo: admin@frulatti.com
+contraseña: Frulatti123!
+```
+
+La API queda disponible en `http://localhost:3000/api`.
+
+Antes de usar el sistema en producción, reemplazá `JWT_SECRET` en `.env` por una clave larga y privada. Nunca publiques ese archivo ni la contraseña inicial.
+
+Para ejecutar el frontend:
+
+```bash
+cd front
+npm install
+npm start
+```
+
 ## Compile and run the project
 
 ```bash

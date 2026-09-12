@@ -1,0 +1,48 @@
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../shared/infrastructure/prisma/prisma.service';
+import { CreateRemitoDto, RemitoFilterDto, UpdateRemitoDto } from './dto';
+
+@Injectable()
+export class RemitosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  list(filters: RemitoFilterDto, userId?: number) {
+    const where: any = {
+      ...(userId ? { idUsuario: userId } : {}),
+      ...(filters.idCliente ? { idCliente: filters.idCliente } : {}),
+      ...(filters.idEstado ? { idEstado: filters.idEstado } : {}),
+      ...(filters.desde || filters.hasta ? { fechaEntrega: { ...(filters.desde ? { gte: new Date(filters.desde) } : {}), ...(filters.hasta ? { lte: new Date(filters.hasta) } : {}) } } : {}),
+      ...(filters.precioMin || filters.precioMax ? { detalles: { some: { subTotal: { ...(filters.precioMin ? { gte: filters.precioMin } : {}), ...(filters.precioMax ? { lte: filters.precioMax } : {}) } } } } : {}),
+      ...(filters.idProducto ? { detalles: { some: { idProducto: filters.idProducto } } } : {}),
+      ...(filters.localidad || filters.provincia ? { cliente: { ...(filters.provincia ? { provincia: { nombre: { contains: filters.provincia, mode: 'insensitive' } } } : {}), ...(filters.localidad ? { direccion: { contains: filters.localidad, mode: 'insensitive' } } : {}) } } : {}),
+    };
+    return this.prisma.remito.findMany({ where, include: { cliente: { include: { provincia: true } }, estado: true, usuario: true, detalles: { include: { producto: true } } }, orderBy: { fechaEntrega: 'desc' } });
+  }
+
+  async find(id: number) {
+    const remito = await this.prisma.remito.findUnique({ where: { idRemito: id }, include: { cliente: true, estado: true, usuario: true, detalles: { include: { producto: true } } } });
+    if (!remito) throw new NotFoundException('Remito inexistente');
+    return remito;
+  }
+
+  async create(dto: CreateRemitoDto, userId: number) {
+    if (!dto.detalles?.length) throw new BadRequestException('El remito debe tener productos');
+    return this.prisma.$transaction(async tx => {
+      const products = await Promise.all(dto.detalles.map(detail => tx.producto.findUnique({ where: { idProducto: detail.idProducto } })));
+      if (products.some(product => !product || !product.activo)) throw new BadRequestException('Producto inexistente o inactivo');
+      for (let index = 0; index < dto.detalles.length; index += 1) {
+        const product = products[index]!;
+        if (product.stockActual < dto.detalles[index].cantidad) throw new BadRequestException(`Stock insuficiente para ${product.nombre}`);
+      }
+      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
+      await Promise.all(dto.detalles.map(detail => tx.producto.update({ where: { idProducto: detail.idProducto }, data: { stockActual: { decrement: detail.cantidad } } })));
+      return remito;
+    });
+  }
+
+  async update(id: number, dto: UpdateRemitoDto, userId: number, roleId: number) {
+    const current = await this.find(id);
+    if (roleId === 3 && current.idUsuario !== userId) throw new ForbiddenException('El remito no esta asignado al viajante');
+    return this.prisma.remito.update({ where: { idRemito: id }, data: { ...dto, fechaEntregaReal: dto.fechaEntregaReal ? new Date(dto.fechaEntregaReal) : undefined } });
+  }
+}
