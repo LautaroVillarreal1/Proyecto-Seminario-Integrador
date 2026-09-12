@@ -31,11 +31,36 @@
 $ npm install
 ```
 
-## Base de datos y ejecución local
+## Ejecución completa con Docker Compose
+
+El proyecto puede levantar PostgreSQL, el backend y el frontend con Docker Desktop iniciado:
+
+```bash
+docker compose up --build
+```
+
+El backend prepara el esquema de Prisma y ejecuta el seed al iniciar. Las aplicaciones quedan disponibles en:
+
+- Frontend: `http://localhost:4200`
+- API: `http://localhost:3000/api`
+
+Para detener los servicios:
+
+```bash
+docker compose down
+```
+
+Para eliminar también los datos persistidos de PostgreSQL:
+
+```bash
+docker compose down -v
+```
+
+## Ejecución local sin Docker
 
 El proyecto usa PostgreSQL y Prisma. En Windows, instalá Docker Desktop o PostgreSQL 17 antes de continuar.
 
-Con Docker Desktop iniciado:
+Con PostgreSQL disponible y un archivo `.env` configurado:
 
 ```bash
 npm run db:up
@@ -54,7 +79,7 @@ La API queda disponible en `http://localhost:3000/api`.
 
 Antes de usar el sistema en producción, reemplazá `JWT_SECRET` en `.env` por una clave larga y privada. Nunca publiques ese archivo ni la contraseña inicial.
 
-Para ejecutar el frontend:
+Para ejecutar el frontend por separado:
 
 ```bash
 cd front

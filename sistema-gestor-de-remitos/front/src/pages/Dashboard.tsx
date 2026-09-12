@@ -3,17 +3,17 @@ import { useApp } from '../context/AppContext';
 import { EstadoBadge } from '../components/Badge';
 import type { EstadoRemito } from '../types';
 
-function StatCard({ label, value, sub, color }: { label: string; value: string | number; sub?: string; color?: string }) {
+function StatCard({ label, value, sub, color, onClick }: { label: string; value: string | number; sub?: string; color?: string; onClick: () => void }) {
   return (
-    <div className="rounded-2xl p-5 border" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
+    <button onClick={onClick} className="rounded-2xl p-5 border text-left transition-all hover:-translate-y-0.5 hover:shadow-md" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
       <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--color-muted-foreground)' }}>
         {label}
       </div>
-      <div className="text-3xl font-bold leading-none" style={{ color: color || 'var(--color-foreground)', fontFamily: 'var(--font-display)' }}>
+      <div className="text-3xl font-bold leading-none" style={{ color: color || 'var(--color-foreground)', fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>
         {value}
       </div>
       {sub && <div className="text-xs mt-2" style={{ color: 'var(--color-muted-foreground)' }}>{sub}</div>}
-    </div>
+    </button>
   );
 }
 
@@ -46,8 +46,8 @@ export default function Dashboard() {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
-          Buen día, {currentUser?.nombre.split(' ')[0]} 👋
+        <h1 className="text-3xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
+          Buen día, {currentUser?.nombre.split(' ')[0]}
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>
           {new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -56,10 +56,10 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Pendientes" value={pendientes} sub="por salir" color="var(--color-accent)" />
-        <StatCard label="En camino" value={enCamino} sub="en tránsito" color="#1F6FAE" />
-        <StatCard label="Entregados hoy" value={entregadosHoy} sub={fmt(totalHoy)} color="var(--color-primary)" />
-        <StatCard label="Con inconveniente" value={conInconveniente} sub="requieren atención" color="#B5392A" />
+        <StatCard label="Pendientes" value={pendientes} sub="por salir" color="var(--color-accent)" onClick={() => navigate('/remitos?estado=pendiente')} />
+        <StatCard label="En camino" value={enCamino} sub="en tránsito" color="var(--color-primary-hover)" onClick={() => navigate('/remitos?estado=en_camino')} />
+        <StatCard label="Entregados hoy" value={entregadosHoy} sub={fmt(totalHoy)} color="var(--color-primary)" onClick={() => navigate('/remitos?estado=entregado')} />
+        <StatCard label="Con inconveniente" value={conInconveniente} sub="requieren atención" color="#E53935" onClick={() => navigate('/remitos?estado=con_inconveniente')} />
       </div>
 
       {/* Alerts */}
@@ -68,7 +68,7 @@ export default function Dashboard() {
           {conInconveniente > 0 && (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm border"
               style={{ background: '#FEE2E2', borderColor: '#FCA5A5', color: '#991B1B' }}>
-              <span>⚠️</span>
+              <span className="font-semibold">Aviso</span>
               <span><strong>{conInconveniente}</strong> remito{conInconveniente > 1 ? 's' : ''} con inconvenientes requieren atención.</span>
               <button onClick={() => navigate('/remitos?estado=con_inconveniente')}
                 className="ml-auto text-xs underline font-medium">Ver</button>
@@ -77,7 +77,7 @@ export default function Dashboard() {
           {stockBajo > 0 && (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm border"
               style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#92400E' }}>
-              <span>📦</span>
+              <span className="font-semibold">Stock</span>
               <span><strong>{stockBajo}</strong> producto{stockBajo > 1 ? 's' : ''} con stock bajo.</span>
               <button onClick={() => navigate('/productos')}
                 className="ml-auto text-xs underline font-medium">Ver</button>
@@ -86,7 +86,7 @@ export default function Dashboard() {
           {insumosBajos > 0 && (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm border"
               style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#92400E' }}>
-              <span>🧴</span>
+              <span className="font-semibold">Insumos</span>
               <span><strong>{insumosBajos}</strong> insumo{insumosBajos > 1 ? 's' : ''} con stock bajo.</span>
               <button onClick={() => navigate('/inventario')}
                 className="ml-auto text-xs underline font-medium">Ver</button>
@@ -102,7 +102,7 @@ export default function Dashboard() {
           <button onClick={() => navigate('/remitos')}
             className="text-sm font-medium transition-colors hover:opacity-70"
             style={{ color: 'var(--color-primary)' }}>
-            Ver todos →
+            Ver todos
           </button>
         </div>
         <div className="overflow-x-auto">

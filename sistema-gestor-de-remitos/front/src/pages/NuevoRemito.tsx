@@ -16,26 +16,37 @@ export default function NuevoRemito() {
   const [observaciones, setObservaciones] = useState('');
   const [items, setItems] = useState<RemitoItem[]>([]);
   const [productoSelId, setProductoSelId] = useState('');
-  const [cantidad, setCantidad] = useState(1);
   const [errors, setErrors] = useState<string[]>([]);
 
   const addItem = () => {
     const prod = productos.find(p => p.id === productoSelId);
     if (!prod) return;
+
     const existing = items.find(i => i.productoId === prod.id);
     if (existing) {
-      setItems(items.map(i => i.productoId === prod.id
-        ? { ...i, cantidad: i.cantidad + cantidad, subtotal: (i.cantidad + cantidad) * i.precioUnitario }
+      const next = items.map(i => i.productoId === prod.id
+        ? { ...i, cantidad: i.cantidad + 1, subtotal: (i.cantidad + 1) * i.precioUnitario }
         : i
-      ));
+      );
+      setItems(next);
     } else {
       setItems([...items, {
-        productoId: prod.id, productoNombre: prod.nombre,
-        cantidad, precioUnitario: prod.precioVenta, subtotal: cantidad * prod.precioVenta,
+        productoId: prod.id,
+        productoNombre: prod.nombre,
+        cantidad: 1,
+        precioUnitario: prod.precioVenta,
+        subtotal: prod.precioVenta,
       }]);
     }
     setProductoSelId('');
-    setCantidad(1);
+  };
+
+  const updateQuantity = (productoId: string, nextQuantity: number) => {
+    const cantidadClamped = Math.max(1, nextQuantity);
+    setItems(items.map(item => item.productoId === productoId
+      ? { ...item, cantidad: cantidadClamped, subtotal: cantidadClamped * item.precioUnitario }
+      : item
+    ));
   };
 
   const removeItem = (productoId: string) => setItems(items.filter(i => i.productoId !== productoId));
@@ -44,10 +55,11 @@ export default function NuevoRemito() {
   const total = subtotal - descuento;
   const fmt = (n: number) => `$${n.toLocaleString('es-AR')}`;
 
-  const handleSubmit = (estado: 'borrador' | 'pendiente') => {
+  const handleSubmit = async (estado: 'borrador' | 'pendiente') => {
     const errs: string[] = [];
     if (!clienteNombre.trim()) errs.push('Nombre del cliente requerido');
     if (!clienteDireccion.trim()) errs.push('Dirección requerida');
+    if (!viajanteId.trim()) errs.push('Es necesario asignar viajante');
     if (items.length === 0) errs.push('Debe agregar al menos un producto');
     if (errs.length > 0) { setErrors(errs); return; }
 
@@ -69,8 +81,18 @@ export default function NuevoRemito() {
       observaciones: observaciones.trim() || undefined,
       creadoPor: currentUser?.id || 'u1',
     };
-    addRemito(newRemito);
-    navigate(`/remitos/${newRemito.id}`);
+
+    try {
+      const created = await addRemito(newRemito);
+      if (!created) {
+        setErrors(['No se pudo guardar el remito en el servidor.']);
+        return;
+      }
+      navigate(`/remitos/${created.id}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'No se pudo guardar el remito en el servidor.';
+      setErrors([message]);
+    }
   };
 
   return (
@@ -80,20 +102,19 @@ export default function NuevoRemito() {
         style={{ color: 'var(--color-muted-foreground)' }}>
         ← Volver
       </button>
-      <h1 className="text-3xl font-bold mb-8" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
+      <h1 className="text-3xl font-bold mb-8" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
         Nuevo remito
       </h1>
 
       {errors.length > 0 && (
         <div className="mb-6 p-4 rounded-xl border text-sm space-y-1"
           style={{ background: '#FEE2E2', borderColor: '#FCA5A5', color: '#991B1B' }}>
-          {errors.map(e => <p key={e}>• {e}</p>)}
+          {errors.map(e => <p key={e}>{e}</p>)}
         </div>
       )}
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-5">
-          {/* Cliente */}
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
               Datos del cliente
@@ -123,12 +144,10 @@ export default function NuevoRemito() {
             </div>
           </section>
 
-          {/* Productos */}
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
               Productos
             </h2>
-            {/* Add item */}
             <div className="flex gap-2 mb-4">
               <select
                 value={productoSelId}
@@ -140,14 +159,6 @@ export default function NuevoRemito() {
                   <option key={p.id} value={p.id}>{p.nombre} — ${p.precioVenta}</option>
                 ))}
               </select>
-              <input
-                type="number"
-                min={1}
-                value={cantidad}
-                onChange={e => setCantidad(Math.max(1, Number(e.target.value)))}
-                className="w-20 px-3 py-2 rounded-xl border text-sm outline-none text-center"
-                style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-              />
               <button
                 onClick={addItem}
                 disabled={!productoSelId}
@@ -170,11 +181,17 @@ export default function NuevoRemito() {
                   {items.map(item => (
                     <tr key={item.productoId} className="border-t" style={{ borderColor: 'var(--color-border)' }}>
                       <td className="px-3 py-2.5 font-medium" style={{ color: 'var(--color-foreground)' }}>{item.productoNombre}</td>
-                      <td className="px-3 py-2.5 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{item.cantidad}</td>
+                      <td className="px-3 py-2.5 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>
+                        <span className="inline-flex items-center gap-2">
+                          <button className="px-2 py-1 rounded border" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} onClick={() => updateQuantity(item.productoId, item.cantidad - 1)}>-</button>
+                          <span>{item.cantidad}</span>
+                          <button className="px-2 py-1 rounded border" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} onClick={() => updateQuantity(item.productoId, item.cantidad + 1)}>+</button>
+                        </span>
+                      </td>
                       <td className="px-3 py-2.5 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{fmt(item.precioUnitario)}</td>
                       <td className="px-3 py-2.5 font-mono text-xs font-semibold" style={{ color: 'var(--color-foreground)' }}>{fmt(item.subtotal)}</td>
                       <td className="px-3 py-2.5">
-                        <button onClick={() => removeItem(item.productoId)} className="text-xs hover:opacity-70" style={{ color: '#B5392A' }}>✕</button>
+                        <button onClick={() => removeItem(item.productoId)} className="text-xs hover:opacity-70" style={{ color: '#E53935' }}>Quitar</button>
                       </td>
                     </tr>
                   ))}
@@ -187,7 +204,6 @@ export default function NuevoRemito() {
             )}
           </section>
 
-          {/* Observaciones */}
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
               Observaciones
@@ -203,9 +219,7 @@ export default function NuevoRemito() {
           </section>
         </div>
 
-        {/* Right */}
         <div className="space-y-5">
-          {/* Viajante */}
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
               Asignar viajante
@@ -220,7 +234,6 @@ export default function NuevoRemito() {
             </select>
           </section>
 
-          {/* Totales */}
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
               Total
@@ -248,7 +261,6 @@ export default function NuevoRemito() {
             </div>
           </section>
 
-          {/* Acciones */}
           <div className="space-y-2">
             <button
               onClick={() => handleSubmit('pendiente')}

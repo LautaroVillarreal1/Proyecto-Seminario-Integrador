@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function Recetas() {
@@ -14,7 +14,7 @@ export default function Recetas() {
     const limitantes = r.ingredientes.map(ing => {
       const insumo = insumos.find(i => i.id === ing.insumoId);
       if (!insumo) return 0;
-      const lotes = Math.floor(insumo.stockActual / ing.cantidad);
+      const lotes = Math.floor(insumo.stockActual / Math.max(ing.cantidad, 1));
       return lotes * r.rendimiento;
     });
     return limitantes.length > 0 ? Math.min(...limitantes) : 0;
@@ -24,7 +24,7 @@ export default function Recetas() {
 
   const calcularInsumosPara = (cantidad: number) => {
     if (!receta) return [];
-    const lotes = cantidad / receta.rendimiento;
+    const lotes = cantidad / Math.max(receta.rendimiento, 1);
     return receta.ingredientes.map(ing => ({
       ...ing,
       cantidadNecesaria: ing.cantidad * lotes,
@@ -32,7 +32,7 @@ export default function Recetas() {
     }));
   };
 
-  const cantidadTarget = calcQty[selectedId] || receta?.rendimiento || 0;
+  const cantidadTarget = calcQty[selectedId] ?? receta?.rendimiento ?? 0;
   const desglose = calcularInsumosPara(cantidadTarget);
 
   const formatMin = (min: number) => {
@@ -42,10 +42,13 @@ export default function Recetas() {
     return `${h}h${m > 0 ? ` ${m}min` : ''}`;
   };
 
+  const productosConReceta = useMemo(() => new Set(recetas.map(r => r.productoId)), [recetas]);
+  const productosSinReceta = productos.filter(p => !productosConReceta.has(p.id));
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
+        <h1 className="text-3xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
           Recetas
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>
@@ -54,11 +57,15 @@ export default function Recetas() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Sidebar recetas */}
         <div className="space-y-2">
           <h2 className="text-xs font-semibold uppercase tracking-widest mb-3 px-1" style={{ color: 'var(--color-muted-foreground)' }}>
             Productos con receta
           </h2>
+          {recetas.length === 0 && (
+            <div className="rounded-2xl border p-4" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)', color: 'var(--color-muted-foreground)' }}>
+              No hay recetas cargadas.
+            </div>
+          )}
           {recetas.map(r => {
             const posible = calcularProduccion(r.id);
             const isSelected = r.id === selectedId;
@@ -76,27 +83,34 @@ export default function Recetas() {
                   <span>Rinde {r.rendimiento} {r.unidadRendimiento}</span>
                   <span>·</span>
                   <span style={{ color: posible === 0 ? '#F87171' : isSelected ? 'rgba(242,247,236,0.9)' : 'var(--color-primary)' }}>
-                    {posible === 0 ? '⚠ Sin stock' : `≈ ${posible} posibles`}
+                    {posible === 0 ? 'Sin stock' : `${posible} posibles`}
                   </span>
                 </div>
               </button>
             );
           })}
+          {productosSinReceta.length > 0 && (
+            <div className="rounded-2xl border p-4 mt-4" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
+              <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--color-muted-foreground)' }}>Sin receta</div>
+              <div className="text-sm mt-2" style={{ color: 'var(--color-foreground)' }}>
+                {productosSinReceta.map(p => p.nombre).join(', ')}
+              </div>
+              <div className="text-xs mt-2" style={{ color: '#E53935' }}>Definí una receta para estos productos.</div>
+            </div>
+          )}
         </div>
 
-        {/* Detail */}
         {receta ? (
           <div className="lg:col-span-2 space-y-5">
-            {/* Header */}
             <div className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
-                  <h2 className="text-xl font-bold" style={{ color: 'var(--color-foreground)', fontFamily: 'var(--font-display)' }}>
+                  <h2 className="text-xl font-bold" style={{ color: 'var(--color-foreground)', fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>
                     {receta.productoNombre}
                   </h2>
                   <div className="flex gap-4 mt-2 text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
-                    <span>🕒 {formatMin(receta.tiempoPrepMin)}</span>
-                    <span>📦 Rinde {receta.rendimiento} {receta.unidadRendimiento}</span>
+                    <span>{formatMin(receta.tiempoPrepMin)}</span>
+                    <span>Rinde {receta.rendimiento} {receta.unidadRendimiento}</span>
                   </div>
                 </div>
                 <div className="text-right">
@@ -104,8 +118,8 @@ export default function Recetas() {
                     Producción posible ahora
                   </div>
                   <div className="text-3xl font-bold" style={{
-                    fontFamily: 'var(--font-display)',
-                    color: produccionPosible === 0 ? '#B5392A' : 'var(--color-primary)'
+                    fontFamily: "'Baloo 2', 'Inter', sans-serif",
+                    color: produccionPosible === 0 ? '#E53935' : 'var(--color-primary)'
                   }}>
                     {produccionPosible}
                   </div>
@@ -120,7 +134,6 @@ export default function Recetas() {
               )}
             </div>
 
-            {/* Ingredientes */}
             <div className="rounded-2xl border overflow-hidden" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
               <h3 className="text-xs font-semibold uppercase tracking-widest px-5 py-4 border-b"
                 style={{ color: 'var(--color-muted-foreground)', borderColor: 'var(--color-border)' }}>
@@ -149,7 +162,7 @@ export default function Recetas() {
                         </td>
                         <td className="px-4 py-3">
                           <span className={`text-xs font-medium px-2 py-0.5 rounded ${suficiente ? 'text-green-700 bg-green-50' : 'text-red-700 bg-red-50'}`}>
-                            {suficiente ? '✓ OK' : '✕ Insuficiente'}
+                            {suficiente ? 'OK' : 'Insuficiente'}
                           </span>
                         </td>
                       </tr>
@@ -159,7 +172,6 @@ export default function Recetas() {
               </table>
             </div>
 
-            {/* Calculadora */}
             <div className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
               <h3 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
                 Calculadora de producción
@@ -168,10 +180,13 @@ export default function Recetas() {
                 <label className="text-sm" style={{ color: 'var(--color-foreground)' }}>Quiero producir</label>
                 <input
                   type="number"
-                  min={receta.rendimiento}
-                  step={receta.rendimiento}
+                  min={0}
+                  step={1}
                   value={cantidadTarget}
-                  onChange={e => setCalcQty({ ...calcQty, [selectedId]: Number(e.target.value) })}
+                  onChange={e => {
+                    const nextValue = Number(e.target.value);
+                    setCalcQty({ ...calcQty, [selectedId]: nextValue >= 0 ? nextValue : 0 });
+                  }}
                   className="w-24 px-3 py-2 rounded-xl border text-sm font-mono text-center outline-none"
                   style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
                 />
@@ -190,11 +205,11 @@ export default function Recetas() {
                           necesito {d.cantidadNecesaria.toFixed(1)} {d.unidad}
                         </span>
                         {!suficiente && faltante > 0 && (
-                          <span className="text-xs font-semibold" style={{ color: '#B5392A' }}>
+                          <span className="text-xs font-semibold" style={{ color: '#E53935' }}>
                             faltan {faltante.toFixed(1)}
                           </span>
                         )}
-                        {suficiente && <span className="text-xs" style={{ color: 'var(--color-primary)' }}>✓</span>}
+                        {suficiente && <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>OK</span>}
                       </div>
                     </div>
                   );

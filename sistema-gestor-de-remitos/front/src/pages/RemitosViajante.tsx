@@ -15,10 +15,10 @@ const FILTROS: { value: string; label: string }[] = [
 ];
 
 const ESTADO_BG: Partial<Record<EstadoRemito, string>> = {
-  en_camino:        'border-l-[#1F6FAE]',
-  pendiente:        'border-l-[#C4761E]',
-  con_inconveniente:'border-l-[#B5392A]',
-  entregado:        'border-l-[#2B6B2B]',
+  en_camino:        'border-l-[#4F9B4F]',
+  pendiente:        'border-l-[#D9A441]',
+  con_inconveniente:'border-l-[#E53935]',
+  entregado:        'border-l-[#3F7D3F]',
   borrador:         'border-l-[#8C8C7A]',
   cancelado:        'border-l-[#555550]',
 };
@@ -58,14 +58,14 @@ export default function RemitosViajante() {
         <div className="px-4 pt-5 pb-4">
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(168,200,150,0.7)' }}>
-              LácteosNaturales
+              Frulatti
             </span>
             <span className="text-xs px-2 py-0.5 rounded-full font-medium"
               style={{ background: 'rgba(196,118,30,0.2)', color: '#E8A84E' }}>
               Viajante
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
+          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>
             Mis remitos
           </h1>
           <p className="text-sm mt-0.5" style={{ color: 'rgba(168,200,150,0.7)' }}>
@@ -76,11 +76,11 @@ export default function RemitosViajante() {
         {/* Stats strip */}
         <div className="flex border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <div className="flex-1 text-center py-3 border-r" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <div className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>{pendientesCount}</div>
+            <div className="text-2xl font-bold text-white" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>{pendientesCount}</div>
             <div className="text-xs mt-0.5" style={{ color: 'rgba(168,200,150,0.6)' }}>pendientes</div>
           </div>
           <div className="flex-1 text-center py-3">
-            <div className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>{entregadosHoy}</div>
+            <div className="text-2xl font-bold text-white" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>{entregadosHoy}</div>
             <div className="text-xs mt-0.5" style={{ color: 'rgba(168,200,150,0.6)' }}>entregados hoy</div>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default function RemitosViajante() {
       {/* Search */}
       <div className="px-4 pt-4 pb-2">
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm" style={{ color: 'var(--color-muted-foreground)' }}>🔍</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-semibold" style={{ color: 'var(--color-muted-foreground)' }}>Buscar</span>
           <input
             type="search"
             placeholder="Buscar cliente o dirección…"
@@ -202,23 +202,23 @@ export default function RemitosViajante() {
                       {r.estado === 'pendiente' ? 'Listo para salir' : 'En camino al cliente'}
                     </span>
                     <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>
-                      {r.estado === 'pendiente' ? 'Iniciar entrega →' : 'Registrar entrega →'}
+                      {r.estado === 'pendiente' ? 'Iniciar entrega' : 'Registrar entrega'}
                     </span>
                   </div>
                 )}
                 {r.estado === 'con_inconveniente' && (
                   <div className="px-4 py-2.5 border-t flex items-center justify-between"
                     style={{ background: '#FFF5F5', borderColor: '#FCA5A5' }}>
-                    <span className="text-xs" style={{ color: '#B5392A' }}>
-                      ⚠ {r.inconveniente ? r.inconveniente.slice(0, 50) + (r.inconveniente.length > 50 ? '…' : '') : 'Con inconveniente'}
+                    <span className="text-xs" style={{ color: '#E53935' }}>
+                      {r.inconveniente ? r.inconveniente.slice(0, 50) + (r.inconveniente.length > 50 ? '…' : '') : 'Con inconveniente'}
                     </span>
                   </div>
                 )}
                 {r.estado === 'entregado' && (
                   <div className="px-4 py-2 border-t flex items-center gap-2"
                     style={{ background: 'rgba(43,107,43,0.05)', borderColor: 'rgba(43,107,43,0.15)' }}>
-                    <span className="text-xs" style={{ color: '#2B6B2B' }}>
-                      ✓ Entregado {r.horaEntrega ? `a las ${r.horaEntrega}` : ''}
+                    <span className="text-xs" style={{ color: '#3F7D3F' }}>
+                      Entregado {r.horaEntrega ? `a las ${r.horaEntrega}` : ''}
                       {r.formaPago ? ` · ${r.formaPago.replace('_', ' ')}` : ''}
                     </span>
                   </div>

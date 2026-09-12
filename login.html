@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frulatti — Iniciar sesión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde-bosque:#2E6B2E;
+    --verde-medio:#5AA85A;
+    --verde-claro:#8FC48A;
+    --azul-marino:#16305C;
+    --crema:#FBF9F4;
+    --blanco:#FFFFFF;
+    --gris-borde:#DAD5C8;
+    --texto-suave:#6B7368;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',sans-serif;
+    display:flex;
+    min-height:100vh;
+    background:var(--crema);
+    color:var(--azul-marino);
+  }
+
+  /* ---------- PANEL IZQUIERDO ---------- */
+  .panel-marca{
+    position:relative;
+    flex:1 1 46%;
+    background:linear-gradient(160deg,var(--verde-bosque) 0%, var(--verde-medio) 100%);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:56px 64px;
+    overflow:hidden;
+    min-height:100vh;
+  }
+  .panel-marca::before{
+    content:"";
+    position:absolute;
+    right:-180px;
+    bottom:-220px;
+    width:620px;
+    height:620px;
+    background:var(--azul-marino);
+    opacity:0.16;
+    border-radius:42% 58% 63% 37% / 41% 47% 53% 59%;
+  }
+  .panel-marca::after{
+    content:"";
+    position:absolute;
+    left:-140px;
+    top:-160px;
+    width:420px;
+    height:420px;
+    background:var(--blanco);
+    opacity:0.08;
+    border-radius:63% 37% 41% 59% / 53% 42% 58% 47%;
+  }
+
+  .marca-top{position:relative; z-index:2;}
+  .isotipo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .splash{
+    width:56px;height:56px;flex-shrink:0;
+  }
+  .marca-nombre{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:28px;
+    color:var(--blanco);
+    letter-spacing:0.3px;
+  }
+
+  .marca-mensaje{position:relative; z-index:2; max-width:380px;}
+  .marca-mensaje h1{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:40px;
+    line-height:1.15;
+    color:var(--blanco);
+    margin-bottom:18px;
+  }
+  .marca-mensaje p{
+    font-size:16px;
+    line-height:1.6;
+    color:rgba(255,255,255,0.88);
+  }
+
+  .marca-footer{
+    position:relative; z-index:2;
+    display:flex;
+    gap:28px;
+    font-size:13.5px;
+    color:rgba(255,255,255,0.75);
+  }
+  .marca-footer span{white-space:nowrap;}
+
+  /* ---------- PANEL DERECHO ---------- */
+  .panel-form{
+    flex:1 1 54%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:48px;
+  }
+  .form-contenedor{
+    width:100%;
+    max-width:400px;
+  }
+  .form-contenedor h2{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:30px;
+    color:var(--azul-marino);
+    margin-bottom:8px;
+  }
+  .form-contenedor > p.sub{
+    font-size:15px;
+    color:var(--texto-suave);
+    margin-bottom:36px;
+  }
+  .form-contenedor > p.sub a{
+    color:var(--verde-bosque);
+    font-weight:600;
+    text-decoration:none;
+  }
+  .form-contenedor > p.sub a:hover{ text-decoration:underline; }
+
+  .campo{
+    margin-bottom:20px;
+  }
+  .campo label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--azul-marino);
+    margin-bottom:7px;
+  }
+  .campo input{
+    width:100%;
+    padding:13px 15px;
+    border:1.5px solid var(--gris-borde);
+    border-radius:10px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    color:var(--azul-marino);
+    background:var(--blanco);
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .campo input::placeholder{ color:#B7B2A4; }
+  .campo input:focus{
+    border-color:var(--verde-medio);
+    box-shadow:0 0 0 3px rgba(90,168,90,0.18);
+  }
+
+  .campo-pass-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .campo-pass-header a{
+    font-size:13px;
+    color:var(--verde-bosque);
+    text-decoration:none;
+    font-weight:500;
+  }
+  .campo-pass-header a:hover{ text-decoration:underline; }
+
+  .recordar{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:22px 0 28px;
+  }
+  .recordar input[type="checkbox"]{
+    width:17px;height:17px;
+    accent-color:var(--verde-bosque);
+    cursor:pointer;
+  }
+  .recordar label{
+    font-size:14px;
+    color:var(--texto-suave);
+    cursor:pointer;
+  }
+
+  .btn-ingresar{
+    width:100%;
+    padding:14px;
+    background:var(--verde-bosque);
+    color:var(--blanco);
+    border:none;
+    border-radius:10px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15.5px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn-ingresar:hover{ background:#255A25; }
+  .btn-ingresar:active{ transform:scale(0.99); }
+
+  .divisor{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin:30px 0;
+    color:var(--texto-suave);
+    font-size:13px;
+  }
+  .divisor::before, .divisor::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--gris-borde);
+  }
+
+  .btn-whatsapp{
+    width:100%;
+    padding:13px;
+    background:var(--blanco);
+    color:var(--azul-marino);
+    border:1.5px solid var(--gris-borde);
+    border-radius:10px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .btn-whatsapp:hover{
+    border-color:var(--verde-medio);
+    background:#FAFAF7;
+  }
+
+  @media (max-width:880px){
+    body{flex-direction:column;}
+    .panel-marca{ min-height:280px; padding:36px 32px; }
+    .panel-marca::before{ width:380px; height:380px; right:-140px; bottom:-180px;}
+    .marca-mensaje h1{ font-size:28px; }
+    .marca-mensaje p{ display:none; }
+    .marca-footer{ display:none; }
+    .panel-form{ padding:36px 28px; }
+  }
+
+  :focus-visible{
+    outline:2.5px solid var(--verde-medio);
+    outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- PANEL IZQUIERDO: MARCA -->
+  <div class="panel-marca">
+    <div class="marca-top">
+      <div class="isotipo">
+        <svg class="splash" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 6 C68 6 82 20 82 38 C82 44 80 49 77 54 C86 60 92 70 92 80 C92 90 82 96 68 96 C58 96 50 93 44 88 C36 93 25 94 16 89 C8 85 8 75 14 66 C10 60 8 53 8 46 C8 24 27 6 50 6 Z"
+                fill="#FBF9F4" opacity="0.95"/>
+        </svg>
+        <span class="marca-nombre">Frulatti</span>
+      </div>
+    </div>
+
+    <div class="marca-mensaje">
+      <h1>Tu opción rica y saludable, todo el año.</h1>
+      <p>Ingresá a tu cuenta para gestionar tus pedidos, seguir tus envíos y descubrir nuestros yogures y kéfires artesanales.</p>
+    </div>
+
+    <div class="marca-footer">
+      <span>+54 9353-4286502</span>
+      <span>frulattivm@gmail.com</span>
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO: FORMULARIO -->
+  <div class="panel-form">
+    <div class="form-contenedor">
+      <h2>Iniciar sesión</h2>
+      <p class="sub">¿Todavía no tenés cuenta? <a href="#">Creá una acá</a></p>
+
+      <form onsubmit="return false;">
+        <div class="campo">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" placeholder="tuemail@ejemplo.com" required>
+        </div>
+
+        <div class="campo">
+          <div class="campo-pass-header">
+            <label for="pass">Contraseña</label>
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
+          <input type="password" id="pass" placeholder="Ingresá tu contraseña" required>
+        </div>
+
+        <div class="recordar">
+          <input type="checkbox" id="recordar">
+          <label for="recordar">Recordarme en este dispositivo</label>
+        </div>
+
+        <button type="submit" class="btn-ingresar">Iniciar sesión</button>
+
+        <div class="divisor">o continuá con</div>
+
+        <button type="button" class="btn-whatsapp">
+          Ingresar con Google
+        </button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

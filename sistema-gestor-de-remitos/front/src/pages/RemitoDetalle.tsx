@@ -78,11 +78,11 @@ export default function RemitoDetalle() {
   };
 
   const transitionLabels: Partial<Record<EstadoRemito, string>> = {
-    pendiente: '✓ Confirmar pedido',
-    en_camino: '🚚 Marcar en camino',
-    entregado: '✓ Marcar como entregado',
-    con_inconveniente: '⚠ Reportar inconveniente',
-    cancelado: '✕ Cancelar remito',
+    pendiente: 'Confirmar pedido',
+    en_camino: 'Marcar en camino',
+    entregado: 'Marcar como entregado',
+    con_inconveniente: 'Reportar inconveniente',
+    cancelado: 'Cancelar remito',
   };
 
   return (
@@ -97,7 +97,7 @@ export default function RemitoDetalle() {
             ← Volver
           </button>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
+            <h1 className="text-2xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
               {remito.numero}
             </h1>
             <EstadoBadge estado={remito.estado as EstadoRemito} />
@@ -148,7 +148,7 @@ export default function RemitoDetalle() {
                       {item.productoNombre}
                     </span>
                     <span className="font-mono text-2xl font-bold ml-4 flex-shrink-0"
-                      style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-display)' }}>
+                      style={{ color: 'var(--color-primary)', fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>
                       {item.cantidad}
                     </span>
                   </div>
@@ -209,7 +209,7 @@ export default function RemitoDetalle() {
             />
             {remito.estado === 'con_inconveniente' && (
               <div className="mt-3">
-                <label className="block text-xs font-medium mb-1.5" style={{ color: '#B5392A' }}>
+                <label className="block text-xs font-medium mb-1.5" style={{ color: '#E53935' }}>
                   Descripción del inconveniente
                 </label>
                 <textarea
@@ -316,7 +316,7 @@ export default function RemitoDetalle() {
                       onClick={() => setShowEntregaForm(false)}
                       className="px-3 py-2 rounded-lg text-sm border transition-colors hover:opacity-70"
                       style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>
-                      ✕
+                      Quitar
                     </button>
                   </div>
                 </div>

@@ -74,7 +74,7 @@ export default function Informes() {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
+        <h1 className="text-3xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
           Informes
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>
@@ -108,7 +108,7 @@ export default function Informes() {
         ].map(s => (
           <div key={s.label} className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--color-muted-foreground)' }}>{s.label}</div>
-            <div className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: s.color || 'var(--color-foreground)' }}>{s.value}</div>
+            <div className="text-2xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: s.color || 'var(--color-foreground)' }}>{s.value}</div>
             <div className="text-xs mt-1" style={{ color: 'var(--color-muted-foreground)' }}>{s.sub}</div>
           </div>
         ))}
@@ -193,7 +193,7 @@ export default function Informes() {
                   <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{v.asignados}</td>
                   <td className="px-4 py-3 font-mono text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>{v.entregados}</td>
                   <td className="px-4 py-3 font-mono text-xs" style={{ color: v.pendientes > 0 ? 'var(--color-accent)' : 'var(--color-muted-foreground)' }}>{v.pendientes}</td>
-                  <td className="px-4 py-3 font-mono text-xs" style={{ color: v.inconvenientes > 0 ? '#B5392A' : 'var(--color-muted-foreground)' }}>{v.inconvenientes}</td>
+                  <td className="px-4 py-3 font-mono text-xs" style={{ color: v.inconvenientes > 0 ? '#E53935' : 'var(--color-muted-foreground)' }}>{v.inconvenientes}</td>
                   <td className="px-4 py-3 font-mono text-xs font-semibold" style={{ color: 'var(--color-foreground)' }}>{fmt(v.totalEntregado)}</td>
                 </tr>
               ))}

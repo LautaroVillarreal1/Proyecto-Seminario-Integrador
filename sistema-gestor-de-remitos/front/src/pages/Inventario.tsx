@@ -5,7 +5,7 @@ import type { Insumo } from '../types';
 function StockBar({ actual, minimo }: { actual: number; minimo: number }) {
   const pct = Math.min(100, Math.round((actual / (minimo * 4)) * 100));
   const bajo = actual <= minimo;
-  const color = bajo ? '#B5392A' : actual <= minimo * 1.5 ? '#C4761E' : 'var(--color-primary)';
+  const color = bajo ? '#E53935' : actual <= minimo * 1.5 ? '#D9A441' : 'var(--color-primary)';
   return (
     <div className="flex items-center gap-3">
       <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-muted)' }}>
@@ -62,11 +62,11 @@ export default function Inventario() {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
+          <h1 className="text-3xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
             Inventario de insumos
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>
-            {insumos.length} insumos · {bajos > 0 && <span style={{ color: '#B5392A' }}>{bajos} con stock bajo</span>}
+            {insumos.length} insumos · {bajos > 0 && <span style={{ color: '#E53935' }}>{bajos} con stock bajo</span>}
           </p>
         </div>
         <button onClick={startNew}
@@ -125,7 +125,7 @@ export default function Inventario() {
             borderColor: solobajos ? '#FCA5A5' : 'var(--color-border)',
             color: solobajos ? '#991B1B' : 'var(--color-foreground)',
           }}>
-          {solobajos ? '✕ ' : ''}Stock bajo
+          {solobajos ? 'Quitar filtro: ' : ''}Stock bajo
         </button>
       </div>
 
@@ -147,7 +147,7 @@ export default function Inventario() {
                   <td className="px-4 py-3">
                     <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>{insumo.nombre}</div>
                     {insumo.stockActual <= insumo.stockMinimo && (
-                      <div className="text-xs mt-0.5" style={{ color: '#B5392A' }}>⚠ Stock bajo</div>
+                      <div className="text-xs mt-0.5" style={{ color: '#E53935' }}>Stock bajo</div>
                     )}
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: 'var(--color-muted-foreground)' }}>

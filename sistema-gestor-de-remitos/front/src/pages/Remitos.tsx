@@ -43,7 +43,7 @@ export default function Remitos() {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-foreground)' }}>
+          <h1 className="text-3xl font-bold" style={{ fontFamily: "'Baloo 2', 'Inter', sans-serif", color: 'var(--color-foreground)' }}>
             {isViajante ? 'Mis Remitos' : 'Remitos'}
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>

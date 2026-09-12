@@ -3,16 +3,16 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
 const NAV_ADMIN = [
-  { to: '/', label: 'Dashboard', icon: '⊞', exact: true },
-  { to: '/remitos', label: 'Remitos', icon: '📋' },
-  { to: '/productos', label: 'Productos', icon: '🥛' },
-  { to: '/inventario', label: 'Inventario', icon: '📦' },
-  { to: '/recetas', label: 'Recetas', icon: '📖' },
-  { to: '/informes', label: 'Informes', icon: '📊' },
+  { to: '/', label: 'Inicio', icon: '', exact: true },
+  { to: '/remitos', label: 'Remitos', icon: '' },
+  { to: '/productos', label: 'Productos', icon: '' },
+  { to: '/inventario', label: 'Inventario', icon: '' },
+  { to: '/recetas', label: 'Recetas', icon: '' },
+  { to: '/informes', label: 'Informes', icon: '' },
 ];
 
 const NAV_VIAJANTE = [
-  { to: '/mis-remitos', label: 'Mis Remitos', icon: '📋', exact: true },
+  { to: '/mis-remitos', label: 'Mis Remitos', icon: '', exact: true },
 ];
 
 function NavItem({ to, label, icon, exact }: { to: string; label: string; icon: string; exact?: boolean }) {
@@ -24,10 +24,10 @@ function NavItem({ to, label, icon, exact }: { to: string; label: string; icon: 
         `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
           isActive
             ? 'bg-white/15 text-white'
-            : 'text-[#A8C896] hover:bg-white/8 hover:text-white'
+            : 'text-white/75 hover:bg-white/10 hover:text-white'
         }`
       }>
-      <span className="text-base w-5 text-center">{icon}</span>
+      {icon && <span className="text-base w-5 text-center">{icon}</span>}
       <span>{label}</span>
     </NavLink>
   );
@@ -52,7 +52,7 @@ export default function Layout() {
         <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
           style={{ background: 'var(--color-accent)' }}>L</div>
         <div>
-          <div className="text-white font-semibold text-sm leading-none">LácteosNaturales</div>
+          <div className="text-white font-semibold text-sm leading-none">Frulatti</div>
           <div className="text-xs mt-0.5" style={{ color: 'rgba(168,200,150,0.65)' }}>
             {currentUser?.rol === 'admin' ? 'Administración' : 'Viajante'}
           </div>
@@ -82,7 +82,7 @@ export default function Layout() {
             className="text-xs px-2 py-1 rounded-lg transition-colors hover:bg-white/10"
             style={{ color: 'rgba(168,200,150,0.8)' }}
             title="Cerrar sesión">
-            ⏻
+            Salir
           </button>
         </div>
       </div>
@@ -118,7 +118,7 @@ export default function Layout() {
             ☰
           </button>
           <span className="font-semibold text-sm" style={{ color: 'var(--color-foreground)' }}>
-            LácteosNaturales
+            Frulatti
           </span>
         </header>
 

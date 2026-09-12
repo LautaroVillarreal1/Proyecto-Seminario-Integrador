@@ -1,10 +1,11 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../shared/infrastructure/prisma/prisma.service';
+import { RealtimeService } from '../realtime/realtime.service';
 import { CreateRemitoDto, RemitoFilterDto, UpdateRemitoDto } from './dto';
 
 @Injectable()
 export class RemitosService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly realtime: RealtimeService) {}
 
   list(filters: RemitoFilterDto, userId?: number) {
     const where: any = {
@@ -26,23 +27,29 @@ export class RemitosService {
   }
 
   async create(dto: CreateRemitoDto, userId: number) {
+    if (!dto.idResponsableEntrega) throw new BadRequestException('Es necesario asignar viajante al remito');
     if (!dto.detalles?.length) throw new BadRequestException('El remito debe tener productos');
-    return this.prisma.$transaction(async tx => {
+    const created = await this.prisma.$transaction(async tx => {
       const products = await Promise.all(dto.detalles.map(detail => tx.producto.findUnique({ where: { idProducto: detail.idProducto } })));
       if (products.some(product => !product || !product.activo)) throw new BadRequestException('Producto inexistente o inactivo');
       for (let index = 0; index < dto.detalles.length; index += 1) {
         const product = products[index]!;
         if (product.stockActual < dto.detalles[index].cantidad) throw new BadRequestException(`Stock insuficiente para ${product.nombre}`);
       }
-      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
+      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: dto.idResponsableEntrega ?? userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
       await Promise.all(dto.detalles.map(detail => tx.producto.update({ where: { idProducto: detail.idProducto }, data: { stockActual: { decrement: detail.cantidad } } })));
       return remito;
     });
+    const complete = await this.find(created.idRemito);
+    this.realtime.publishRemito(complete as unknown as Record<string, unknown>);
+    return complete;
   }
 
   async update(id: number, dto: UpdateRemitoDto, userId: number, roleId: number) {
     const current = await this.find(id);
     if (roleId === 3 && current.idUsuario !== userId) throw new ForbiddenException('El remito no esta asignado al viajante');
-    return this.prisma.remito.update({ where: { idRemito: id }, data: { ...dto, fechaEntregaReal: dto.fechaEntregaReal ? new Date(dto.fechaEntregaReal) : undefined } });
+    const updated = await this.prisma.remito.update({ where: { idRemito: id }, data: { ...dto, fechaEntregaReal: dto.fechaEntregaReal ? new Date(dto.fechaEntregaReal) : undefined }, include: { cliente: { include: { provincia: true } }, estado: true, usuario: true, detalles: { include: { producto: true } } } });
+    this.realtime.publishRemito(updated as unknown as Record<string, unknown>);
+    return updated;
   }
 }

@@ -9,9 +9,10 @@ import { CatalogModule } from './catalog/catalog.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { RemitosModule } from './remitos/remitos.module';
 import { ReportsModule } from './reports/reports.module';
+import { RealtimeModule } from './realtime/realtime.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule, UsersModule, CatalogModule, RecipesModule, RemitosModule, ReportsModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule, UsersModule, CatalogModule, RecipesModule, RemitosModule, ReportsModule, RealtimeModule],
   controllers: [AppController],
   providers: [AppService],
 })
