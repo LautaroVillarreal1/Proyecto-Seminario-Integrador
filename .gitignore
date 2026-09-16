@@ -1,0 +1,24 @@
+# Dependencies
+**/node_modules/
+
+# Build output and generated files
+**/dist/
+**/build/
+**/.angular/cache/
+**/coverage/
+**/generated/prisma/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# Logs and runtime files
+*.log
+*.pid
+*.pid.lock
+
+# Local tooling and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
