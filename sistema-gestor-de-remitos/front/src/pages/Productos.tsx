@@ -38,11 +38,11 @@ export default function Productos() {
   const [editId, setEditId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [createRecipe, setCreateRecipe] = useState(false);
-  const [form, setForm] = useState<Partial<Producto & { recetaRendimiento: number; recetaUnidadRendimiento: string; recetaTiempoPrepMin: number; recetaInstrucciones: string }>>({ activo: true, unidad: 'Unidad' });
+  const [form, setForm] = useState<Partial<Producto & { recetaRendimiento: number; recetaUnidadRendimiento: string; recetaTiempoPrepMin: number; recetaInstrucciones: string }>>({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' });
 
   const filtered = productos
     .filter(p => !catFiltro || p.categoria === catFiltro)
-    .filter(p => !search || p.nombre.toLowerCase().includes(search.toLowerCase()));
+    .filter(p => !search || p.nombre.toLowerCase().includes(search.toLowerCase()) || p.codigo.toLowerCase().includes(search.toLowerCase()));
 
   const selectedProduct = productos.find(p => p.id === selectedProductId) ?? null;
   const selectedRecipe = recetas.find(r => r.productoId === selectedProduct?.id);
@@ -53,19 +53,30 @@ export default function Productos() {
   }, [form.unidad]);
 
   const startDetail = (p: Producto) => { setSelectedProductId(p.id); setEditId(null); setShowNew(false); };
-  const startNew = () => { setShowNew(true); setEditId(null); setSelectedProductId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
-  const cancel = () => { setEditId(null); setShowNew(false); setSelectedProductId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad' }); };
+  const startNew = () => { setShowNew(true); setEditId(null); setSelectedProductId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '', recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
+  const cancel = () => { setEditId(null); setShowNew(false); setSelectedProductId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' }); };
 
   const save = () => {
-    if (!form.nombre?.trim() || !form.precioVenta || !form.categoria) return;
+    const nombre = form.nombre?.trim() ?? '';
+    const codigo = form.codigo?.trim() ?? '';
+    const precio = Number(form.precioVenta ?? 0);
+    const stockActual = Number(form.stockActual ?? 0);
+    const stockMinimo = Number(form.stockMinimo ?? 0);
+
+    if (!nombre || !codigo || !form.categoria || precio < 0 || stockActual < 0 || stockMinimo < 0) return;
+
     if (showNew) {
       const nuevo: Producto = {
         id: `p${Date.now()}`,
-        nombre: form.nombre!, descripcion: form.descripcion || '',
-        categoria: form.categoria!, unidad: form.unidad || 'Unidad',
-        precioVenta: Number(form.precioVenta),
-        stockActual: Number(form.stockActual || 0),
-        stockMinimo: Number(form.stockMinimo || 10),
+        codigo,
+        codigoBarras: form.codigoBarras?.trim() || undefined,
+        nombre,
+        descripcion: form.descripcion || '',
+        categoria: form.categoria!,
+        unidad: form.unidad || 'Unidad',
+        precioVenta: precio,
+        stockActual,
+        stockMinimo,
         activo: form.activo !== false,
       };
       setProductos([...productos, nuevo]);
@@ -84,7 +95,7 @@ export default function Productos() {
         setRecetas([...recetas, nuevaReceta]);
       }
     } else if (editId) {
-      setProductos(productos.map(p => p.id === editId ? { ...p, ...form } as Producto : p));
+      setProductos(productos.map(p => p.id === editId ? { ...p, ...form, codigo: codigo || p.codigo, nombre, descripcion: form.descripcion || '', categoria: form.categoria || p.categoria, unidad: form.unidad || p.unidad, precioVenta: precio, stockActual, stockMinimo, activo: form.activo !== false } as Producto : p));
     }
     cancel();
   };
@@ -112,6 +123,18 @@ export default function Productos() {
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Código *</label>
+              <input value={form.codigo || ''} onChange={e => setForm({ ...form, codigo: e.target.value })}
+                className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
+                style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Código de barras</label>
+              <input value={form.codigoBarras || ''} onChange={e => setForm({ ...form, codigoBarras: e.target.value })}
+                className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
+                style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+            </div>
+            <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Nombre *</label>
               <input value={form.nombre || ''} onChange={e => setForm({ ...form, nombre: e.target.value })}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
@@ -125,7 +148,7 @@ export default function Productos() {
             </div>
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Precio venta *</label>
-              <input type="number" min={0} value={form.precioVenta || ''} onChange={e => setForm({ ...form, precioVenta: Number(e.target.value) })}
+              <input type="number" min={0} value={form.precioVenta ?? ''} onChange={e => setForm({ ...form, precioVenta: Number(e.target.value) })}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                 style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
             </div>
@@ -140,13 +163,13 @@ export default function Productos() {
             </div>
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Stock actual</label>
-              <input type="number" min={0} value={form.stockActual || 0} onChange={e => setForm({ ...form, stockActual: Number(e.target.value) })}
+              <input type="number" min={0} value={form.stockActual ?? 0} onChange={e => setForm({ ...form, stockActual: Number(e.target.value) })}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                 style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
             </div>
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Stock mínimo</label>
-              <input type="number" min={0} value={form.stockMinimo || 0} onChange={e => setForm({ ...form, stockMinimo: Number(e.target.value) })}
+              <input type="number" min={0} value={form.stockMinimo ?? 0} onChange={e => setForm({ ...form, stockMinimo: Number(e.target.value) })}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                 style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
             </div>
@@ -229,9 +252,9 @@ export default function Productos() {
             <button onClick={() => setSelectedProductId(null)} className="px-3 py-2 rounded-xl border text-xs" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>Cerrar</button>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+            <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Código</span><div className="font-semibold mt-1">{selectedProduct.codigo}</div></div>
             <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Categoría</span><div className="font-semibold mt-1">{selectedProduct.categoria}</div></div>
             <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Precio</span><div className="font-semibold mt-1">{fmt(selectedProduct.precioVenta)}</div></div>
-            <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Unidad</span><div className="font-semibold mt-1">{selectedProduct.unidad}</div></div>
             <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Estado</span><div className="font-semibold mt-1">{selectedProduct.activo ? 'Activo' : 'Inactivo'}</div></div>
           </div>
           {selectedRecipe ? (
@@ -270,7 +293,7 @@ export default function Productos() {
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: 'var(--color-muted)' }}>
-                {['Producto', 'Categoría', 'Precio', 'Stock', 'Unidad', 'Estado'].map(h => (
+                {['Código', 'Producto', 'Categoría', 'Precio', 'Stock', 'Unidad', 'Estado'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap"
                     style={{ color: 'var(--color-muted-foreground)' }}>{h}</th>
                 ))}
@@ -279,6 +302,7 @@ export default function Productos() {
             <tbody>
               {filtered.map(p => (
                 <tr key={p.id} className="border-t cursor-pointer transition-colors hover:opacity-90" style={{ borderColor: 'var(--color-border)' }} onClick={() => startDetail(p)}>
+                  <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--color-foreground)' }}>{p.codigo}</td>
                   <td className="px-4 py-3">
                     <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>{p.nombre}</div>
                     <div className="text-xs mt-0.5" style={{ color: 'var(--color-muted-foreground)' }}>{p.descripcion}</div>

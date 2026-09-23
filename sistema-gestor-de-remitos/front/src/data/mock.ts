@@ -8,13 +8,13 @@ export const USUARIOS: Usuario[] = [
 ];
 
 export const PRODUCTOS: Producto[] = [
-  { id: 'p1', nombre: 'Yogur Natural 500g', descripcion: 'Yogur natural cremoso sin azúcar', categoria: 'Yogures', unidad: 'unidad', precioVenta: 850, stockActual: 120, stockMinimo: 30, activo: true },
-  { id: 'p2', nombre: 'Yogur Frutado Frutilla 500g', descripcion: 'Yogur con trocitos de frutilla', categoria: 'Yogures', unidad: 'unidad', precioVenta: 950, stockActual: 85, stockMinimo: 30, activo: true },
-  { id: 'p3', nombre: 'Kéfir Natural 500ml', descripcion: 'Kéfir de leche fermentado artesanal', categoria: 'Kéfir', unidad: 'unidad', precioVenta: 1100, stockActual: 60, stockMinimo: 20, activo: true },
-  { id: 'p4', nombre: 'Kéfir Agua Limón 500ml', descripcion: 'Kéfir de agua con limón', categoria: 'Kéfir', unidad: 'unidad', precioVenta: 900, stockActual: 45, stockMinimo: 20, activo: true },
-  { id: 'p5', nombre: 'Granola Clásica 300g', descripcion: 'Granola con avena, miel y frutos secos', categoria: 'Granolas', unidad: 'unidad', precioVenta: 1400, stockActual: 70, stockMinimo: 15, activo: true },
-  { id: 'p6', nombre: 'Granola Cacao 300g', descripcion: 'Granola con cacao y chips de chocolate', categoria: 'Granolas', unidad: 'unidad', precioVenta: 1500, stockActual: 50, stockMinimo: 15, activo: true },
-  { id: 'p7', nombre: 'Yogur Griego 250g', descripcion: 'Yogur griego espeso y cremoso', categoria: 'Yogures', unidad: 'unidad', precioVenta: 1200, stockActual: 40, stockMinimo: 20, activo: true },
+  { id: 'p1', codigo: 'YOG-001', codigoBarras: '779123456001', nombre: 'Yogur Natural 500g', descripcion: 'Yogur natural cremoso sin azúcar', categoria: 'Yogures', unidad: 'unidad', precioVenta: 850, stockActual: 120, stockMinimo: 30, activo: true },
+  { id: 'p2', codigo: 'YOG-002', codigoBarras: '779123456002', nombre: 'Yogur Frutado Frutilla 500g', descripcion: 'Yogur con trocitos de frutilla', categoria: 'Yogures', unidad: 'unidad', precioVenta: 950, stockActual: 85, stockMinimo: 30, activo: true },
+  { id: 'p3', codigo: 'KEF-001', codigoBarras: '779123456003', nombre: 'Kéfir Natural 500ml', descripcion: 'Kéfir de leche fermentado artesanal', categoria: 'Kéfir', unidad: 'unidad', precioVenta: 1100, stockActual: 60, stockMinimo: 20, activo: true },
+  { id: 'p4', codigo: 'KEF-002', codigoBarras: '779123456004', nombre: 'Kéfir Agua Limón 500ml', descripcion: 'Kéfir de agua con limón', categoria: 'Kéfir', unidad: 'unidad', precioVenta: 900, stockActual: 45, stockMinimo: 20, activo: true },
+  { id: 'p5', codigo: 'GRA-001', codigoBarras: '779123456005', nombre: 'Granola Clásica 300g', descripcion: 'Granola con avena, miel y frutos secos', categoria: 'Granolas', unidad: 'unidad', precioVenta: 1400, stockActual: 70, stockMinimo: 15, activo: true },
+  { id: 'p6', codigo: 'GRA-002', codigoBarras: '779123456006', nombre: 'Granola Cacao 300g', descripcion: 'Granola con cacao y chips de chocolate', categoria: 'Granolas', unidad: 'unidad', precioVenta: 1500, stockActual: 50, stockMinimo: 15, activo: true },
+  { id: 'p7', codigo: 'YOG-003', codigoBarras: '779123456007', nombre: 'Yogur Griego 250g', descripcion: 'Yogur griego espeso y cremoso', categoria: 'Yogures', unidad: 'unidad', precioVenta: 1200, stockActual: 40, stockMinimo: 20, activo: true },
 ];
 
 export const INSUMOS: Insumo[] = [

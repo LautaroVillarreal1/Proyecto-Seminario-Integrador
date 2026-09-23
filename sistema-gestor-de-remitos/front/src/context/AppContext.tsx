@@ -73,7 +73,19 @@ function mapRemito(value: any): Remito {
 }
 
 function mapProducto(value: any): Producto {
-  return { id: `p${value.idProducto}`, nombre: value.nombre, descripcion: value.descripcion, categoria: value.categoria?.nombre ?? 'Sin categoría', unidad: value.unidadDeMedida?.nombre ?? 'unidad', precioVenta: Number(value.precioUnitario), stockActual: Number(value.stockActual), stockMinimo: Number(value.stockMinimo), activo: value.activo };
+  return {
+    id: `p${value.idProducto}`,
+    codigo: value.codigo ?? '',
+    codigoBarras: value.codigoBarras ?? undefined,
+    nombre: value.nombre,
+    descripcion: value.descripcion,
+    categoria: value.categoria?.nombre ?? 'Sin categoría',
+    unidad: value.unidadDeMedida?.nombre ?? 'unidad',
+    precioVenta: Number(value.precioUnitario),
+    stockActual: Number(value.stockActual),
+    stockMinimo: Number(value.stockMinimo),
+    activo: value.activo,
+  };
 }
 
 function mapInsumo(value: any): Insumo {
@@ -152,7 +164,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!changed) return;
     const id = Number(changed.id.replace('p', ''));
     const isNew = !previous.some(item => item.id === changed.id);
-    const payload = { nombre: changed.nombre, descripcion: changed.descripcion, precioUnitario: changed.precioVenta, peso: 0, idUnidadDeMedida: 1, idCategoria: changed.categoria === 'Kéfir' ? 3 : changed.categoria === 'Granolas' ? 4 : 1, stockActual: changed.stockActual, stockMinimo: changed.stockMinimo, activo: changed.activo };
+    const payload = {
+      codigo: changed.codigo?.trim(),
+      codigoBarras: changed.codigoBarras?.trim() || undefined,
+      nombre: changed.nombre,
+      descripcion: changed.descripcion,
+      precioUnitario: Math.max(0, Number(changed.precioVenta) || 0),
+      peso: 0,
+      idUnidadDeMedida: 1,
+      idCategoria: 1,
+      stockActual: Math.max(0, Number(changed.stockActual) || 0),
+      stockMinimo: Math.max(0, Number(changed.stockMinimo) || 0),
+      activo: changed.activo,
+    };
     void fetch(!isNew ? `/api/productos/${id}` : '/api/productos', { method: !isNew ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) });
   };
 

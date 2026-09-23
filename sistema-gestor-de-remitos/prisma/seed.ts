@@ -25,8 +25,8 @@ async function main() {
   const categoria = await prisma.categoria.upsert({ where: { idCategoria: 1 }, update: {}, create: { idCategoria: 1, nombre: 'Yogur' } });
   const unidad = await prisma.unidadDeMedida.upsert({ where: { idUnidadDeMedida: 1 }, update: {}, create: { idUnidadDeMedida: 1, nombre: 'unidad' } });
   const productos = await Promise.all([
-    prisma.producto.upsert({ where: { idProducto: 1 }, update: {}, create: { idProducto: 1, nombre: 'Yogur Natural 500g', descripcion: 'Yogur natural cremoso', peso: 0.5, precioUnitario: 850, stockActual: 120, stockMinimo: 30, idCategoria: categoria.idCategoria, idUnidadDeMedida: unidad.idUnidadDeMedida } }),
-    prisma.producto.upsert({ where: { idProducto: 2 }, update: {}, create: { idProducto: 2, nombre: 'Granola Clásica 300g', descripcion: 'Granola con avena y miel', peso: 0.3, precioUnitario: 1400, stockActual: 70, stockMinimo: 15, idCategoria: categoria.idCategoria, idUnidadDeMedida: unidad.idUnidadDeMedida } }),
+    prisma.producto.upsert({ where: { idProducto: 1 }, update: {}, create: { idProducto: 1, codigo: 'YOG-001', codigoBarras: '7790000000001', nombre: 'Yogur Natural 500g', descripcion: 'Yogur natural cremoso', peso: 0.5, precioUnitario: 850, stockActual: 120, stockMinimo: 30, idCategoria: categoria.idCategoria, idUnidadDeMedida: unidad.idUnidadDeMedida } }),
+    prisma.producto.upsert({ where: { idProducto: 2 }, update: {}, create: { idProducto: 2, codigo: 'GRA-001', codigoBarras: '7790000000002', nombre: 'Granola Clásica 300g', descripcion: 'Granola con avena y miel', peso: 0.3, precioUnitario: 1400, stockActual: 70, stockMinimo: 15, idCategoria: categoria.idCategoria, idUnidadDeMedida: unidad.idUnidadDeMedida } }),
   ]);
   const insumos = await Promise.all([
     prisma.insumo.upsert({ where: { idInsumo: 1 }, update: {}, create: { idInsumo: 1, nombre: 'Leche entera', descripcion: 'Leche para producción', stockActual: 500, stockMinimo: 100, costoUnitario: 120, proveedor: 'Tambo Los Álamos', idUnidadDeMedida: 3 } }),

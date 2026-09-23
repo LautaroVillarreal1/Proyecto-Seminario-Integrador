@@ -55,6 +55,8 @@ export interface Remito {
 
 export interface Producto {
   id: string;
+  codigo: string;
+  codigoBarras?: string;
   nombre: string;
   descripcion: string;
   categoria: string;

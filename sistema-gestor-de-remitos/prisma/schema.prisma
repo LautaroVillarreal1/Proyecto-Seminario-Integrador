@@ -119,6 +119,8 @@ model Insumo {
 
 model Producto {
   idProducto       Int             @id @default(autoincrement()) // tipo asumido
+  codigo           String          @unique
+  codigoBarras     String?         @unique
   nombre           String
   precioUnitario   Decimal // tipo asumido
   descripcion      String

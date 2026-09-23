@@ -6,6 +6,7 @@ export class RecipeIngredientDto {
 }
 
 export class CreateRecipeDto {
+  @IsOptional() @IsInt() idProducto?: number;
   @IsString() descripcion!: string;
   @IsNumber() @Min(0) rendimiento!: number;
   @IsString() unidadRendimiento!: string;

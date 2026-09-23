@@ -25,4 +25,4 @@ COPY --from=build /app/tsconfig.json ./tsconfig.json
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma generate && npx prisma db push --skip-generate && npm run db:seed && npm run start:prod"]
+CMD ["sh", "-c", "npx prisma generate && npx prisma db push --force-reset --skip-generate && npm run db:seed && npm run start:prod"]
