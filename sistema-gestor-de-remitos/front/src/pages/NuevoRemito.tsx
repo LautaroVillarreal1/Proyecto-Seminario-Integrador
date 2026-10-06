@@ -1,23 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import ProductNameButton from '../components/ProductNameButton';
 import type { Remito, RemitoItem } from '../types';
 
+const normalizeText = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/\s+/g, ' ').toLowerCase();
+const normalizePhone = (value: string) => value.replace(/\D/g, '');
+
 export default function NuevoRemito() {
   const navigate = useNavigate();
-  const { productos, usuarios, addRemito, currentUser } = useApp();
+  const { productos, usuarios, clientes, provincias, addCliente, addRemito, currentUser } = useApp();
   const viajantes = usuarios.filter(u => u.rol === 'viajante' && u.activo);
 
-  const [clienteNombre, setClienteNombre] = useState('');
-  const [clienteDireccion, setClienteDireccion] = useState('');
-  const [clienteTelefono, setClienteTelefono] = useState('');
+  const [clienteId, setClienteId] = useState<number | null>(null);
+  const [clienteSearch, setClienteSearch] = useState('');
+  const [clienteDropdownOpen, setClienteDropdownOpen] = useState(false);
+  const clientePickerRef = useRef<HTMLDivElement>(null);
+  const [showClienteForm, setShowClienteForm] = useState(false);
+  const [clienteSaving, setClienteSaving] = useState(false);
+  const [clienteError, setClienteError] = useState('');
+  const [clienteForm, setClienteForm] = useState({ nombre: '', descripcion: '', ciudad: '', calle: '', numero: '', correoElectronico: '', numeroDeTelefono: '', idProvincia: '' });
   const [viajanteId, setViajanteId] = useState('');
-  const [descuento, setDescuento] = useState(0);
+  const [descuento, setDescuento] = useState<number | undefined>(0);
   const [observaciones, setObservaciones] = useState('');
   const [items, setItems] = useState<RemitoItem[]>([]);
   const [productoSelId, setProductoSelId] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!clientePickerRef.current?.contains(event.target as Node)) {
+        setClienteDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, []);
+
+  const selectedCliente = clientes.find(cliente => cliente.idCliente === clienteId);
+  const filteredClientes = clientes.filter(cliente => {
+    const query = normalizeText(clienteSearch);
+    return !query || normalizeText(`${cliente.nombre} ${cliente.correoElectronico} ${cliente.direccion} ${cliente.provincia?.nombre ?? ''}`).includes(query);
+  });
 
   const addItem = () => {
     const prod = productos.find(p => p.id === productoSelId);
@@ -53,13 +78,66 @@ export default function NuevoRemito() {
   const removeItem = (productoId: string) => setItems(items.filter(i => i.productoId !== productoId));
 
   const subtotal = items.reduce((s, i) => s + i.subtotal, 0);
-  const total = subtotal - descuento;
+  const total = subtotal - (descuento ?? 0);
   const fmt = (n: number) => `$${n.toLocaleString('es-AR')}`;
+
+  const handleCreateCliente = async () => {
+    setClienteError('');
+    const nombre = clienteForm.nombre.trim();
+    const ciudad = clienteForm.ciudad.trim();
+    const calle = clienteForm.calle.trim();
+    const numero = clienteForm.numero.trim();
+    const correoElectronico = clienteForm.correoElectronico.trim().toLowerCase();
+    const numeroDeTelefono = clienteForm.numeroDeTelefono.trim();
+    const direccion = `${calle} ${numero}, ${ciudad}`;
+
+    if (!nombre || !ciudad || !calle || !numero || !correoElectronico || !numeroDeTelefono || !clienteForm.idProvincia) {
+      setClienteError('Completá nombre, ciudad, calle, número, correo, teléfono y provincia.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoElectronico)) {
+      setClienteError('Ingresá un correo electrónico válido.');
+      return;
+    }
+    if (clienteForm.descripcion.trim().length > 400) {
+      setClienteError('La descripción no puede superar los 400 caracteres.');
+      return;
+    }
+    const duplicate = clientes.some(cliente =>
+      normalizeText(cliente.correoElectronico) === normalizeText(correoElectronico) ||
+      (normalizePhone(numeroDeTelefono).length > 0 && normalizePhone(cliente.numeroDeTelefono) === normalizePhone(numeroDeTelefono)) ||
+      (normalizeText(cliente.nombre) === normalizeText(nombre) && normalizeText(cliente.direccion) === normalizeText(direccion)),
+    );
+    if (duplicate) {
+      setClienteError('Ya existe un cliente con el mismo correo, teléfono o nombre y dirección.');
+      return;
+    }
+
+    setClienteSaving(true);
+    const created = await addCliente({
+      nombre,
+      descripcion: clienteForm.descripcion.trim(),
+      direccion,
+      correoElectronico,
+      numeroDeTelefono,
+      idProvincia: Number(clienteForm.idProvincia),
+    });
+    setClienteSaving(false);
+    if (!created) {
+      setClienteError('No se pudo crear el cliente. Revisá los datos e intentá nuevamente.');
+      return;
+    }
+    setClienteId(created.idCliente);
+    setClienteSearch(created.nombre);
+    setClienteDropdownOpen(false);
+    setShowClienteForm(false);
+    setClienteForm({ nombre: '', descripcion: '', ciudad: '', calle: '', numero: '', correoElectronico: '', numeroDeTelefono: '', idProvincia: '' });
+  };
 
   const handleSubmit = async (estado: 'borrador' | 'pendiente') => {
     const errs: string[] = [];
-    if (!clienteNombre.trim()) errs.push('Nombre del cliente requerido');
-    if (!clienteDireccion.trim()) errs.push('Dirección requerida');
+    const cliente = clientes.find(item => item.idCliente === clienteId);
+    if (!cliente) errs.push('Seleccioná un cliente.');
     if (!viajanteId.trim()) errs.push('Es necesario asignar viajante');
     if (items.length === 0) errs.push('Debe agregar al menos un producto');
     if (errs.length > 0) { setErrors(errs); return; }
@@ -69,14 +147,15 @@ export default function NuevoRemito() {
       id: `rem${Date.now()}`,
       numero: `R-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 900) + 100)}`,
       fecha: new Date().toISOString().split('T')[0],
-      clienteNombre: clienteNombre.trim(),
-      clienteDireccion: clienteDireccion.trim(),
-      clienteTelefono: clienteTelefono.trim() || undefined,
+      clienteId: cliente!.idCliente,
+      clienteNombre: cliente!.nombre,
+      clienteDireccion: cliente!.direccion,
+      clienteTelefono: cliente!.numeroDeTelefono,
       viajanteId: viajanteId || undefined,
       viajanteNombre: viajante?.nombre,
       items,
       subtotal,
-      descuento,
+      descuento: descuento ?? 0,
       total,
       estado,
       observaciones: observaciones.trim() || undefined,
@@ -120,29 +199,87 @@ export default function NuevoRemito() {
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
               Datos del cliente
             </h2>
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Nombre *</label>
-                <input value={clienteNombre} onChange={e => setClienteNombre(e.target.value)}
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div ref={clientePickerRef} className="relative flex-1">
+                <input
+                  role="combobox"
+                  aria-label="Buscar y seleccionar cliente"
+                  aria-expanded={clienteDropdownOpen}
+                  aria-controls="clientes-options"
+                  autoComplete="off"
+                  value={clienteSearch}
+                  onFocus={() => setClienteDropdownOpen(true)}
+                  onChange={event => { setClienteSearch(event.target.value); setClienteId(null); setClienteDropdownOpen(true); }}
                   className="w-full px-3 py-2.5 rounded-xl border text-sm outline-none"
                   style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-                  placeholder="Nombre del cliente o negocio" />
+                  placeholder="Buscar por nombre, correo o dirección" />
+                {clienteDropdownOpen && (
+                  <div id="clientes-options" role="listbox" className="absolute z-20 mt-1 w-full max-h-56 overflow-y-auto rounded-lg border shadow-lg" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
+                    {filteredClientes.length > 0 ? filteredClientes.slice(0, 8).map(cliente => (
+                      <button key={cliente.idCliente} type="button" role="option" aria-selected={cliente.idCliente === clienteId}
+                        onClick={() => { setClienteId(cliente.idCliente); setClienteSearch(cliente.nombre); setClienteDropdownOpen(false); }}
+                        className="block w-full px-3 py-2.5 text-left text-sm hover:bg-[var(--color-muted)]">
+                        <span className="block font-medium" style={{ color: 'var(--color-foreground)' }}>{cliente.nombre}</span>
+                        <span className="block text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{cliente.direccion} · {cliente.provincia?.nombre ?? 'Provincia sin datos'}</span>
+                      </button>
+                    )) : <p className="px-3 py-3 text-sm" style={{ color: 'var(--color-muted-foreground)' }}>No hay clientes que coincidan.</p>}
+                  </div>
+                )}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Dirección *</label>
-                <input value={clienteDireccion} onChange={e => setClienteDireccion(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border text-sm outline-none"
-                  style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-                  placeholder="Calle, número, localidad" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Teléfono</label>
-                <input value={clienteTelefono} onChange={e => setClienteTelefono(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border text-sm outline-none"
-                  style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-                  placeholder="Opcional" />
-              </div>
+              <button type="button" onClick={() => { setShowClienteForm(value => !value); setClienteError(''); }}
+                className="shrink-0 px-4 py-2.5 rounded-xl border text-sm font-semibold"
+                style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)', background: 'var(--color-card)' }}>
+                + Nuevo cliente
+              </button>
             </div>
+            {selectedCliente && !showClienteForm && (
+              <div className="mt-3 text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
+                <p className="font-medium" style={{ color: 'var(--color-foreground)' }}>{selectedCliente.nombre}</p>
+                <p>{selectedCliente.direccion} · {selectedCliente.provincia?.nombre ?? 'Provincia sin datos'}</p>
+                <p>{selectedCliente.correoElectronico} · {selectedCliente.numeroDeTelefono}</p>
+              </div>
+            )}
+            {showClienteForm && (
+              <div className="mt-5 border-t pt-4 space-y-3" style={{ borderColor: 'var(--color-border)' }}>
+                <h3 className="text-sm font-semibold" style={{ color: 'var(--color-foreground)' }}>Nuevo cliente</h3>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Nombre *
+                    <input value={clienteForm.nombre} onChange={e => setClienteForm({ ...clienteForm, nombre: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                  </label>
+                  <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Correo electrónico *
+                    <input type="email" value={clienteForm.correoElectronico} onChange={e => setClienteForm({ ...clienteForm, correoElectronico: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                  </label>
+                  <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Teléfono *
+                    <input type="tel" value={clienteForm.numeroDeTelefono} onChange={e => setClienteForm({ ...clienteForm, numeroDeTelefono: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                  </label>
+                  <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Provincia *
+                    <select value={clienteForm.idProvincia} onChange={e => setClienteForm({ ...clienteForm, idProvincia: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>
+                      <option value="">Seleccionar provincia</option>
+                      {provincias.map(provincia => <option key={provincia.idProvincia} value={provincia.idProvincia}>{provincia.nombre}</option>)}
+                    </select>
+                  </label>
+                  <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Ciudad *
+                    <input value={clienteForm.ciudad} onChange={e => setClienteForm({ ...clienteForm, ciudad: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                  </label>
+                  <div className="grid grid-cols-[1fr_7rem] gap-2">
+                    <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Calle *
+                      <input value={clienteForm.calle} onChange={e => setClienteForm({ ...clienteForm, calle: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                    </label>
+                    <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Número *
+                      <input value={clienteForm.numero} onChange={e => setClienteForm({ ...clienteForm, numero: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                    </label>
+                  </div>
+                  <label className="text-xs font-medium sm:col-span-2" style={{ color: 'var(--color-foreground)' }}>Descripción (opcional, hasta 400 caracteres)
+                    <textarea maxLength={400} rows={2} value={clienteForm.descripcion} onChange={e => setClienteForm({ ...clienteForm, descripcion: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none resize-y" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                  </label>
+                </div>
+                {clienteError && <p role="alert" className="text-sm" style={{ color: '#B42318' }}>{clienteError}</p>}
+                <div className="flex gap-2">
+                  <button type="button" onClick={handleCreateCliente} disabled={clienteSaving} className="px-4 py-2 rounded-xl text-sm font-semibold disabled:opacity-50" style={{ background: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }}>{clienteSaving ? 'Guardando...' : 'Guardar cliente'}</button>
+                  <button type="button" onClick={() => { setShowClienteForm(false); setClienteError(''); }} className="px-4 py-2 rounded-xl border text-sm" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>Cancelar</button>
+                </div>
+              </div>
+            )}
           </section>
 
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
@@ -249,8 +386,8 @@ export default function NuevoRemito() {
                 <input
                   type="number"
                   min={0}
-                  value={descuento}
-                  onChange={e => setDescuento(Math.max(0, Number(e.target.value)))}
+                  value={descuento ?? ''}
+                  onChange={e => setDescuento(e.target.value === '' ? undefined : Math.max(0, Number(e.target.value)))}
                   className="w-24 px-2 py-1 rounded-lg border text-xs text-right font-mono outline-none"
                   style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
                 />

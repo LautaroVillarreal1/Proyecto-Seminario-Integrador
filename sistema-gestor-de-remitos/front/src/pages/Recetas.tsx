@@ -6,11 +6,11 @@ import type { Receta } from '../types';
 type RecipeDraft = {
   productoId: string;
   productoNombre: string;
-  rendimiento: number;
+  rendimiento: number | undefined;
   unidadRendimiento: string;
-  tiempoPrepMin: number;
+  tiempoPrepMin: number | undefined;
   instrucciones: string;
-  ingredientes: Array<{ insumoId: string; insumoNombre: string; cantidad: number; unidad: string }>;
+  ingredientes: Array<{ insumoId: string; insumoNombre: string; cantidad: number | undefined; unidad: string }>;
 };
 
 export default function Recetas() {
@@ -106,8 +106,8 @@ export default function Recetas() {
 
   const handleCreateOrUpdate = async () => {
     if (!draft || !draft.productoId) { notifyError('Seleccioná un producto para la receta.'); return; }
-    if (!draft.unidadRendimiento.trim() || draft.rendimiento < 1) { notifyError('Completá la unidad y un rendimiento mayor que cero.'); return; }
-    if (draft.ingredientes.length === 0 || draft.ingredientes.some(ingredient => !ingredient.insumoId || ingredient.cantidad <= 0)) {
+    if (!draft.unidadRendimiento.trim() || (draft.rendimiento ?? 0) < 1) { notifyError('Completá la unidad y un rendimiento mayor que cero.'); return; }
+    if (draft.ingredientes.length === 0 || draft.ingredientes.some(ingredient => !ingredient.insumoId || (ingredient.cantidad ?? 0) <= 0)) {
       notifyError('Agregá al menos un insumo con una cantidad mayor que cero.');
       return;
     }
@@ -162,7 +162,7 @@ export default function Recetas() {
       item.insumoNombre = insumo?.nombre ?? item.insumoNombre;
       item.unidad = insumo?.unidad ?? item.unidad;
     } else if (field === 'cantidad') {
-      item.cantidad = Math.max(0, Number(value || 0));
+      item.cantidad = value === '' || value === undefined ? undefined : Math.max(0, Number(value));
     } else if (field === 'insumoNombre') {
       item.insumoNombre = String(value);
     } else if (field === 'unidad') {
@@ -278,7 +278,7 @@ export default function Recetas() {
               </div>
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Rendimiento</label>
-                <input type="number" min={1} value={draft?.rendimiento ?? receta?.rendimiento ?? 1} onChange={e => setDraft(draft ? { ...draft, rendimiento: Number(e.target.value) } : null)}
+                <input type="number" min={1} value={draft ? draft.rendimiento ?? '' : receta?.rendimiento ?? 1} onChange={e => setDraft(draft ? { ...draft, rendimiento: e.target.value === '' ? undefined : Number(e.target.value) } : null)}
                   className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                   style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
               </div>
@@ -290,7 +290,7 @@ export default function Recetas() {
               </div>
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Tiempo prep. (min)</label>
-                <input type="number" min={0} value={draft?.tiempoPrepMin ?? receta?.tiempoPrepMin ?? 0} onChange={e => setDraft(draft ? { ...draft, tiempoPrepMin: Number(e.target.value) } : null)}
+                <input type="number" min={0} value={draft ? draft.tiempoPrepMin ?? '' : receta?.tiempoPrepMin ?? 0} onChange={e => setDraft(draft ? { ...draft, tiempoPrepMin: e.target.value === '' ? undefined : Number(e.target.value) } : null)}
                   className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                   style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
               </div>
@@ -328,7 +328,7 @@ export default function Recetas() {
                     style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>
                     {insumos.map(item => <option key={item.id} value={item.id}>{item.nombre}</option>)}
                   </select>
-                  <input type="number" min={0} value={ing.cantidad} onChange={e => updateIngredient(index, 'cantidad', Number(e.target.value))}
+                  <input type="number" min={0} value={ing.cantidad ?? ''} onChange={e => updateIngredient(index, 'cantidad', e.target.value === '' ? undefined : Number(e.target.value))}
                     className="px-3 py-2 rounded-xl border text-sm outline-none"
                     style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
                   <input value={ing.unidad} onChange={e => updateIngredient(index, 'unidad', e.target.value)}

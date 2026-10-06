@@ -8,6 +8,23 @@ export interface Usuario {
   activo: boolean;
 }
 
+export interface Provincia {
+  idProvincia: number;
+  nombre: string;
+}
+
+export interface Cliente {
+  id: string;
+  idCliente: number;
+  nombre: string;
+  descripcion?: string;
+  direccion: string;
+  correoElectronico: string;
+  numeroDeTelefono: string;
+  idProvincia: number;
+  provincia?: Provincia;
+}
+
 export type EstadoRemito =
   | 'borrador'
   | 'pendiente'
@@ -35,6 +52,7 @@ export interface Remito {
   id: string;
   numero: string;
   fecha: string;
+  clienteId?: number;
   clienteNombre: string;
   clienteDireccion: string;
   clienteTelefono?: string;

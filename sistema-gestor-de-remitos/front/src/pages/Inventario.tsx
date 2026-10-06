@@ -38,6 +38,11 @@ export default function Inventario() {
 
   const save = async () => {
     if (!form.nombre?.trim()) { notifyError('Completá el dato obligatorio: Nombre del insumo.'); return; }
+    if (form.costoUnitario === undefined || form.costoUnitario === null || form.costoUnitario === '') { notifyError('El costo unitario es obligatorio.'); return; }
+    const costoUnitario = Number(form.costoUnitario);
+    if (!Number.isFinite(costoUnitario)) { notifyError('Ingresá un costo unitario válido.'); return; }
+    if (costoUnitario < 0) { notifyError('El costo unitario no puede ser negativo.'); return; }
+    if (costoUnitario === 0) { notifyError('El costo unitario debe ser mayor que $0.'); return; }
     if (showNew) {
       const nuevo: Insumo = {
         id: `i${Date.now()}`,
@@ -45,7 +50,7 @@ export default function Inventario() {
         stockActual: Number(form.stockActual || 0),
         stockMinimo: Number(form.stockMinimo || 0),
         proveedor: form.proveedor,
-        costoUnitario: Number(form.costoUnitario || 0),
+        costoUnitario,
       };
       if (!await setInsumos([...insumos, nuevo])) return;
     } else if (editId) {
@@ -94,8 +99,10 @@ export default function Inventario() {
               <div key={f.key}>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>{f.label}</label>
                 <input type={f.type}
-                  value={(form as any)[f.key] || ''}
-                  onChange={e => setForm({ ...form, [f.key]: f.type === 'number' ? Number(e.target.value) : e.target.value })}
+                  min={f.key === 'costoUnitario' ? 0.01 : undefined}
+                  step={f.key === 'costoUnitario' ? '0.01' : undefined}
+                  value={(form as any)[f.key] ?? ''}
+                  onChange={e => setForm({ ...form, [f.key]: f.type === 'number' ? e.target.value === '' ? undefined : Number(e.target.value) : e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                   style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
                 />

@@ -3,6 +3,15 @@ import { useApp } from '../context/AppContext';
 import type { Producto, Receta } from '../types';
 
 const CATEGORIAS = ['Yogures', 'Kéfir', 'Granolas'];
+type ProductoForm = Omit<Partial<Producto>, 'precioVenta' | 'stockActual' | 'stockMinimo'> & {
+  precioVenta?: number | string;
+  stockActual?: number | string;
+  stockMinimo?: number | string;
+  recetaRendimiento?: number;
+  recetaUnidadRendimiento?: string;
+  recetaTiempoPrepMin?: number;
+  recetaInstrucciones?: string;
+};
 const UNIDADES = [
   { value: 'Litro', label: 'Litro', abreviatura: 'L' },
   { value: 'Mililitro', label: 'Mililitro', abreviatura: 'ml' },
@@ -37,7 +46,7 @@ export default function Productos() {
   const [editId, setEditId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [createRecipe, setCreateRecipe] = useState(false);
-  const [form, setForm] = useState<Partial<Producto & { recetaRendimiento: number; recetaUnidadRendimiento: string; recetaTiempoPrepMin: number; recetaInstrucciones: string }>>({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' });
+  const [form, setForm] = useState<ProductoForm>({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' });
 
   const filtered = productos
     .filter(p => !catFiltro || p.categoria === catFiltro)
@@ -48,19 +57,22 @@ export default function Productos() {
     return UNIDADES.find(u => u.value.toLowerCase() === value || u.label.toLowerCase() === value || u.abreviatura.toLowerCase() === value)?.label ?? value;
   }, [form.unidad]);
 
-  const startNew = () => { setShowNew(true); setEditId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '', recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
+  const startNew = () => { setShowNew(true); setEditId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '', precioVenta: 0, stockActual: 0, stockMinimo: 0, recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
   const cancel = () => { setEditId(null); setShowNew(false); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' }); };
 
   const save = async () => {
     const nombre = form.nombre?.trim() ?? '';
     const codigo = form.codigo?.trim() ?? '';
-    const precio = Number(form.precioVenta ?? 0);
     const stockActual = Number(form.stockActual ?? 0);
     const stockMinimo = Number(form.stockMinimo ?? 0);
 
-    const missing = [!codigo && 'Código', !nombre && 'Nombre', !form.categoria && 'Categoría', (form.precioVenta === undefined || form.precioVenta === null || form.precioVenta === '') && 'Precio de venta'].filter(Boolean);
+    const missing = [!codigo && 'Código', !nombre && 'Nombre', !form.categoria && 'Categoría'].filter(Boolean);
     if (missing.length) { notifyError(`Completá los datos obligatorios: ${missing.join(', ')}.`); return; }
-    if (precio < 0 || stockActual < 0 || stockMinimo < 0) { notifyError('Los precios y el stock no pueden ser negativos.'); return; }
+    if (form.precioVenta === undefined || form.precioVenta === null || form.precioVenta === '') { notifyError('El precio de venta es obligatorio.'); return; }
+    const precio = Number(form.precioVenta);
+    if (!Number.isFinite(precio)) { notifyError('Ingresá un precio de venta válido.'); return; }
+    if (precio < 0) { notifyError('El precio de venta no puede ser negativo.'); return; }
+    if (!Number.isFinite(stockActual) || !Number.isFinite(stockMinimo) || stockActual < 0 || stockMinimo < 0) { notifyError('Ingresá valores de stock válidos y no negativos.'); return; }
 
     if (showNew) {
       const nuevo: Producto = {
@@ -146,7 +158,8 @@ export default function Productos() {
             </div>
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Precio venta *</label>
-              <input type="number" min={0} value={form.precioVenta ?? ''} onChange={e => setForm({ ...form, precioVenta: Number(e.target.value) })}
+              <input type="text" inputMode="decimal" value={form.precioVenta ?? ''} onChange={e => { const value = e.target.value.replace(',', '.'); if (/^\d*\.?\d*$/.test(value)) setForm({ ...form, precioVenta: value === '' ? undefined : value }); }}
+                onKeyDown={e => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                 style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
             </div>
@@ -161,13 +174,15 @@ export default function Productos() {
             </div>
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Stock actual</label>
-              <input type="number" min={0} value={form.stockActual ?? 0} onChange={e => setForm({ ...form, stockActual: Number(e.target.value) })}
+              <input type="text" inputMode="decimal" value={form.stockActual ?? ''} onChange={e => { const value = e.target.value.replace(',', '.'); if (/^\d*\.?\d*$/.test(value)) setForm({ ...form, stockActual: value === '' ? undefined : value }); }}
+                onKeyDown={e => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                 style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
             </div>
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Stock mínimo</label>
-              <input type="number" min={0} value={form.stockMinimo ?? 0} onChange={e => setForm({ ...form, stockMinimo: Number(e.target.value) })}
+              <input type="text" inputMode="decimal" value={form.stockMinimo ?? ''} onChange={e => { const value = e.target.value.replace(',', '.'); if (/^\d*\.?\d*$/.test(value)) setForm({ ...form, stockMinimo: value === '' ? undefined : value }); }}
+                onKeyDown={e => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                 style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
             </div>
@@ -199,7 +214,7 @@ export default function Productos() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
                 <div>
                   <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Rendimiento</label>
-                  <input type="number" min={1} value={form.recetaRendimiento ?? 1} onChange={e => setForm({ ...form, recetaRendimiento: Number(e.target.value) })}
+                  <input type="number" min={1} value={form.recetaRendimiento ?? ''} onChange={e => setForm({ ...form, recetaRendimiento: e.target.value === '' ? undefined : Number(e.target.value) })}
                     className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                     style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
                 </div>
@@ -211,7 +226,7 @@ export default function Productos() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--color-foreground)' }}>Tiempo prep. (min)</label>
-                  <input type="number" min={0} value={form.recetaTiempoPrepMin ?? 15} onChange={e => setForm({ ...form, recetaTiempoPrepMin: Number(e.target.value) })}
+                  <input type="number" min={0} value={form.recetaTiempoPrepMin ?? ''} onChange={e => setForm({ ...form, recetaTiempoPrepMin: e.target.value === '' ? undefined : Number(e.target.value) })}
                     className="w-full px-3 py-2 rounded-xl border text-sm outline-none"
                     style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
                 </div>

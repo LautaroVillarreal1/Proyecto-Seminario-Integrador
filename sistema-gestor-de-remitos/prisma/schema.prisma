@@ -29,7 +29,7 @@ model Rol {
 model Cliente {
   idCliente         Int       @id @default(autoincrement()) // tipo asumido
   nombre            String
-  descripcion       String
+  descripcion       String?   @db.VarChar(400)
   direccion         String // "direccion(calle numero)" en el DER
   correoElectronico String
   numeroDeTelefono  String

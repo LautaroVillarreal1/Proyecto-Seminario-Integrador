@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { Usuario, Remito, Producto, Insumo, Receta } from '../types';
+import type { Usuario, Remito, Producto, Insumo, Receta, Cliente, Provincia } from '../types';
 import { USUARIOS, REMITOS, PRODUCTOS, INSUMOS, RECETAS } from '../data/mock';
 
 interface AppContextType {
@@ -8,6 +8,9 @@ interface AppContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   usuarios: Usuario[];
+  clientes: Cliente[];
+  provincias: Provincia[];
+  addCliente: (cliente: Omit<Cliente, 'id' | 'idCliente' | 'provincia'>) => Promise<Cliente | null>;
   remitos: Remito[];
   setRemitos: (r: Remito[]) => void;
   addRemito: (r: Remito) => Promise<Remito | null>;
@@ -58,6 +61,7 @@ function mapRemito(value: any): Remito {
     id: `rem${value.idRemito ?? value.id}`,
     numero: value.numero ?? `R-2026-${String(value.idRemito ?? value.id).padStart(3, '0')}`,
     fecha: new Date(value.fechaEntrega).toISOString().split('T')[0],
+    clienteId: value.cliente?.idCliente ?? value.idCliente,
     clienteNombre: value.cliente?.nombre ?? value.clienteNombre ?? 'Cliente',
     clienteDireccion: value.cliente?.direccion ?? value.clienteDireccion ?? '',
     clienteTelefono: value.cliente?.numeroDeTelefono ?? value.clienteTelefono,
@@ -73,6 +77,20 @@ function mapRemito(value: any): Remito {
     observaciones: value.observacion,
     inconveniente: value.inconveniente,
     creadoPor: value.usuario?.idUsuario ? `u${value.usuario.idUsuario}` : 'u1',
+  };
+}
+
+function mapCliente(value: any): Cliente {
+  return {
+    id: `c${value.idCliente}`,
+    idCliente: value.idCliente,
+    nombre: value.nombre,
+    descripcion: value.descripcion ?? undefined,
+    direccion: value.direccion,
+    correoElectronico: value.correoElectronico,
+    numeroDeTelefono: value.numeroDeTelefono,
+    idProvincia: value.idProvincia,
+    provincia: value.provincia ? { idProvincia: value.provincia.idProvincia, nombre: value.provincia.nombre } : undefined,
   };
 }
 
@@ -106,6 +124,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<Usuario | null>(null);
   const [productDetailId, setProductDetailId] = useState<string | null>(null);
   const [usuarios, setUsuarios] = useState<Usuario[]>(USUARIOS);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [provincias, setProvincias] = useState<Provincia[]>([]);
   const [remitos, setRemitos] = useState<Remito[]>(REMITOS);
   const [productos, setProductosState] = useState<Producto[]>(PRODUCTOS);
   const [insumos, setInsumosState] = useState<Insumo[]>(INSUMOS);
@@ -173,9 +193,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setToken(data.accessToken);
     setCurrentUser(user);
     const headers = { Authorization: `Bearer ${data.accessToken}` };
-    const [remitosResponse, productosResponse, insumosResponse, recetasResponse, usuariosResponse] = await Promise.all([
+    const [remitosResponse, productosResponse, insumosResponse, recetasResponse, usuariosResponse, clientesResponse, provinciasResponse] = await Promise.all([
       fetch('/api/remitos', { headers }), fetch('/api/productos', { headers }), fetch('/api/insumos', { headers }), fetch('/api/recetas', { headers }),
       user.rol === 'admin' ? fetch('/api/usuarios', { headers }) : Promise.resolve(null),
+      fetch('/api/clientes', { headers }), fetch('/api/provincias', { headers }),
     ]);
     if (remitosResponse.ok) {
       const fetched = (await remitosResponse.json()).map(mapRemito);
@@ -185,10 +206,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (insumosResponse.ok) setInsumosState((await insumosResponse.json()).map(mapInsumo));
     if (recetasResponse.ok) setRecetasState((await recetasResponse.json()).map(mapReceta));
     if (usuariosResponse?.ok) setUsuarios((await usuariosResponse.json()).map((item: any) => ({ id: `u${item.idUsuario}`, nombre: `${item.nombre} ${item.apellido}`, email: item.correoElectronico, rol: item.idRol === 3 ? 'viajante' : 'admin', activo: item.activo })));
+    if (clientesResponse.ok) setClientes((await clientesResponse.json()).map(mapCliente));
+    if (provinciasResponse.ok) setProvincias((await provinciasResponse.json()).map((item: any) => ({ idProvincia: item.idProvincia, nombre: item.nombre })));
     return true;
   };
 
   const logout = () => { localStorage.removeItem('accessToken'); setToken(''); setCurrentUser(null); };
+
+  const addCliente = async (cliente: Omit<Cliente, 'id' | 'idCliente' | 'provincia'>): Promise<Cliente | null> => {
+    const result = await saveMutation('/api/clientes', 'POST', cliente, 'No se pudo guardar el cliente.');
+    if (!result) return null;
+    const provincia = provincias.find(item => item.idProvincia === result.idProvincia);
+    const persisted = mapCliente({ ...result, provincia: result.provincia ?? provincia });
+    setClientes(previous => [...previous, persisted].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')));
+    return persisted;
+  };
 
   const setProductos = async (next: Producto[]): Promise<Producto | null> => {
     const previous = productos;
@@ -259,20 +291,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const addRemito = async (r: Remito) => {
     try {
+      if (!r.clienteId) throw new Error('Seleccioná un cliente antes de guardar el remito.');
       const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
-      const clientsResponse = await fetch('/api/clientes', { headers });
-      const clients = clientsResponse.ok ? await clientsResponse.json() : [];
-      let client = clients.find((item: any) => item.nombre === r.clienteNombre);
-      if (!client) {
-        const clientResponse = await fetch('/api/clientes', { method: 'POST', headers, body: JSON.stringify({ nombre: r.clienteNombre, descripcion: 'Cliente creado desde remito', direccion: r.clienteDireccion, correoElectronico: `cliente${Date.now()}@demo.local`, numeroDeTelefono: r.clienteTelefono || 'Sin teléfono', idProvincia: 1 }) });
-        if (!clientResponse.ok) {
-          const body = await clientResponse.text();
-          throw new Error(`No se pudo crear el cliente (HTTP ${clientResponse.status}): ${body}`);
-        }
-        client = await clientResponse.json();
-      }
-
-      const response = await fetch('/api/remitos', { method: 'POST', headers, body: JSON.stringify({ fechaEntrega: `${r.fecha}T10:00:00.000Z`, horaEntrega: `${r.fecha}T10:00:00.000Z`, idEstado: estadoToId[r.estado], idCliente: client.idCliente, idResponsableEntrega: r.viajanteId ? Number(r.viajanteId.replace('u', '')) : undefined, observacion: r.observaciones, detalles: r.items.map(item => ({ idProducto: Number(item.productoId.replace('p', '')), cantidad: item.cantidad })) }) });
+      const response = await fetch('/api/remitos', { method: 'POST', headers, body: JSON.stringify({ fechaEntrega: `${r.fecha}T10:00:00.000Z`, horaEntrega: `${r.fecha}T10:00:00.000Z`, idEstado: estadoToId[r.estado], idCliente: r.clienteId, idResponsableEntrega: r.viajanteId ? Number(r.viajanteId.replace('u', '')) : undefined, observacion: r.observaciones, detalles: r.items.map(item => ({ idProducto: Number(item.productoId.replace('p', '')), cantidad: item.cantidad })) }) });
 
       if (!response.ok) {
         let serverMessage = 'No se pudo guardar el remito en el servidor.';
@@ -316,6 +337,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return (
     <AppContext.Provider value={{
       notifyError, currentUser, login, logout, usuarios,
+      clientes, provincias, addCliente,
       remitos, setRemitos, addRemito, updateRemito,
       productos, setProductos,
       insumos, setInsumos,

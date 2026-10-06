@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { validate } from 'class-validator';
-import { CreateProductoDto } from './dto';
+import { CreateInsumoDto, CreateProductoDto } from './dto';
 import { CreateRecipeDto } from '../recipes/dto';
 
 describe('CreateProductoDto', () => {
@@ -37,6 +37,41 @@ describe('CreateProductoDto', () => {
 
     const errors = await validate(dto);
     expect(errors).toHaveLength(0);
+  });
+
+  it('acepta precio de venta igual a cero', async () => {
+    const dto = new CreateProductoDto();
+    dto.codigo = 'YOG-001';
+    dto.nombre = 'Yogur';
+    dto.descripcion = 'Desc';
+    dto.precioUnitario = 0;
+    dto.peso = 0.5;
+    dto.idUnidadDeMedida = 1;
+    dto.idCategoria = 1;
+
+    const errors = await validate(dto);
+    expect(errors.some(error => error.property === 'precioUnitario')).toBe(false);
+  });
+
+  it('requiere costo unitario positivo', async () => {
+    const missingPriceErrors = await validate(new CreateInsumoDto());
+    expect(missingPriceErrors.some(error => error.property === 'costoUnitario')).toBe(true);
+
+    const dto = new CreateInsumoDto();
+    dto.nombre = 'Leche';
+    dto.descripcion = '';
+    dto.idUnidadDeMedida = 1;
+    dto.costoUnitario = 0;
+    const zeroPriceErrors = await validate(dto);
+    expect(zeroPriceErrors.some(error => error.property === 'costoUnitario')).toBe(true);
+
+    dto.costoUnitario = -1;
+    const negativePriceErrors = await validate(dto);
+    expect(negativePriceErrors.some(error => error.property === 'costoUnitario')).toBe(true);
+
+    dto.costoUnitario = 10;
+    const positivePriceErrors = await validate(dto);
+    expect(positivePriceErrors).toHaveLength(0);
   });
 
   it('rechaza nombre obligatorio vacio', async () => {
