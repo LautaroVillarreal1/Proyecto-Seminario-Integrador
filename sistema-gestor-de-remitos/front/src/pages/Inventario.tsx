@@ -19,7 +19,7 @@ function StockBar({ actual, minimo }: { actual: number; minimo: number }) {
 }
 
 export default function Inventario() {
-  const { insumos, setInsumos } = useApp();
+  const { insumos, setInsumos, notifyError } = useApp();
   const [editId, setEditId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState<Partial<Insumo>>({});
@@ -36,8 +36,8 @@ export default function Inventario() {
   const startNew = () => { setShowNew(true); setEditId(null); setForm({}); };
   const cancel = () => { setEditId(null); setShowNew(false); setForm({}); };
 
-  const save = () => {
-    if (!form.nombre?.trim()) return;
+  const save = async () => {
+    if (!form.nombre?.trim()) { notifyError('Completá el dato obligatorio: Nombre del insumo.'); return; }
     if (showNew) {
       const nuevo: Insumo = {
         id: `i${Date.now()}`,
@@ -47,9 +47,9 @@ export default function Inventario() {
         proveedor: form.proveedor,
         costoUnitario: Number(form.costoUnitario || 0),
       };
-      setInsumos([...insumos, nuevo]);
+      if (!await setInsumos([...insumos, nuevo])) return;
     } else if (editId) {
-      setInsumos(insumos.map(i => i.id === editId ? { ...i, ...form } as Insumo : i));
+      if (!await setInsumos(insumos.map(i => i.id === editId ? { ...i, ...form } as Insumo : i))) return;
     }
     cancel();
   };

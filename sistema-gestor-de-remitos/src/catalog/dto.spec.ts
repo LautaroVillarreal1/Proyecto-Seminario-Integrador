@@ -1,5 +1,7 @@
+import 'reflect-metadata';
 import { validate } from 'class-validator';
 import { CreateProductoDto } from './dto';
+import { CreateRecipeDto } from '../recipes/dto';
 
 describe('CreateProductoDto', () => {
   it('requiere codigo y rechaza valores negativos para precios y stock', async () => {
@@ -35,5 +37,33 @@ describe('CreateProductoDto', () => {
 
     const errors = await validate(dto);
     expect(errors).toHaveLength(0);
+  });
+
+  it('rechaza nombre obligatorio vacio', async () => {
+    const dto = new CreateProductoDto();
+    dto.codigo = 'YOG-001';
+    dto.nombre = ' ';
+    dto.descripcion = '';
+    dto.precioUnitario = 100;
+    dto.peso = 0.5;
+    dto.idUnidadDeMedida = 1;
+    dto.idCategoria = 1;
+
+    const errors = await validate(dto);
+    expect(errors.some(error => error.property === 'nombre')).toBe(true);
+  });
+});
+
+describe('CreateRecipeDto', () => {
+  it('requiere al menos un ingrediente', async () => {
+    const dto = new CreateRecipeDto();
+    dto.descripcion = 'Yogur';
+    dto.rendimiento = 1;
+    dto.unidadRendimiento = 'unidad';
+    dto.tiempoPrepMin = 10;
+    dto.detalles = [];
+
+    const errors = await validate(dto);
+    expect(errors.some(error => error.property === 'detalles')).toBe(true);
   });
 });

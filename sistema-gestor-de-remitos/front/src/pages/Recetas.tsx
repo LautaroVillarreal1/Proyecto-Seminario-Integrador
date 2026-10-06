@@ -14,7 +14,7 @@ type RecipeDraft = {
 };
 
 export default function Recetas() {
-  const { recetas, productos, insumos, setRecetas } = useApp();
+  const { recetas, productos, insumos, setRecetas, notifyError } = useApp();
   const [searchParams] = useSearchParams();
   const requestedRecipeId = searchParams.get('recetaId');
   const requestedProductId = searchParams.get('productoId');
@@ -104,8 +104,13 @@ export default function Recetas() {
     setDraft(toDraft(next));
   };
 
-  const handleCreateOrUpdate = () => {
-    if (!draft || !draft.productoId) return;
+  const handleCreateOrUpdate = async () => {
+    if (!draft || !draft.productoId) { notifyError('Seleccioná un producto para la receta.'); return; }
+    if (!draft.unidadRendimiento.trim() || draft.rendimiento < 1) { notifyError('Completá la unidad y un rendimiento mayor que cero.'); return; }
+    if (draft.ingredientes.length === 0 || draft.ingredientes.some(ingredient => !ingredient.insumoId || ingredient.cantidad <= 0)) {
+      notifyError('Agregá al menos un insumo con una cantidad mayor que cero.');
+      return;
+    }
     const nextRecipe: Receta = {
       id: receta?.id ?? `r${Date.now()}`,
       productoId: draft.productoId,
@@ -123,10 +128,11 @@ export default function Recetas() {
     };
 
     if (receta) {
-      setRecetas(recetas.map(r => r.id === receta.id ? nextRecipe : r));
+      if (!await setRecetas(recetas.map(r => r.id === receta.id ? nextRecipe : r))) return;
     } else {
-      setRecetas([...recetas, nextRecipe]);
-      setSelectedId(nextRecipe.id);
+      const savedRecipe = await setRecetas([...recetas, nextRecipe]);
+      if (!savedRecipe) return;
+      setSelectedId(savedRecipe.id);
     }
   };
 

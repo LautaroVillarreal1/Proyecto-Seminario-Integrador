@@ -1,9 +1,9 @@
-import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Min } from 'class-validator';
 
 export class CreateProductoDto {
-  @IsString() @IsNotEmpty() codigo!: string;
+  @IsString() @IsNotEmpty() @Matches(/\S/) codigo!: string;
   @IsOptional() @IsString() @IsNotEmpty() codigoBarras?: string;
-  @IsString() nombre!: string;
+  @IsString() @IsNotEmpty() @Matches(/\S/) nombre!: string;
   @IsString() descripcion!: string;
   @IsNumber() @Min(0) precioUnitario!: number;
   @IsNumber() @Min(0) peso!: number;
@@ -16,7 +16,7 @@ export class CreateProductoDto {
 }
 
 export class CreateInsumoDto {
-  @IsString() nombre!: string;
+  @IsString() @IsNotEmpty() @Matches(/\S/) nombre!: string;
   @IsString() descripcion!: string;
   @IsInt() idUnidadDeMedida!: number;
   @IsOptional() @IsNumber() @Min(0) stockActual?: number;
@@ -26,11 +26,11 @@ export class CreateInsumoDto {
 }
 
 export class CreateClienteDto {
-  @IsString() nombre!: string;
+  @IsString() @IsNotEmpty() @Matches(/\S/) nombre!: string;
   @IsString() descripcion!: string;
-  @IsString() direccion!: string;
+  @IsString() @IsNotEmpty() @Matches(/\S/) direccion!: string;
   @IsEmail() correoElectronico!: string;
-  @IsString() numeroDeTelefono!: string;
+  @IsString() @IsNotEmpty() @Matches(/\S/) numeroDeTelefono!: string;
   @IsInt() idProvincia!: number;
   @IsOptional() @IsNumber() latitud?: number;
   @IsOptional() @IsNumber() longitud?: number;

@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../shared/infrastructure/prisma/prisma.service';
 import { RealtimeService } from '../realtime/realtime.service';
 import { CreateRemitoDto, RemitoFilterDto, UpdateRemitoDto } from './dto';
@@ -31,10 +31,11 @@ export class RemitosService {
     if (!dto.detalles?.length) throw new BadRequestException('El remito debe tener productos');
     const created = await this.prisma.$transaction(async tx => {
       const products = await Promise.all(dto.detalles.map(detail => tx.producto.findUnique({ where: { idProducto: detail.idProducto } })));
-      if (products.some(product => !product || !product.activo)) throw new BadRequestException('Producto inexistente o inactivo');
+      if (products.some(product => !product)) throw new NotFoundException('Producto inexistente');
+      if (products.some(product => !product!.activo)) throw new ConflictException('No se pueden incluir productos inactivos');
       for (let index = 0; index < dto.detalles.length; index += 1) {
         const product = products[index]!;
-        if (product.stockActual < dto.detalles[index].cantidad) throw new BadRequestException(`Stock insuficiente para ${product.nombre}`);
+        if (product.stockActual < dto.detalles[index].cantidad) throw new ConflictException(`Stock insuficiente para ${product.nombre}`);
       }
       const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: dto.idResponsableEntrega ?? userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
       await Promise.all(dto.detalles.map(detail => tx.producto.update({ where: { idProducto: detail.idProducto }, data: { stockActual: { decrement: detail.cantidad } } })));

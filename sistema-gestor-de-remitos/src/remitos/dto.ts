@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDateString, IsInt, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { IsArray, IsDateString, IsInt, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 
 export class RemitoDetailDto {
   @IsInt() idProducto!: number;
@@ -12,7 +12,7 @@ export class CreateRemitoDto {
   @IsInt() idEstado!: number;
   @IsInt() idCliente!: number;
   @IsOptional() @IsInt() idResponsableEntrega?: number;
-  @ValidateNested({ each: true }) @Type(() => RemitoDetailDto) detalles!: RemitoDetailDto[];
+  @IsArray() @ValidateNested({ each: true }) @Type(() => RemitoDetailDto) detalles!: RemitoDetailDto[];
   @IsOptional() @IsString() observacion?: string;
 }
 

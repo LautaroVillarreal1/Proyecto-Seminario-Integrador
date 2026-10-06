@@ -31,7 +31,7 @@ function StockIndicator({ actual, minimo }: { actual: number; minimo: number }) 
 }
 
 export default function Productos() {
-  const { productos, recetas, setProductos, setRecetas, openProductDetails } = useApp();
+  const { productos, recetas, setProductos, setRecetas, openProductDetails, notifyError } = useApp();
   const [search, setSearch] = useState('');
   const [catFiltro, setCatFiltro] = useState('');
   const [editId, setEditId] = useState<string | null>(null);
@@ -51,14 +51,16 @@ export default function Productos() {
   const startNew = () => { setShowNew(true); setEditId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '', recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
   const cancel = () => { setEditId(null); setShowNew(false); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' }); };
 
-  const save = () => {
+  const save = async () => {
     const nombre = form.nombre?.trim() ?? '';
     const codigo = form.codigo?.trim() ?? '';
     const precio = Number(form.precioVenta ?? 0);
     const stockActual = Number(form.stockActual ?? 0);
     const stockMinimo = Number(form.stockMinimo ?? 0);
 
-    if (!nombre || !codigo || !form.categoria || precio < 0 || stockActual < 0 || stockMinimo < 0) return;
+    const missing = [!codigo && 'Código', !nombre && 'Nombre', !form.categoria && 'Categoría', (form.precioVenta === undefined || form.precioVenta === null || form.precioVenta === '') && 'Precio de venta'].filter(Boolean);
+    if (missing.length) { notifyError(`Completá los datos obligatorios: ${missing.join(', ')}.`); return; }
+    if (precio < 0 || stockActual < 0 || stockMinimo < 0) { notifyError('Los precios y el stock no pueden ser negativos.'); return; }
 
     if (showNew) {
       const nuevo: Producto = {
@@ -74,12 +76,13 @@ export default function Productos() {
         stockMinimo,
         activo: form.activo !== false,
       };
-      setProductos([...productos, nuevo]);
+      const savedProduct = await setProductos([...productos, nuevo]);
+      if (!savedProduct) return;
 
       if (createRecipe) {
         const nuevaReceta: Receta = {
           id: `r${Date.now()}`,
-          productoId: nuevo.id,
+          productoId: savedProduct.id,
           productoNombre: nuevo.nombre,
           rendimiento: Number(form.recetaRendimiento || 1),
           unidadRendimiento: form.recetaUnidadRendimiento || 'unidad',
@@ -87,10 +90,10 @@ export default function Productos() {
           instrucciones: form.recetaInstrucciones || '',
           ingredientes: [],
         };
-        setRecetas([...recetas, nuevaReceta]);
+        if (!await setRecetas([...recetas, nuevaReceta])) return;
       }
     } else if (editId) {
-      setProductos(productos.map(p => p.id === editId ? { ...p, ...form, codigo: codigo || p.codigo, nombre, descripcion: form.descripcion || '', categoria: form.categoria || p.categoria, unidad: form.unidad || p.unidad, precioVenta: precio, stockActual, stockMinimo, activo: form.activo !== false } as Producto : p));
+      if (!await setProductos(productos.map(p => p.id === editId ? { ...p, ...form, codigo: codigo || p.codigo, nombre, descripcion: form.descripcion || '', categoria: form.categoria || p.categoria, unidad: form.unidad || p.unidad, precioVenta: precio, stockActual, stockMinimo, activo: form.activo !== false } as Producto : p))) return;
     }
     cancel();
   };

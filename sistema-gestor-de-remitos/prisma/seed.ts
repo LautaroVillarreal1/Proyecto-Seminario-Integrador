@@ -50,6 +50,18 @@ async function main() {
       create: { idRemito: item.idRemito, idUsuario: item.idUsuario, idEstado: item.idEstado, idCliente: cliente.idCliente, fechaEntrega: new Date(`${item.fecha}T10:00:00.000Z`), horaEntrega: new Date(`${item.fecha}T10:00:00.000Z`), observacion: item.observacion, detalles: { create: [{ idProducto: productos[0].idProducto, cantidad: 12, subTotal: 10200 }, { idProducto: productos[1].idProducto, cantidad: 6, subTotal: 8400 }] } },
     });
   }
+  const sequences = [
+    ['Rol', 'idRol'], ['Estado', 'idEstado'], ['Categoria', 'idCategoria'],
+    ['UnidadDeMedida', 'idUnidadDeMedida'], ['Provincia', 'idProvincia'],
+    ['Ciudad', 'idCiudad'], ['Usuario', 'idUsuario'], ['Producto', 'idProducto'],
+    ['Insumo', 'idInsumo'], ['Receta', 'idReceta'], ['DetalleReceta', 'idDetalleReceta'],
+    ['Cliente', 'idCliente'], ['Remito', 'idRemito'], ['DetalleRemito', 'idDetalleRemito'],
+  ];
+  for (const [table, column] of sequences) {
+    await prisma.$queryRawUnsafe(
+      `SELECT setval(pg_get_serial_sequence('"${table}"', '${column}'), COALESCE(MAX("${column}"), 1), MAX("${column}") IS NOT NULL) FROM "${table}"`,
+    );
+  }
   console.log('Seed completado. Usuario: admin@frulatti.com / Frulatti123!');
 }
 

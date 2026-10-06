@@ -3,6 +3,7 @@ import type { Usuario, Remito, Producto, Insumo, Receta } from '../types';
 import { USUARIOS, REMITOS, PRODUCTOS, INSUMOS, RECETAS } from '../data/mock';
 
 interface AppContextType {
+  notifyError: (message: string) => void;
   currentUser: Usuario | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
@@ -12,11 +13,11 @@ interface AppContextType {
   addRemito: (r: Remito) => Promise<Remito | null>;
   updateRemito: (r: Remito) => void;
   productos: Producto[];
-  setProductos: (p: Producto[]) => void;
+  setProductos: (p: Producto[]) => Promise<Producto | null>;
   insumos: Insumo[];
-  setInsumos: (i: Insumo[]) => void;
+  setInsumos: (i: Insumo[]) => Promise<Insumo | null>;
   recetas: Receta[];
-  setRecetas: (r: Receta[]) => void;
+  setRecetas: (r: Receta[]) => Promise<Receta | null>;
   productDetailId: string | null;
   openProductDetails: (id: string) => void;
   closeProductDetails: () => void;
@@ -101,6 +102,7 @@ function mapReceta(value: any): Receta {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  const [notification, setNotification] = useState<{ id: number; message: string } | null>(null);
   const [currentUser, setCurrentUser] = useState<Usuario | null>(null);
   const [productDetailId, setProductDetailId] = useState<string | null>(null);
   const [usuarios, setUsuarios] = useState<Usuario[]>(USUARIOS);
@@ -109,6 +111,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [insumos, setInsumosState] = useState<Insumo[]>(INSUMOS);
   const [recetas, setRecetasState] = useState<Receta[]>(RECETAS);
   const [token, setToken] = useState(() => localStorage.getItem('accessToken') || '');
+
+  useEffect(() => {
+    if (!notification) return;
+    const timeout = window.setTimeout(() => setNotification(null), 6000);
+    return () => window.clearTimeout(timeout);
+  }, [notification]);
+
+  const notifyError = (message: string) => setNotification({ id: Date.now(), message });
+
+  const saveMutation = async (url: string, method: string, payload: unknown, fallback: string) => {
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        const detail = Array.isArray(body?.message) ? body.message.join(', ') : body?.message;
+        throw new Error(`${fallback} (HTTP ${response.status})${detail ? `: ${detail}` : ''}`);
+      }
+      return await response.json().catch(() => null);
+    } catch (error) {
+      notifyError(error instanceof Error ? error.message : fallback);
+      return false;
+    }
+  };
 
   useEffect(() => {
     let events: EventSource | null = null;
@@ -161,11 +190,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = () => { localStorage.removeItem('accessToken'); setToken(''); setCurrentUser(null); };
 
-  const setProductos = (next: Producto[]) => {
+  const setProductos = async (next: Producto[]): Promise<Producto | null> => {
     const previous = productos;
-    setProductosState(next);
     const changed = next.find(item => JSON.stringify(item) !== JSON.stringify(previous.find(old => old.id === item.id)));
-    if (!changed) return;
+    if (!changed) { setProductosState(next); return next[0] ?? null; }
     const id = Number(changed.id.replace('p', ''));
     const isNew = !previous.some(item => item.id === changed.id);
     const payload = {
@@ -181,25 +209,31 @@ export function AppProvider({ children }: { children: ReactNode }) {
       stockMinimo: Math.max(0, Number(changed.stockMinimo) || 0),
       activo: changed.activo,
     };
-    void fetch(!isNew ? `/api/productos/${id}` : '/api/productos', { method: !isNew ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) });
+    const result = await saveMutation(!isNew ? `/api/productos/${id}` : '/api/productos', !isNew ? 'PATCH' : 'POST', payload, 'No se pudo guardar el producto.');
+    if (!result) return null;
+    const persisted = isNew && result.idProducto ? { ...changed, id: `p${result.idProducto}` } : changed;
+    setProductosState(next.map(item => item.id === changed.id ? persisted : item));
+    return persisted;
   };
 
-  const setInsumos = (next: Insumo[]) => {
+  const setInsumos = async (next: Insumo[]): Promise<Insumo | null> => {
     const previous = insumos;
-    setInsumosState(next);
     const changed = next.find(item => JSON.stringify(item) !== JSON.stringify(previous.find(old => old.id === item.id)));
-    if (!changed) return;
+    if (!changed) { setInsumosState(next); return next[0] ?? null; }
     const id = Number(changed.id.replace('i', ''));
     const isNew = !previous.some(item => item.id === changed.id);
     const payload = { nombre: changed.nombre, descripcion: '', idUnidadDeMedida: 1, stockActual: changed.stockActual, stockMinimo: changed.stockMinimo, costoUnitario: changed.costoUnitario, proveedor: changed.proveedor };
-    void fetch(!isNew ? `/api/insumos/${id}` : '/api/insumos', { method: !isNew ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) });
+    const result = await saveMutation(!isNew ? `/api/insumos/${id}` : '/api/insumos', !isNew ? 'PATCH' : 'POST', payload, 'No se pudo guardar el insumo.');
+    if (!result) return null;
+    const persisted = isNew && result.idInsumo ? { ...changed, id: `i${result.idInsumo}` } : changed;
+    setInsumosState(next.map(item => item.id === changed.id ? persisted : item));
+    return persisted;
   };
 
-  const setRecetas = (next: Receta[]) => {
+  const setRecetas = async (next: Receta[]): Promise<Receta | null> => {
     const previous = recetas;
-    setRecetasState(next);
     const changed = next.find(item => JSON.stringify(item) !== JSON.stringify(previous.find(old => old.id === item.id)));
-    if (!changed) return;
+    if (!changed) { setRecetasState(next); return next[0] ?? null; }
 
     const id = Number(changed.id.replace('r', ''));
     const isNew = !previous.some(item => item.id === changed.id);
@@ -216,11 +250,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       })),
     };
 
-    void fetch(!isNew ? `/api/recetas/${id}` : '/api/recetas', {
-      method: !isNew ? 'PATCH' : 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload),
-    });
+    const result = await saveMutation(!isNew ? `/api/recetas/${id}` : '/api/recetas', !isNew ? 'PATCH' : 'POST', payload, 'No se pudo guardar la receta.');
+    if (!result) return null;
+    const persisted = isNew && result.idReceta ? { ...changed, id: `r${result.idReceta}` } : changed;
+    setRecetasState(next.map(item => item.id === changed.id ? persisted : item));
+    return persisted;
   };
 
   const addRemito = async (r: Remito) => {
@@ -233,8 +267,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const clientResponse = await fetch('/api/clientes', { method: 'POST', headers, body: JSON.stringify({ nombre: r.clienteNombre, descripcion: 'Cliente creado desde remito', direccion: r.clienteDireccion, correoElectronico: `cliente${Date.now()}@demo.local`, numeroDeTelefono: r.clienteTelefono || 'Sin teléfono', idProvincia: 1 }) });
         if (!clientResponse.ok) {
           const body = await clientResponse.text();
-          console.error('No se pudo crear el cliente:', body);
-          return null;
+          throw new Error(`No se pudo crear el cliente (HTTP ${clientResponse.status}): ${body}`);
         }
         client = await clientResponse.json();
       }
@@ -282,7 +315,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   return (
     <AppContext.Provider value={{
-      currentUser, login, logout, usuarios,
+      notifyError, currentUser, login, logout, usuarios,
       remitos, setRemitos, addRemito, updateRemito,
       productos, setProductos,
       insumos, setInsumos,
@@ -292,6 +325,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       closeProductDetails: () => setProductDetailId(null),
     }}>
       {children}
+      {notification && (
+        <div key={notification.id} role="alert" className="fixed bottom-5 right-5 z-50 max-w-md rounded-lg border px-4 py-3 text-sm shadow-lg" style={{ background: '#FEE2E2', borderColor: '#FCA5A5', color: '#7F1D1D' }}>
+          {notification.message}
+        </div>
+      )}
     </AppContext.Provider>
   );
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseFloatPipe, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
@@ -18,7 +18,7 @@ export class CatalogController {
   @Get('insumos') insumos() { return this.catalog.insumos(); }
   @Post('insumos') @Roles(1, 2) crearInsumo(@Body() dto: CreateInsumoDto) { return this.catalog.crearInsumo(dto); }
   @Patch('insumos/:id') @Roles(1, 2) actualizarInsumo(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<CreateInsumoDto>) { return this.catalog.actualizarInsumo(id, dto); }
-  @Post('insumos/:id/ajustes') @Roles(1, 2) ajustarInsumo(@Param('id', ParseIntPipe) id: number, @Body('cantidad') cantidad: number) { return this.catalog.ajustarInsumo(id, cantidad); }
+  @Post('insumos/:id/ajustes') @HttpCode(HttpStatus.OK) @Roles(1, 2) ajustarInsumo(@Param('id', ParseIntPipe) id: number, @Body('cantidad', ParseFloatPipe) cantidad: number) { return this.catalog.ajustarInsumo(id, cantidad); }
 
   @Get('clientes') clientes() { return this.catalog.clientes(); }
   @Post('clientes') @Roles(1, 2) crearCliente(@Body() dto: CreateClienteDto) { return this.catalog.crearCliente(dto); }
