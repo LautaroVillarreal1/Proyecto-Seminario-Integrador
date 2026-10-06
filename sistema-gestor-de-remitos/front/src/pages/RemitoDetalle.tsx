@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import ProductNameButton from '../components/ProductNameButton';
 import { EstadoBadge } from '../components/Badge';
 import type { EstadoRemito, FormaPago } from '../types';
 
@@ -144,9 +145,9 @@ export default function RemitoDetalle() {
               <div className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
                 {remito.items.map((item, i) => (
                   <div key={i} className="flex items-center justify-between px-5 py-4">
-                    <span className="font-medium text-sm" style={{ color: 'var(--color-foreground)' }}>
+                    <ProductNameButton productId={item.productoId} className="font-medium text-sm" style={{ color: 'var(--color-foreground)' }}>
                       {item.productoNombre}
-                    </span>
+                    </ProductNameButton>
                     <span className="font-mono text-2xl font-bold ml-4 flex-shrink-0"
                       style={{ color: 'var(--color-primary)', fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>
                       {item.cantidad}
@@ -167,7 +168,7 @@ export default function RemitoDetalle() {
                   <tbody>
                     {remito.items.map((item, i) => (
                       <tr key={i} className="border-t" style={{ borderColor: 'var(--color-border)' }}>
-                        <td className="px-4 py-3 font-medium" style={{ color: 'var(--color-foreground)' }}>{item.productoNombre}</td>
+                        <td className="px-4 py-3 font-medium" style={{ color: 'var(--color-foreground)' }}><ProductNameButton productId={item.productoId}>{item.productoNombre}</ProductNameButton></td>
                         <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{item.cantidad}</td>
                         <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{fmt(item.precioUnitario)}</td>
                         <td className="px-4 py-3 font-mono text-xs font-semibold" style={{ color: 'var(--color-foreground)' }}>{fmt(item.subtotal)}</td>

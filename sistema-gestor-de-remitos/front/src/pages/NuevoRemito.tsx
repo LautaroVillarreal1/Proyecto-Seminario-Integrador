@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import ProductNameButton from '../components/ProductNameButton';
 import type { Remito, RemitoItem } from '../types';
 
 export default function NuevoRemito() {
@@ -180,7 +181,7 @@ export default function NuevoRemito() {
                 <tbody>
                   {items.map(item => (
                     <tr key={item.productoId} className="border-t" style={{ borderColor: 'var(--color-border)' }}>
-                      <td className="px-3 py-2.5 font-medium" style={{ color: 'var(--color-foreground)' }}>{item.productoNombre}</td>
+                      <td className="px-3 py-2.5 font-medium" style={{ color: 'var(--color-foreground)' }}><ProductNameButton productId={item.productoId}>{item.productoNombre}</ProductNameButton></td>
                       <td className="px-3 py-2.5 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>
                         <span className="inline-flex items-center gap-2">
                           <button className="px-2 py-1 rounded border" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} onClick={() => updateQuantity(item.productoId, item.cantidad - 1)}>-</button>

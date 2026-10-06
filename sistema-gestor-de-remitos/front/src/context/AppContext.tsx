@@ -17,6 +17,9 @@ interface AppContextType {
   setInsumos: (i: Insumo[]) => void;
   recetas: Receta[];
   setRecetas: (r: Receta[]) => void;
+  productDetailId: string | null;
+  openProductDetails: (id: string) => void;
+  closeProductDetails: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -99,11 +102,12 @@ function mapReceta(value: any): Receta {
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<Usuario | null>(null);
+  const [productDetailId, setProductDetailId] = useState<string | null>(null);
   const [usuarios, setUsuarios] = useState<Usuario[]>(USUARIOS);
   const [remitos, setRemitos] = useState<Remito[]>(REMITOS);
   const [productos, setProductosState] = useState<Producto[]>(PRODUCTOS);
   const [insumos, setInsumosState] = useState<Insumo[]>(INSUMOS);
-  const [recetas, setRecetas] = useState<Receta[]>(RECETAS);
+  const [recetas, setRecetasState] = useState<Receta[]>(RECETAS);
   const [token, setToken] = useState(() => localStorage.getItem('accessToken') || '');
 
   useEffect(() => {
@@ -150,7 +154,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     if (productosResponse.ok) setProductosState((await productosResponse.json()).map(mapProducto));
     if (insumosResponse.ok) setInsumosState((await insumosResponse.json()).map(mapInsumo));
-    if (recetasResponse.ok) setRecetas((await recetasResponse.json()).map(mapReceta));
+    if (recetasResponse.ok) setRecetasState((await recetasResponse.json()).map(mapReceta));
     if (usuariosResponse?.ok) setUsuarios((await usuariosResponse.json()).map((item: any) => ({ id: `u${item.idUsuario}`, nombre: `${item.nombre} ${item.apellido}`, email: item.correoElectronico, rol: item.idRol === 3 ? 'viajante' : 'admin', activo: item.activo })));
     return true;
   };
@@ -189,6 +193,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const isNew = !previous.some(item => item.id === changed.id);
     const payload = { nombre: changed.nombre, descripcion: '', idUnidadDeMedida: 1, stockActual: changed.stockActual, stockMinimo: changed.stockMinimo, costoUnitario: changed.costoUnitario, proveedor: changed.proveedor };
     void fetch(!isNew ? `/api/insumos/${id}` : '/api/insumos', { method: !isNew ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) });
+  };
+
+  const setRecetas = (next: Receta[]) => {
+    const previous = recetas;
+    setRecetasState(next);
+    const changed = next.find(item => JSON.stringify(item) !== JSON.stringify(previous.find(old => old.id === item.id)));
+    if (!changed) return;
+
+    const id = Number(changed.id.replace('r', ''));
+    const isNew = !previous.some(item => item.id === changed.id);
+    const payload = {
+      idProducto: changed.productoId ? Number(changed.productoId.replace('p', '')) : undefined,
+      descripcion: changed.productoNombre,
+      rendimiento: Math.max(0, Number(changed.rendimiento) || 0),
+      unidadRendimiento: changed.unidadRendimiento,
+      tiempoPrepMin: Math.max(0, Number(changed.tiempoPrepMin) || 0),
+      instrucciones: changed.instrucciones ?? '',
+      detalles: changed.ingredientes.map(ingredient => ({
+        idInsumo: Number(ingredient.insumoId.replace('i', '')),
+        cantidad: Math.max(0, Number(ingredient.cantidad) || 0),
+      })),
+    };
+
+    void fetch(!isNew ? `/api/recetas/${id}` : '/api/recetas', {
+      method: !isNew ? 'PATCH' : 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload),
+    });
   };
 
   const addRemito = async (r: Remito) => {
@@ -255,6 +287,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       productos, setProductos,
       insumos, setInsumos,
       recetas, setRecetas,
+      productDetailId,
+      openProductDetails: id => setProductDetailId(id),
+      closeProductDetails: () => setProductDetailId(null),
     }}>
       {children}
     </AppContext.Provider>

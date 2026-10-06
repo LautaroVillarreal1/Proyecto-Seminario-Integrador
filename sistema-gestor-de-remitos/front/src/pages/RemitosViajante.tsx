@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import ProductNameButton from '../components/ProductNameButton';
 import { EstadoBadge } from '../components/Badge';
 import type { EstadoRemito } from '../types';
 
@@ -169,7 +170,7 @@ export default function RemitosViajante() {
                       <span key={i}
                         className="text-xs px-2.5 py-1 rounded-lg font-medium"
                         style={{ background: 'var(--color-muted)', color: 'var(--color-foreground)' }}>
-                        {item.cantidad}× {item.productoNombre.replace(/\s\d+g$|\s\d+ml$/, '')}
+                        {item.cantidad}× <ProductNameButton productId={item.productoId}>{item.productoNombre.replace(/\s\d+g$|\s\d+ml$/, '')}</ProductNameButton>
                       </span>
                     ))}
                   </div>

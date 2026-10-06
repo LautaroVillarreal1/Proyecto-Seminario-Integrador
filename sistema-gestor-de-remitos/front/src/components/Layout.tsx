@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import ProductDetailsDialog from './ProductDetailsDialog';
 
 const NAV_ADMIN = [
   { to: '/', label: 'Inicio', icon: '', exact: true },
@@ -126,6 +127,7 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+      <ProductDetailsDialog />
     </div>
   );
 }

@@ -31,10 +31,9 @@ function StockIndicator({ actual, minimo }: { actual: number; minimo: number }) 
 }
 
 export default function Productos() {
-  const { productos, recetas, setProductos, setRecetas } = useApp();
+  const { productos, recetas, setProductos, setRecetas, openProductDetails } = useApp();
   const [search, setSearch] = useState('');
   const [catFiltro, setCatFiltro] = useState('');
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [createRecipe, setCreateRecipe] = useState(false);
@@ -44,17 +43,13 @@ export default function Productos() {
     .filter(p => !catFiltro || p.categoria === catFiltro)
     .filter(p => !search || p.nombre.toLowerCase().includes(search.toLowerCase()) || p.codigo.toLowerCase().includes(search.toLowerCase()));
 
-  const selectedProduct = productos.find(p => p.id === selectedProductId) ?? null;
-  const selectedRecipe = recetas.find(r => r.productoId === selectedProduct?.id);
-
   const unitLabel = useMemo(() => {
     const value = (form.unidad ?? 'Unidad').toLowerCase();
     return UNIDADES.find(u => u.value.toLowerCase() === value || u.label.toLowerCase() === value || u.abreviatura.toLowerCase() === value)?.label ?? value;
   }, [form.unidad]);
 
-  const startDetail = (p: Producto) => { setSelectedProductId(p.id); setEditId(null); setShowNew(false); };
-  const startNew = () => { setShowNew(true); setEditId(null); setSelectedProductId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '', recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
-  const cancel = () => { setEditId(null); setShowNew(false); setSelectedProductId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' }); };
+  const startNew = () => { setShowNew(true); setEditId(null); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '', recetaRendimiento: 1, recetaUnidadRendimiento: 'unidad', recetaTiempoPrepMin: 15, recetaInstrucciones: '' }); };
+  const cancel = () => { setEditId(null); setShowNew(false); setCreateRecipe(false); setForm({ activo: true, unidad: 'Unidad', codigo: '', codigoBarras: '' }); };
 
   const save = () => {
     const nombre = form.nombre?.trim() ?? '';
@@ -242,33 +237,6 @@ export default function Productos() {
         </div>
       )}
 
-      {selectedProduct && (
-        <section className="mb-6 rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold" style={{ color: 'var(--color-foreground)', fontFamily: "'Baloo 2', 'Inter', sans-serif" }}>{selectedProduct.nombre}</h2>
-              <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>{selectedProduct.descripcion || 'Sin descripción'}</p>
-            </div>
-            <button onClick={() => setSelectedProductId(null)} className="px-3 py-2 rounded-xl border text-xs" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>Cerrar</button>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-            <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Código</span><div className="font-semibold mt-1">{selectedProduct.codigo}</div></div>
-            <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Categoría</span><div className="font-semibold mt-1">{selectedProduct.categoria}</div></div>
-            <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Precio</span><div className="font-semibold mt-1">{fmt(selectedProduct.precioVenta)}</div></div>
-            <div className="rounded-xl p-3" style={{ background: 'var(--color-muted)' }}><span className="text-xs uppercase" style={{ color: 'var(--color-muted-foreground)' }}>Estado</span><div className="font-semibold mt-1">{selectedProduct.activo ? 'Activo' : 'Inactivo'}</div></div>
-          </div>
-          {selectedRecipe ? (
-            <div className="mt-4 rounded-xl border p-4" style={{ borderColor: 'var(--color-border)' }}>
-              <div className="font-semibold" style={{ color: 'var(--color-foreground)' }}>Receta</div>
-              <div className="text-sm mt-2" style={{ color: 'var(--color-muted-foreground)' }}>{selectedRecipe.rendimiento} {selectedRecipe.unidadRendimiento} · {selectedRecipe.tiempoPrepMin} min</div>
-              <div className="text-sm mt-2" style={{ color: 'var(--color-foreground)' }}>{selectedRecipe.instrucciones || 'Sin instrucciones'}</div>
-            </div>
-          ) : (
-            <div className="mt-4 rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', color: '#E53935' }}>Sin receta definida para este producto. Definila en Recetas.</div>
-          )}
-        </section>
-      )}
-
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <input type="text" placeholder="Buscar…" value={search} onChange={e => setSearch(e.target.value)}
           className="flex-1 px-3 py-2.5 rounded-xl border text-sm outline-none"
@@ -301,7 +269,7 @@ export default function Productos() {
             </thead>
             <tbody>
               {filtered.map(p => (
-                <tr key={p.id} className="border-t cursor-pointer transition-colors hover:opacity-90" style={{ borderColor: 'var(--color-border)' }} onClick={() => startDetail(p)}>
+                <tr key={p.id} className="border-t cursor-pointer transition-colors hover:opacity-90" style={{ borderColor: 'var(--color-border)' }} onClick={() => openProductDetails(p.id)}>
                   <td className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--color-foreground)' }}>{p.codigo}</td>
                   <td className="px-4 py-3">
                     <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>{p.nombre}</div>

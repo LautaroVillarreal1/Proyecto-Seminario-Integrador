@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import type { Receta } from '../types';
 
@@ -14,13 +15,38 @@ type RecipeDraft = {
 
 export default function Recetas() {
   const { recetas, productos, insumos, setRecetas } = useApp();
-  const [selectedId, setSelectedId] = useState(recetas[0]?.id || '');
+  const [searchParams] = useSearchParams();
+  const requestedRecipeId = searchParams.get('recetaId');
+  const requestedProductId = searchParams.get('productoId');
+  const [selectedId, setSelectedId] = useState(() => {
+    const requestedRecipe = recetas.find(r => r.id === requestedRecipeId || r.productoId === requestedProductId);
+    return requestedRecipe?.id ?? (requestedProductId ? '' : recetas[0]?.id ?? '');
+  });
   const [calcQty, setCalcQty] = useState<Record<string, number>>({});
   const [draft, setDraft] = useState<RecipeDraft | null>(null);
 
   const receta = recetas.find(r => r.id === selectedId) ?? null;
 
   const productoSeleccionado = productos.find(p => p.id === draft?.productoId) ?? productos.find(p => p.id === receta?.productoId) ?? null;
+
+  useEffect(() => {
+    if (draft) return;
+    if (receta) {
+      setDraft(toDraft(receta));
+      return;
+    }
+    const product = productos.find(item => item.id === requestedProductId);
+    if (!product) return;
+    setDraft({
+      productoId: product.id,
+      productoNombre: product.nombre,
+      rendimiento: 1,
+      unidadRendimiento: 'unidad',
+      tiempoPrepMin: 0,
+      instrucciones: '',
+      ingredientes: [],
+    });
+  }, [draft, receta, productos, requestedProductId]);
 
   const toDraft = (value: Receta | null): RecipeDraft | null => {
     if (!value) return null;
