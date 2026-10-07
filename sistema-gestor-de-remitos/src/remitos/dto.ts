@@ -12,6 +12,7 @@ export class CreateRemitoDto {
   @IsInt() idEstado!: number;
   @IsInt() idCliente!: number;
   @IsOptional() @IsInt() idResponsableEntrega?: number;
+  @IsOptional() @IsNumber() @Min(0) descuento?: number;
   @IsArray() @ValidateNested({ each: true }) @Type(() => RemitoDetailDto) detalles!: RemitoDetailDto[];
   @IsOptional() @IsString() observacion?: string;
 }

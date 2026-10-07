@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { Usuario, Remito, Producto, Insumo, Receta, Cliente, Provincia } from '../types';
+import type { Usuario, Remito, Producto, Insumo, Receta, Cliente, Provincia, Ciudad } from '../types';
 import { USUARIOS, REMITOS, PRODUCTOS, INSUMOS, RECETAS } from '../data/mock';
 
 interface AppContextType {
@@ -10,6 +10,7 @@ interface AppContextType {
   usuarios: Usuario[];
   clientes: Cliente[];
   provincias: Provincia[];
+  ciudades: Ciudad[];
   addCliente: (cliente: Omit<Cliente, 'id' | 'idCliente' | 'provincia'>) => Promise<Cliente | null>;
   remitos: Remito[];
   setRemitos: (r: Remito[]) => void;
@@ -57,6 +58,8 @@ function mapEstado(idEstado: number, nombre: string): Remito['estado'] {
 function mapRemito(value: any): Remito {
   const estado = mapEstado(value.idEstado ?? value.estado?.idEstado, value.estado?.nombre ?? '');
   const detalles = value.detalles ?? [];
+  const subtotal = detalles.reduce((total: number, detail: any) => total + Number(detail.subTotal ?? 0), 0);
+  const descuento = Number(value.descuento ?? 0);
   return {
     id: `rem${value.idRemito ?? value.id}`,
     numero: value.numero ?? `R-2026-${String(value.idRemito ?? value.id).padStart(3, '0')}`,
@@ -68,9 +71,9 @@ function mapRemito(value: any): Remito {
     viajanteId: value.usuario?.idUsuario ? `u${value.usuario.idUsuario}` : value.viajanteId,
     viajanteNombre: value.usuario ? `${value.usuario.nombre} ${value.usuario.apellido}` : value.viajanteNombre,
     items: detalles.map((detail: any) => ({ productoId: `p${detail.idProducto}`, productoNombre: detail.producto?.nombre ?? 'Producto', cantidad: detail.cantidad, precioUnitario: Number(detail.producto?.precioUnitario ?? 0), subtotal: Number(detail.subTotal ?? 0) })),
-    subtotal: detalles.reduce((total: number, detail: any) => total + Number(detail.subTotal ?? 0), 0),
-    descuento: 0,
-    total: detalles.reduce((total: number, detail: any) => total + Number(detail.subTotal ?? 0), 0),
+    subtotal,
+    descuento,
+    total: subtotal - descuento,
     estado,
     fechaEntrega: value.fechaEntregaReal ? new Date(value.fechaEntregaReal).toISOString().split('T')[0] : undefined,
     formaPago: value.formaPago,
@@ -126,6 +129,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [usuarios, setUsuarios] = useState<Usuario[]>(USUARIOS);
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [provincias, setProvincias] = useState<Provincia[]>([]);
+  const [ciudades, setCiudades] = useState<Ciudad[]>([]);
   const [remitos, setRemitos] = useState<Remito[]>(REMITOS);
   const [productos, setProductosState] = useState<Producto[]>(PRODUCTOS);
   const [insumos, setInsumosState] = useState<Insumo[]>(INSUMOS);
@@ -193,14 +197,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setToken(data.accessToken);
     setCurrentUser(user);
     const headers = { Authorization: `Bearer ${data.accessToken}` };
-    const [remitosResponse, productosResponse, insumosResponse, recetasResponse, usuariosResponse, clientesResponse, provinciasResponse] = await Promise.all([
+    const [remitosResponse, productosResponse, insumosResponse, recetasResponse, usuariosResponse, clientesResponse, provinciasResponse, ciudadesResponse] = await Promise.all([
       fetch('/api/remitos', { headers }), fetch('/api/productos', { headers }), fetch('/api/insumos', { headers }), fetch('/api/recetas', { headers }),
       user.rol === 'admin' ? fetch('/api/usuarios', { headers }) : Promise.resolve(null),
-      fetch('/api/clientes', { headers }), fetch('/api/provincias', { headers }),
+      fetch('/api/clientes', { headers }), fetch('/api/provincias', { headers }), fetch('/api/ciudades', { headers }),
     ]);
     if (remitosResponse.ok) {
       const fetched = (await remitosResponse.json()).map(mapRemito);
-      setRemitos(previous => mergeRemitos(previous, fetched));
+      setRemitos(fetched);
     }
     if (productosResponse.ok) setProductosState((await productosResponse.json()).map(mapProducto));
     if (insumosResponse.ok) setInsumosState((await insumosResponse.json()).map(mapInsumo));
@@ -208,6 +212,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (usuariosResponse?.ok) setUsuarios((await usuariosResponse.json()).map((item: any) => ({ id: `u${item.idUsuario}`, nombre: `${item.nombre} ${item.apellido}`, email: item.correoElectronico, rol: item.idRol === 3 ? 'viajante' : 'admin', activo: item.activo })));
     if (clientesResponse.ok) setClientes((await clientesResponse.json()).map(mapCliente));
     if (provinciasResponse.ok) setProvincias((await provinciasResponse.json()).map((item: any) => ({ idProvincia: item.idProvincia, nombre: item.nombre })));
+    if (ciudadesResponse.ok) setCiudades((await ciudadesResponse.json()).map((item: any) => ({ idCiudad: item.idCiudad, nombre: item.nombre, idProvincia: item.idProvincia })));
     return true;
   };
 
@@ -293,7 +298,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       if (!r.clienteId) throw new Error('Seleccioná un cliente antes de guardar el remito.');
       const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
-      const response = await fetch('/api/remitos', { method: 'POST', headers, body: JSON.stringify({ fechaEntrega: `${r.fecha}T10:00:00.000Z`, horaEntrega: `${r.fecha}T10:00:00.000Z`, idEstado: estadoToId[r.estado], idCliente: r.clienteId, idResponsableEntrega: r.viajanteId ? Number(r.viajanteId.replace('u', '')) : undefined, observacion: r.observaciones, detalles: r.items.map(item => ({ idProducto: Number(item.productoId.replace('p', '')), cantidad: item.cantidad })) }) });
+      const response = await fetch('/api/remitos', { method: 'POST', headers, body: JSON.stringify({ fechaEntrega: `${r.fecha}T10:00:00.000Z`, horaEntrega: `${r.fecha}T10:00:00.000Z`, idEstado: estadoToId[r.estado], idCliente: r.clienteId, idResponsableEntrega: r.viajanteId ? Number(r.viajanteId.replace('u', '')) : undefined, observacion: r.observaciones, descuento: r.descuento, detalles: r.items.map(item => ({ idProducto: Number(item.productoId.replace('p', '')), cantidad: item.cantidad })) }) });
 
       if (!response.ok) {
         let serverMessage = 'No se pudo guardar el remito en el servidor.';
@@ -337,7 +342,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return (
     <AppContext.Provider value={{
       notifyError, currentUser, login, logout, usuarios,
-      clientes, provincias, addCliente,
+      clientes, provincias, ciudades, addCliente,
       remitos, setRemitos, addRemito, updateRemito,
       productos, setProductos,
       insumos, setInsumos,

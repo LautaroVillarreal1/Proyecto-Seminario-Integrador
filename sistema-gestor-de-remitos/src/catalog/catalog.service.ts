@@ -47,6 +47,7 @@ export class CatalogService {
 
   clientes() { return this.prisma.cliente.findMany({ include: { provincia: true }, orderBy: { nombre: 'asc' } }); }
   provincias() { return this.prisma.provincia.findMany({ orderBy: { nombre: 'asc' } }); }
+  ciudades() { return this.prisma.ciudad.findMany({ select: { idCiudad: true, nombre: true, idProvincia: true }, orderBy: { nombre: 'asc' } }); }
 
   private async assertNoDuplicateCliente(data: Pick<CreateClienteDto, 'nombre' | 'direccion' | 'correoElectronico' | 'numeroDeTelefono'>, excludeId?: number) {
     const existing = await this.prisma.cliente.findMany({

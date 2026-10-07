@@ -23,6 +23,8 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/sistema_gestor_remitos?schema=public
       JWT_SECRET: clave-local-de-desarrollo
+    volumes:
+      - "../provincias_localidades_argentina (1).csv:/provincias_localidades_argentina (1).csv:ro"
     depends_on:
       postgres:
         condition: service_healthy

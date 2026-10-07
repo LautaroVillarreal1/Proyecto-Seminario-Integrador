@@ -37,7 +37,10 @@ export class RemitosService {
         const product = products[index]!;
         if (product.stockActual < dto.detalles[index].cantidad) throw new ConflictException(`Stock insuficiente para ${product.nombre}`);
       }
-      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: dto.idResponsableEntrega ?? userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
+      const subtotal = dto.detalles.reduce((sum, detail, index) => sum + Number(products[index]!.precioUnitario) * detail.cantidad, 0);
+      const descuento = dto.descuento ?? 0;
+      if (descuento > subtotal) throw new BadRequestException('El descuento no puede superar el subtotal del remito');
+      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: dto.idResponsableEntrega ?? userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, descuento, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
       await Promise.all(dto.detalles.map(detail => tx.producto.update({ where: { idProducto: detail.idProducto }, data: { stockActual: { decrement: detail.cantidad } } })));
       return remito;
     });

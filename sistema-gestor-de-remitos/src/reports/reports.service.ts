@@ -17,7 +17,8 @@ export class ReportsService {
       const key = remito.estado.nombre;
       result[key] ??= { cantidad: 0, total: 0 };
       result[key].cantidad += 1;
-      result[key].total += remito.detalles.reduce((sum, detail) => sum + Number(detail.subTotal), 0);
+      const subtotal = remito.detalles.reduce((sum, detail) => sum + Number(detail.subTotal), 0);
+      result[key].total += subtotal - Number(remito.descuento);
       return result;
     }, {});
 

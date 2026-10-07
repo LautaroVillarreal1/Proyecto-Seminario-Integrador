@@ -149,6 +149,7 @@ model DetalleRemito {
 
 model Remito {
   idRemito         Int             @id @default(autoincrement())
+  descuento        Decimal         @default(0) @db.Decimal(12, 2)
   fechaEntrega     DateTime // tipo asumido
   horaEntrega      DateTime // tipo asumido
   idUsuario        Int

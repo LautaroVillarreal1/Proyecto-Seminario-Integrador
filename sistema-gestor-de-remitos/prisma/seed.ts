@@ -1,9 +1,76 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const prisma = new PrismaClient();
 
+function parseCsvLine(line: string): string[] {
+  const columns: string[] = [];
+  let column = '';
+  let quoted = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === '"') {
+      if (quoted && line[index + 1] === '"') {
+        column += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === ',' && !quoted) {
+      columns.push(column);
+      column = '';
+    } else {
+      column += character;
+    }
+  }
+
+  columns.push(column);
+  return columns;
+}
+
 async function main() {
+  const csvPath = resolve(__dirname, '../../provincias_localidades_argentina (1).csv');
+  const [header, ...lines] = readFileSync(csvPath, 'utf8').replace(/^\uFEFF/, '').trim().split(/\r?\n/);
+  const columns = parseCsvLine(header);
+  const rows = lines.map((line) => {
+    const values = parseCsvLine(line);
+    return Object.fromEntries(columns.map((column, index) => [column, values[index]]));
+  });
+  const provinces = new Map<number, { nombre: string; capitalId?: number }>();
+
+  for (const [index, row] of rows.entries()) {
+    const idProvincia = Number(row.id_provincia);
+    const idCiudad = index + 1;
+    const province = provinces.get(idProvincia) ?? { nombre: row.provincia };
+    if (row.es_capital?.toLocaleLowerCase() === 'sí') province.capitalId = idCiudad;
+    provinces.set(idProvincia, province);
+  }
+
+  for (const [idProvincia, province] of provinces) {
+    await prisma.provincia.upsert({
+      where: { idProvincia },
+      update: { nombre: province.nombre, descripcion: '' },
+      create: { idProvincia, nombre: province.nombre, descripcion: '' },
+    });
+  }
+
+  for (const [index, row] of rows.entries()) {
+    const idCiudad = index + 1;
+    const codigoPostal = row.es_capital?.toLocaleLowerCase() === 'sí' ? row.codigo_postal_capital : '';
+    await prisma.ciudad.upsert({
+      where: { idCiudad },
+      update: { nombre: row.localidad, descripcion: '', codigoPostal, idProvincia: Number(row.id_provincia) },
+      create: { idCiudad, nombre: row.localidad, descripcion: '', codigoPostal, idProvincia: Number(row.id_provincia) },
+    });
+  }
+
+  for (const [idProvincia, province] of provinces) {
+    if (province.capitalId) await prisma.provincia.update({ where: { idProvincia }, data: { idCiudad: province.capitalId } });
+  }
+
   const roles = await Promise.all([
     prisma.rol.upsert({ where: { idRol: 1 }, update: { nombre: 'Administrador' }, create: { idRol: 1, nombre: 'Administrador' } }),
     prisma.rol.upsert({ where: { idRol: 2 }, update: { nombre: 'Encargado de Producción' }, create: { idRol: 2, nombre: 'Encargado de Producción' } }),
@@ -15,8 +82,6 @@ async function main() {
   for (const nombre of categorias) await prisma.categoria.upsert({ where: { idCategoria: categorias.indexOf(nombre) + 1 }, update: { nombre }, create: { idCategoria: categorias.indexOf(nombre) + 1, nombre } });
   const unidades = ['unidad', 'kilogramo', 'litro', 'gramo'];
   for (const nombre of unidades) await prisma.unidadDeMedida.upsert({ where: { idUnidadDeMedida: unidades.indexOf(nombre) + 1 }, update: { nombre }, create: { idUnidadDeMedida: unidades.indexOf(nombre) + 1, nombre } });
-  const provincia = await prisma.provincia.upsert({ where: { idProvincia: 1 }, update: { nombre: 'Buenos Aires' }, create: { idProvincia: 1, nombre: 'Buenos Aires', descripcion: 'Provincia de Buenos Aires' } });
-  await prisma.ciudad.upsert({ where: { idCiudad: 1 }, update: { nombre: 'La Plata', idProvincia: provincia.idProvincia }, create: { idCiudad: 1, nombre: 'La Plata', descripcion: 'Ciudad capital', codigoPostal: '1900', idProvincia: provincia.idProvincia } });
   const admin = await prisma.usuario.upsert({ where: { correoElectronico: 'admin@frulatti.com' }, update: { activo: true, idRol: roles[0].idRol }, create: { nombre: 'Administrador', apellido: 'Frulatti', correoElectronico: 'admin@frulatti.com', passwordHash: await bcrypt.hash('Frulatti123!', 12), idRol: roles[0].idRol } });
   const sergioPassword = await bcrypt.hash('Sergio123!', 12);
   const marcosPassword = await bcrypt.hash('Marcos123!', 12);
@@ -37,19 +102,6 @@ async function main() {
   const recetaGranola = await prisma.receta.upsert({ where: { idReceta: 2 }, update: { descripcion: 'Granola clásica', rendimiento: 15, unidadRendimiento: 'unidades', tiempoPrepMin: 60, instrucciones: 'Mezclar avena y hornear.', detalles: { deleteMany: {}, create: [{ idInsumo: insumos[2].idInsumo, cantidad: 3 }] } }, create: { idReceta: 2, descripcion: 'Granola clásica', rendimiento: 15, unidadRendimiento: 'unidades', tiempoPrepMin: 60, instrucciones: 'Mezclar avena y hornear.', detalles: { create: [{ idInsumo: insumos[2].idInsumo, cantidad: 3 }] } } });
   await prisma.producto.update({ where: { idProducto: productos[0].idProducto }, data: { idreceta: recetaYogur.idReceta } });
   await prisma.producto.update({ where: { idProducto: productos[1].idProducto }, data: { idreceta: recetaGranola.idReceta } });
-  const cliente = await prisma.cliente.upsert({ where: { idCliente: 1 }, update: {}, create: { idCliente: 1, nombre: 'Dietética San Martín', descripcion: 'Cliente demo', direccion: 'San Martín 456, Palermo', correoElectronico: 'cliente@demo.com', numeroDeTelefono: '11-4567-8901', idProvincia: provincia.idProvincia } });
-  const remitos = [
-    { idRemito: 1, idUsuario: sergio.idUsuario, idEstado: 1, fecha: '2026-09-12', observacion: 'Entrega prioritaria' },
-    { idRemito: 2, idUsuario: marcos.idUsuario, idEstado: 8, fecha: '2026-09-12', observacion: 'Cliente avisado' },
-    { idRemito: 3, idUsuario: sergio.idUsuario, idEstado: 4, fecha: '2026-09-13', observacion: 'Salida programada' },
-  ];
-  for (const item of remitos) {
-    await prisma.remito.upsert({
-      where: { idRemito: item.idRemito },
-      update: { idUsuario: item.idUsuario, idEstado: item.idEstado, idCliente: cliente.idCliente, fechaEntrega: new Date(`${item.fecha}T10:00:00.000Z`), horaEntrega: new Date(`${item.fecha}T10:00:00.000Z`), observacion: item.observacion },
-      create: { idRemito: item.idRemito, idUsuario: item.idUsuario, idEstado: item.idEstado, idCliente: cliente.idCliente, fechaEntrega: new Date(`${item.fecha}T10:00:00.000Z`), horaEntrega: new Date(`${item.fecha}T10:00:00.000Z`), observacion: item.observacion, detalles: { create: [{ idProducto: productos[0].idProducto, cantidad: 12, subTotal: 10200 }, { idProducto: productos[1].idProducto, cantidad: 6, subTotal: 8400 }] } },
-    });
-  }
   const sequences = [
     ['Rol', 'idRol'], ['Estado', 'idEstado'], ['Categoria', 'idCategoria'],
     ['UnidadDeMedida', 'idUnidadDeMedida'], ['Provincia', 'idProvincia'],

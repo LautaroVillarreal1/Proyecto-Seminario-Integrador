@@ -1,0 +1,366 @@
+﻿id_provincia,provincia,localidad,es_capital,letra_cpa,codigo_postal_capital,cpa_capital
+1,Buenos Aires,La Plata,Sí,B,1900,B1900
+1,Buenos Aires,Mar del Plata,No,B,1900,B1900
+1,Buenos Aires,Bahía Blanca,No,B,1900,B1900
+1,Buenos Aires,Tandil,No,B,1900,B1900
+1,Buenos Aires,Olavarría,No,B,1900,B1900
+1,Buenos Aires,Pergamino,No,B,1900,B1900
+1,Buenos Aires,Junín,No,B,1900,B1900
+1,Buenos Aires,San Nicolás de los Arroyos,No,B,1900,B1900
+1,Buenos Aires,Zárate,No,B,1900,B1900
+1,Buenos Aires,Campana,No,B,1900,B1900
+1,Buenos Aires,Luján,No,B,1900,B1900
+1,Buenos Aires,Necochea,No,B,1900,B1900
+1,Buenos Aires,Azul,No,B,1900,B1900
+1,Buenos Aires,Chivilcoy,No,B,1900,B1900
+1,Buenos Aires,Pinamar,No,B,1900,B1900
+1,Buenos Aires,Villa Gesell,No,B,1900,B1900
+1,Buenos Aires,Tres Arroyos,No,B,1900,B1900
+1,Buenos Aires,Mercedes,No,B,1900,B1900
+1,Buenos Aires,San Pedro,No,B,1900,B1900
+1,Buenos Aires,Chascomús,No,B,1900,B1900
+1,Buenos Aires,Dolores,No,B,1900,B1900
+1,Buenos Aires,Trenque Lauquen,No,B,1900,B1900
+1,Buenos Aires,Bolívar,No,B,1900,B1900
+1,Buenos Aires,9 de Julio,No,B,1900,B1900
+1,Buenos Aires,Lomas de Zamora,No,B,1900,B1900
+1,Buenos Aires,Quilmes,No,B,1900,B1900
+1,Buenos Aires,Lanús,No,B,1900,B1900
+1,Buenos Aires,Avellaneda,No,B,1900,B1900
+1,Buenos Aires,Morón,No,B,1900,B1900
+1,Buenos Aires,San Isidro,No,B,1900,B1900
+1,Buenos Aires,Tigre,No,B,1900,B1900
+1,Buenos Aires,Moreno,No,B,1900,B1900
+1,Buenos Aires,Merlo,No,B,1900,B1900
+1,Buenos Aires,La Matanza,No,B,1900,B1900
+1,Buenos Aires,Banfield,No,B,1900,B1900
+1,Buenos Aires,Florencio Varela,No,B,1900,B1900
+1,Buenos Aires,San Martín,No,B,1900,B1900
+1,Buenos Aires,Escobar,No,B,1900,B1900
+1,Buenos Aires,Pilar,No,B,1900,B1900
+2,Ciudad Autónoma de Buenos Aires,Palermo,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Recoleta,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Belgrano,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Caballito,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Flores,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Almagro,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,San Telmo,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,La Boca,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Villa Urquiza,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Núñez,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Barracas,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Villa Devoto,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Mataderos,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Liniers,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Retiro,No,C,1000,C1000
+2,Ciudad Autónoma de Buenos Aires,Puerto Madero,No,C,1000,C1000
+3,Catamarca,San Fernando del Valle de Catamarca,Sí,K,4700,K4700
+3,Catamarca,Belén,No,K,4700,K4700
+3,Catamarca,Tinogasta,No,K,4700,K4700
+3,Catamarca,Andalgalá,No,K,4700,K4700
+3,Catamarca,Santa María,No,K,4700,K4700
+3,Catamarca,Fiambalá,No,K,4700,K4700
+3,Catamarca,Recreo,No,K,4700,K4700
+3,Catamarca,Londres,No,K,4700,K4700
+3,Catamarca,Pomán,No,K,4700,K4700
+3,Catamarca,Chumbicha,No,K,4700,K4700
+3,Catamarca,El Rodeo,No,K,4700,K4700
+3,Catamarca,Saujil,No,K,4700,K4700
+4,Chaco,Resistencia,Sí,H,3500,H3500
+4,Chaco,Presidencia Roque Sáenz Peña,No,H,3500,H3500
+4,Chaco,Villa Ángela,No,H,3500,H3500
+4,Chaco,Charata,No,H,3500,H3500
+4,Chaco,General San Martín,No,H,3500,H3500
+4,Chaco,Barranqueras,No,H,3500,H3500
+4,Chaco,Fontana,No,H,3500,H3500
+4,Chaco,Quitilipi,No,H,3500,H3500
+4,Chaco,Machagai,No,H,3500,H3500
+4,Chaco,Las Breñas,No,H,3500,H3500
+4,Chaco,Juan José Castelli,No,H,3500,H3500
+4,Chaco,Puerto Tirol,No,H,3500,H3500
+4,Chaco,Tres Isletas,No,H,3500,H3500
+4,Chaco,Basail,No,H,3500,H3500
+5,Chubut,Rawson,Sí,U,9103,U9103
+5,Chubut,Comodoro Rivadavia,No,U,9103,U9103
+5,Chubut,Trelew,No,U,9103,U9103
+5,Chubut,Puerto Madryn,No,U,9103,U9103
+5,Chubut,Esquel,No,U,9103,U9103
+5,Chubut,Sarmiento,No,U,9103,U9103
+5,Chubut,Trevelin,No,U,9103,U9103
+5,Chubut,Gaiman,No,U,9103,U9103
+5,Chubut,Dolavon,No,U,9103,U9103
+5,Chubut,Rada Tilly,No,U,9103,U9103
+5,Chubut,Camarones,No,U,9103,U9103
+5,Chubut,El Maitén,No,U,9103,U9103
+5,Chubut,Lago Puelo,No,U,9103,U9103
+5,Chubut,Gobernador Costa,No,U,9103,U9103
+6,Córdoba,Córdoba,Sí,X,5000,X5000
+6,Córdoba,Río Cuarto,No,X,5000,X5000
+6,Córdoba,Villa María,No,X,5000,X5000
+6,Córdoba,San Francisco,No,X,5000,X5000
+6,Córdoba,Villa Carlos Paz,No,X,5000,X5000
+6,Córdoba,Alta Gracia,No,X,5000,X5000
+6,Córdoba,Río Tercero,No,X,5000,X5000
+6,Córdoba,Bell Ville,No,X,5000,X5000
+6,Córdoba,Jesús María,No,X,5000,X5000
+6,Córdoba,Cosquín,No,X,5000,X5000
+6,Córdoba,La Falda,No,X,5000,X5000
+6,Córdoba,Villa Dolores,No,X,5000,X5000
+6,Córdoba,Marcos Juárez,No,X,5000,X5000
+6,Córdoba,Cruz del Eje,No,X,5000,X5000
+6,Córdoba,Deán Funes,No,X,5000,X5000
+6,Córdoba,Laboulaye,No,X,5000,X5000
+6,Córdoba,Río Ceballos,No,X,5000,X5000
+6,Córdoba,Mina Clavero,No,X,5000,X5000
+6,Córdoba,Villa General Belgrano,No,X,5000,X5000
+6,Córdoba,Arroyito,No,X,5000,X5000
+6,Córdoba,Villa Allende,No,X,5000,X5000
+6,Córdoba,Unquillo,No,X,5000,X5000
+7,Corrientes,Corrientes,Sí,W,3400,W3400
+7,Corrientes,Goya,No,W,3400,W3400
+7,Corrientes,Paso de los Libres,No,W,3400,W3400
+7,Corrientes,Curuzú Cuatiá,No,W,3400,W3400
+7,Corrientes,Mercedes,No,W,3400,W3400
+7,Corrientes,Esquina,No,W,3400,W3400
+7,Corrientes,Monte Caseros,No,W,3400,W3400
+7,Corrientes,Bella Vista,No,W,3400,W3400
+7,Corrientes,Santo Tomé,No,W,3400,W3400
+7,Corrientes,Ituzaingó,No,W,3400,W3400
+7,Corrientes,Santa Lucía,No,W,3400,W3400
+7,Corrientes,Saladas,No,W,3400,W3400
+7,Corrientes,Empedrado,No,W,3400,W3400
+7,Corrientes,Virasoro,No,W,3400,W3400
+8,Entre Ríos,Paraná,Sí,E,3100,E3100
+8,Entre Ríos,Concordia,No,E,3100,E3100
+8,Entre Ríos,Gualeguaychú,No,E,3100,E3100
+8,Entre Ríos,Concepción del Uruguay,No,E,3100,E3100
+8,Entre Ríos,Gualeguay,No,E,3100,E3100
+8,Entre Ríos,Victoria,No,E,3100,E3100
+8,Entre Ríos,Villaguay,No,E,3100,E3100
+8,Entre Ríos,Chajarí,No,E,3100,E3100
+8,Entre Ríos,Colón,No,E,3100,E3100
+8,Entre Ríos,La Paz,No,E,3100,E3100
+8,Entre Ríos,Federación,No,E,3100,E3100
+8,Entre Ríos,Crespo,No,E,3100,E3100
+8,Entre Ríos,Diamante,No,E,3100,E3100
+8,Entre Ríos,Nogoyá,No,E,3100,E3100
+8,Entre Ríos,San José,No,E,3100,E3100
+8,Entre Ríos,Basavilbaso,No,E,3100,E3100
+9,Formosa,Formosa,Sí,P,3600,P3600
+9,Formosa,Clorinda,No,P,3600,P3600
+9,Formosa,Pirané,No,P,3600,P3600
+9,Formosa,El Colorado,No,P,3600,P3600
+9,Formosa,Ibarreta,No,P,3600,P3600
+9,Formosa,Las Lomitas,No,P,3600,P3600
+9,Formosa,Ingeniero Juárez,No,P,3600,P3600
+9,Formosa,Laguna Blanca,No,P,3600,P3600
+9,Formosa,Comandante Fontana,No,P,3600,P3600
+9,Formosa,Herradura,No,P,3600,P3600
+9,Formosa,General Güemes,No,P,3600,P3600
+10,Jujuy,San Salvador de Jujuy,Sí,Y,4600,Y4600
+10,Jujuy,San Pedro de Jujuy,No,Y,4600,Y4600
+10,Jujuy,Palpalá,No,Y,4600,Y4600
+10,Jujuy,Libertador General San Martín,No,Y,4600,Y4600
+10,Jujuy,Perico,No,Y,4600,Y4600
+10,Jujuy,Humahuaca,No,Y,4600,Y4600
+10,Jujuy,La Quiaca,No,Y,4600,Y4600
+10,Jujuy,Tilcara,No,Y,4600,Y4600
+10,Jujuy,Purmamarca,No,Y,4600,Y4600
+10,Jujuy,El Carmen,No,Y,4600,Y4600
+10,Jujuy,Abra Pampa,No,Y,4600,Y4600
+10,Jujuy,Monterrico,No,Y,4600,Y4600
+10,Jujuy,Fraile Pintado,No,Y,4600,Y4600
+10,Jujuy,Calilegua,No,Y,4600,Y4600
+11,La Pampa,Santa Rosa,Sí,L,6300,L6300
+11,La Pampa,General Pico,No,L,6300,L6300
+11,La Pampa,Toay,No,L,6300,L6300
+11,La Pampa,Realicó,No,L,6300,L6300
+11,La Pampa,Eduardo Castex,No,L,6300,L6300
+11,La Pampa,General Acha,No,L,6300,L6300
+11,La Pampa,Macachín,No,L,6300,L6300
+11,La Pampa,Intendente Alvear,No,L,6300,L6300
+11,La Pampa,25 de Mayo,No,L,6300,L6300
+11,La Pampa,Victorica,No,L,6300,L6300
+11,La Pampa,Guatraché,No,L,6300,L6300
+11,La Pampa,Colonia Barón,No,L,6300,L6300
+11,La Pampa,Ingeniero Luiggi,No,L,6300,L6300
+12,La Rioja,La Rioja,Sí,F,5300,F5300
+12,La Rioja,Chilecito,No,F,5300,F5300
+12,La Rioja,Aimogasta,No,F,5300,F5300
+12,La Rioja,Chamical,No,F,5300,F5300
+12,La Rioja,Chepes,No,F,5300,F5300
+12,La Rioja,Villa Unión,No,F,5300,F5300
+12,La Rioja,Famatina,No,F,5300,F5300
+12,La Rioja,Nonogasta,No,F,5300,F5300
+12,La Rioja,Anillaco,No,F,5300,F5300
+12,La Rioja,Arauco,No,F,5300,F5300
+12,La Rioja,Villa Castelli,No,F,5300,F5300
+13,Mendoza,Mendoza,Sí,M,5500,M5500
+13,Mendoza,San Rafael,No,M,5500,M5500
+13,Mendoza,Godoy Cruz,No,M,5500,M5500
+13,Mendoza,Guaymallén,No,M,5500,M5500
+13,Mendoza,Las Heras,No,M,5500,M5500
+13,Mendoza,Maipú,No,M,5500,M5500
+13,Mendoza,Luján de Cuyo,No,M,5500,M5500
+13,Mendoza,San Martín,No,M,5500,M5500
+13,Mendoza,Rivadavia,No,M,5500,M5500
+13,Mendoza,Tunuyán,No,M,5500,M5500
+13,Mendoza,Malargüe,No,M,5500,M5500
+13,Mendoza,General Alvear,No,M,5500,M5500
+13,Mendoza,Tupungato,No,M,5500,M5500
+13,Mendoza,Uspallata,No,M,5500,M5500
+13,Mendoza,Junín,No,M,5500,M5500
+13,Mendoza,Lavalle,No,M,5500,M5500
+14,Misiones,Posadas,Sí,N,3300,N3300
+14,Misiones,Oberá,No,N,3300,N3300
+14,Misiones,Eldorado,No,N,3300,N3300
+14,Misiones,Puerto Iguazú,No,N,3300,N3300
+14,Misiones,Apóstoles,No,N,3300,N3300
+14,Misiones,Leandro N. Alem,No,N,3300,N3300
+14,Misiones,Jardín América,No,N,3300,N3300
+14,Misiones,San Vicente,No,N,3300,N3300
+14,Misiones,Montecarlo,No,N,3300,N3300
+14,Misiones,San Pedro,No,N,3300,N3300
+14,Misiones,Aristóbulo del Valle,No,N,3300,N3300
+14,Misiones,Puerto Rico,No,N,3300,N3300
+14,Misiones,Wanda,No,N,3300,N3300
+14,Misiones,San Ignacio,No,N,3300,N3300
+14,Misiones,Garupá,No,N,3300,N3300
+15,Neuquén,Neuquén,Sí,Q,8300,Q8300
+15,Neuquén,Cutral Có,No,Q,8300,Q8300
+15,Neuquén,Plottier,No,Q,8300,Q8300
+15,Neuquén,Centenario,No,Q,8300,Q8300
+15,Neuquén,Zapala,No,Q,8300,Q8300
+15,Neuquén,San Martín de los Andes,No,Q,8300,Q8300
+15,Neuquén,Junín de los Andes,No,Q,8300,Q8300
+15,Neuquén,Villa La Angostura,No,Q,8300,Q8300
+15,Neuquén,Plaza Huincul,No,Q,8300,Q8300
+15,Neuquén,Chos Malal,No,Q,8300,Q8300
+15,Neuquén,Rincón de los Sauces,No,Q,8300,Q8300
+15,Neuquén,Senillosa,No,Q,8300,Q8300
+15,Neuquén,Aluminé,No,Q,8300,Q8300
+15,Neuquén,Picún Leufú,No,Q,8300,Q8300
+16,Río Negro,Viedma,Sí,R,8500,R8500
+16,Río Negro,San Carlos de Bariloche,No,R,8500,R8500
+16,Río Negro,General Roca,No,R,8500,R8500
+16,Río Negro,Cipolletti,No,R,8500,R8500
+16,Río Negro,Villa Regina,No,R,8500,R8500
+16,Río Negro,Allen,No,R,8500,R8500
+16,Río Negro,Cinco Saltos,No,R,8500,R8500
+16,Río Negro,El Bolsón,No,R,8500,R8500
+16,Río Negro,Choele Choel,No,R,8500,R8500
+16,Río Negro,Catriel,No,R,8500,R8500
+16,Río Negro,Ingeniero Jacobacci,No,R,8500,R8500
+16,Río Negro,Río Colorado,No,R,8500,R8500
+16,Río Negro,San Antonio Oeste,No,R,8500,R8500
+16,Río Negro,Sierra Grande,No,R,8500,R8500
+16,Río Negro,Fernández Oro,No,R,8500,R8500
+17,Salta,Salta,Sí,A,4400,A4400
+17,Salta,San Ramón de la Nueva Orán,No,A,4400,A4400
+17,Salta,Tartagal,No,A,4400,A4400
+17,Salta,General Güemes,No,A,4400,A4400
+17,Salta,Metán,No,A,4400,A4400
+17,Salta,Cafayate,No,A,4400,A4400
+17,Salta,Rosario de la Frontera,No,A,4400,A4400
+17,Salta,Embarcación,No,A,4400,A4400
+17,Salta,Joaquín V. González,No,A,4400,A4400
+17,Salta,Cerrillos,No,A,4400,A4400
+17,Salta,San Lorenzo,No,A,4400,A4400
+17,Salta,Rosario de Lerma,No,A,4400,A4400
+17,Salta,Cachi,No,A,4400,A4400
+17,Salta,Pichanal,No,A,4400,A4400
+17,Salta,Aguaray,No,A,4400,A4400
+18,San Juan,San Juan,Sí,J,5400,J5400
+18,San Juan,Rawson,No,J,5400,J5400
+18,San Juan,Rivadavia,No,J,5400,J5400
+18,San Juan,Chimbas,No,J,5400,J5400
+18,San Juan,Santa Lucía,No,J,5400,J5400
+18,San Juan,Pocito,No,J,5400,J5400
+18,San Juan,Caucete,No,J,5400,J5400
+18,San Juan,Albardón,No,J,5400,J5400
+18,San Juan,Jáchal,No,J,5400,J5400
+18,San Juan,Calingasta,No,J,5400,J5400
+18,San Juan,San Martín,No,J,5400,J5400
+18,San Juan,Villa Aberastain,No,J,5400,J5400
+18,San Juan,Barreal,No,J,5400,J5400
+18,San Juan,Media Agua,No,J,5400,J5400
+18,San Juan,Zonda,No,J,5400,J5400
+19,San Luis,San Luis,Sí,D,5700,D5700
+19,San Luis,Villa Mercedes,No,D,5700,D5700
+19,San Luis,Merlo,No,D,5700,D5700
+19,San Luis,La Punta,No,D,5700,D5700
+19,San Luis,Juana Koslay,No,D,5700,D5700
+19,San Luis,Justo Daract,No,D,5700,D5700
+19,San Luis,Tilisarao,No,D,5700,D5700
+19,San Luis,Concarán,No,D,5700,D5700
+19,San Luis,Quines,No,D,5700,D5700
+19,San Luis,Buena Esperanza,No,D,5700,D5700
+19,San Luis,Santa Rosa del Conlara,No,D,5700,D5700
+19,San Luis,Naschel,No,D,5700,D5700
+19,San Luis,Villa de la Quebrada,No,D,5700,D5700
+20,Santa Cruz,Río Gallegos,Sí,Z,9400,Z9400
+20,Santa Cruz,Caleta Olivia,No,Z,9400,Z9400
+20,Santa Cruz,Pico Truncado,No,Z,9400,Z9400
+20,Santa Cruz,Puerto Deseado,No,Z,9400,Z9400
+20,Santa Cruz,Las Heras,No,Z,9400,Z9400
+20,Santa Cruz,El Calafate,No,Z,9400,Z9400
+20,Santa Cruz,Río Turbio,No,Z,9400,Z9400
+20,Santa Cruz,28 de Noviembre,No,Z,9400,Z9400
+20,Santa Cruz,Puerto San Julián,No,Z,9400,Z9400
+20,Santa Cruz,Perito Moreno,No,Z,9400,Z9400
+20,Santa Cruz,Los Antiguos,No,Z,9400,Z9400
+20,Santa Cruz,El Chaltén,No,Z,9400,Z9400
+20,Santa Cruz,Comandante Luis Piedra Buena,No,Z,9400,Z9400
+20,Santa Cruz,Gobernador Gregores,No,Z,9400,Z9400
+21,Santa Fe,Santa Fe,Sí,S,3000,S3000
+21,Santa Fe,Rosario,No,S,3000,S3000
+21,Santa Fe,Rafaela,No,S,3000,S3000
+21,Santa Fe,Venado Tuerto,No,S,3000,S3000
+21,Santa Fe,Reconquista,No,S,3000,S3000
+21,Santa Fe,Villa Gobernador Gálvez,No,S,3000,S3000
+21,Santa Fe,Santo Tomé,No,S,3000,S3000
+21,Santa Fe,Esperanza,No,S,3000,S3000
+21,Santa Fe,Cañada de Gómez,No,S,3000,S3000
+21,Santa Fe,Casilda,No,S,3000,S3000
+21,Santa Fe,Sunchales,No,S,3000,S3000
+21,Santa Fe,San Lorenzo,No,S,3000,S3000
+21,Santa Fe,Villa Constitución,No,S,3000,S3000
+21,Santa Fe,Gálvez,No,S,3000,S3000
+21,Santa Fe,Firmat,No,S,3000,S3000
+21,Santa Fe,San Justo,No,S,3000,S3000
+21,Santa Fe,Rufino,No,S,3000,S3000
+21,Santa Fe,Las Parejas,No,S,3000,S3000
+21,Santa Fe,Funes,No,S,3000,S3000
+21,Santa Fe,Granadero Baigorria,No,S,3000,S3000
+21,Santa Fe,Avellaneda,No,S,3000,S3000
+22,Santiago del Estero,Santiago del Estero,Sí,G,4200,G4200
+22,Santiago del Estero,La Banda,No,G,4200,G4200
+22,Santiago del Estero,Termas de Río Hondo,No,G,4200,G4200
+22,Santiago del Estero,Añatuya,No,G,4200,G4200
+22,Santiago del Estero,Frías,No,G,4200,G4200
+22,Santiago del Estero,Fernández,No,G,4200,G4200
+22,Santiago del Estero,Quimilí,No,G,4200,G4200
+22,Santiago del Estero,Loreto,No,G,4200,G4200
+22,Santiago del Estero,Monte Quemado,No,G,4200,G4200
+22,Santiago del Estero,Clodomira,No,G,4200,G4200
+22,Santiago del Estero,Beltrán,No,G,4200,G4200
+22,Santiago del Estero,Bandera,No,G,4200,G4200
+22,Santiago del Estero,Suncho Corral,No,G,4200,G4200
+22,Santiago del Estero,Villa Ojo de Agua,No,G,4200,G4200
+23,"Tierra del Fuego, Antártida e Islas del Atlántico Sur",Ushuaia,Sí,V,9410,V9410
+23,"Tierra del Fuego, Antártida e Islas del Atlántico Sur",Río Grande,No,V,9410,V9410
+23,"Tierra del Fuego, Antártida e Islas del Atlántico Sur",Tolhuin,No,V,9410,V9410
+24,Tucumán,San Miguel de Tucumán,Sí,T,4000,T4000
+24,Tucumán,Yerba Buena,No,T,4000,T4000
+24,Tucumán,Tafí Viejo,No,T,4000,T4000
+24,Tucumán,Banda del Río Salí,No,T,4000,T4000
+24,Tucumán,Concepción,No,T,4000,T4000
+24,Tucumán,Monteros,No,T,4000,T4000
+24,Tucumán,Aguilares,No,T,4000,T4000
+24,Tucumán,Famaillá,No,T,4000,T4000
+24,Tucumán,Alderetes,No,T,4000,T4000
+24,Tucumán,Las Talitas,No,T,4000,T4000
+24,Tucumán,Tafí del Valle,No,T,4000,T4000
+24,Tucumán,Lules,No,T,4000,T4000
+24,Tucumán,Bella Vista,No,T,4000,T4000
+24,Tucumán,Simoca,No,T,4000,T4000

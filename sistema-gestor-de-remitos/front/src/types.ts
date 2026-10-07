@@ -13,6 +13,12 @@ export interface Provincia {
   nombre: string;
 }
 
+export interface Ciudad {
+  idCiudad: number;
+  nombre: string;
+  idProvincia: number;
+}
+
 export interface Cliente {
   id: string;
   idCliente: number;

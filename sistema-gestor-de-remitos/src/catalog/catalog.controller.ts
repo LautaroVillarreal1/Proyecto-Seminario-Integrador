@@ -24,4 +24,5 @@ export class CatalogController {
   @Post('clientes') @Roles(1, 2) crearCliente(@Body() dto: CreateClienteDto) { return this.catalog.crearCliente(dto); }
   @Patch('clientes/:id') @Roles(1, 2) actualizarCliente(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<CreateClienteDto>) { return this.catalog.actualizarCliente(id, dto); }
   @Get('provincias') provincias() { return this.catalog.provincias(); }
+  @Get('ciudades') ciudades() { return this.catalog.ciudades(); }
 }

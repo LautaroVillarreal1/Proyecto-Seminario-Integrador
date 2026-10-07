@@ -9,7 +9,7 @@ const normalizePhone = (value: string) => value.replace(/\D/g, '');
 
 export default function NuevoRemito() {
   const navigate = useNavigate();
-  const { productos, usuarios, clientes, provincias, addCliente, addRemito, currentUser } = useApp();
+  const { productos, usuarios, clientes, provincias, ciudades, addCliente, addRemito, currentUser } = useApp();
   const viajantes = usuarios.filter(u => u.rol === 'viajante' && u.activo);
 
   const [clienteId, setClienteId] = useState<number | null>(null);
@@ -19,9 +19,9 @@ export default function NuevoRemito() {
   const [showClienteForm, setShowClienteForm] = useState(false);
   const [clienteSaving, setClienteSaving] = useState(false);
   const [clienteError, setClienteError] = useState('');
-  const [clienteForm, setClienteForm] = useState({ nombre: '', descripcion: '', ciudad: '', calle: '', numero: '', correoElectronico: '', numeroDeTelefono: '', idProvincia: '' });
+  const [clienteForm, setClienteForm] = useState({ nombre: '', descripcion: '', idCiudad: '', calle: '', numero: '', correoElectronico: '', numeroDeTelefono: '', idProvincia: '' });
   const [viajanteId, setViajanteId] = useState('');
-  const [descuento, setDescuento] = useState<number | undefined>(0);
+  const [descuento, setDescuento] = useState('0');
   const [observaciones, setObservaciones] = useState('');
   const [items, setItems] = useState<RemitoItem[]>([]);
   const [productoSelId, setProductoSelId] = useState('');
@@ -43,6 +43,7 @@ export default function NuevoRemito() {
     const query = normalizeText(clienteSearch);
     return !query || normalizeText(`${cliente.nombre} ${cliente.correoElectronico} ${cliente.direccion} ${cliente.provincia?.nombre ?? ''}`).includes(query);
   });
+  const ciudadesDisponibles = ciudades.filter(ciudad => !clienteForm.idProvincia || ciudad.idProvincia === Number(clienteForm.idProvincia));
 
   const addItem = () => {
     const prod = productos.find(p => p.id === productoSelId);
@@ -78,13 +79,14 @@ export default function NuevoRemito() {
   const removeItem = (productoId: string) => setItems(items.filter(i => i.productoId !== productoId));
 
   const subtotal = items.reduce((s, i) => s + i.subtotal, 0);
-  const total = subtotal - (descuento ?? 0);
+  const descuentoImporte = Math.round(subtotal * ((Number(descuento) || 0) / 100) * 100) / 100;
+  const total = subtotal - descuentoImporte;
   const fmt = (n: number) => `$${n.toLocaleString('es-AR')}`;
 
   const handleCreateCliente = async () => {
     setClienteError('');
     const nombre = clienteForm.nombre.trim();
-    const ciudad = clienteForm.ciudad.trim();
+    const ciudad = ciudades.find(item => String(item.idCiudad) === clienteForm.idCiudad)?.nombre ?? '';
     const calle = clienteForm.calle.trim();
     const numero = clienteForm.numero.trim();
     const correoElectronico = clienteForm.correoElectronico.trim().toLowerCase();
@@ -131,7 +133,7 @@ export default function NuevoRemito() {
     setClienteSearch(created.nombre);
     setClienteDropdownOpen(false);
     setShowClienteForm(false);
-    setClienteForm({ nombre: '', descripcion: '', ciudad: '', calle: '', numero: '', correoElectronico: '', numeroDeTelefono: '', idProvincia: '' });
+    setClienteForm({ nombre: '', descripcion: '', idCiudad: '', calle: '', numero: '', correoElectronico: '', numeroDeTelefono: '', idProvincia: '' });
   };
 
   const handleSubmit = async (estado: 'borrador' | 'pendiente') => {
@@ -155,7 +157,7 @@ export default function NuevoRemito() {
       viajanteNombre: viajante?.nombre,
       items,
       subtotal,
-      descuento: descuento ?? 0,
+      descuento: descuentoImporte,
       total,
       estado,
       observaciones: observaciones.trim() || undefined,
@@ -253,13 +255,19 @@ export default function NuevoRemito() {
                     <input type="tel" value={clienteForm.numeroDeTelefono} onChange={e => setClienteForm({ ...clienteForm, numeroDeTelefono: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
                   </label>
                   <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Provincia *
-                    <select value={clienteForm.idProvincia} onChange={e => setClienteForm({ ...clienteForm, idProvincia: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>
+                    <select value={clienteForm.idProvincia} onChange={e => setClienteForm({ ...clienteForm, idProvincia: e.target.value, idCiudad: '' })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>
                       <option value="">Seleccionar provincia</option>
                       {provincias.map(provincia => <option key={provincia.idProvincia} value={provincia.idProvincia}>{provincia.nombre}</option>)}
                     </select>
                   </label>
                   <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Ciudad *
-                    <input value={clienteForm.ciudad} onChange={e => setClienteForm({ ...clienteForm, ciudad: e.target.value })} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} />
+                    <select value={clienteForm.idCiudad} onChange={e => {
+                      const ciudad = ciudades.find(item => String(item.idCiudad) === e.target.value);
+                      setClienteForm({ ...clienteForm, idCiudad: e.target.value, idProvincia: ciudad ? String(ciudad.idProvincia) : clienteForm.idProvincia });
+                    }} className="mt-1 w-full px-3 py-2 rounded-xl border text-sm outline-none" style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}>
+                      <option value="">Seleccionar ciudad</option>
+                      {ciudadesDisponibles.map(ciudad => <option key={ciudad.idCiudad} value={ciudad.idCiudad}>{ciudad.nombre}</option>)}
+                    </select>
                   </label>
                   <div className="grid grid-cols-[1fr_7rem] gap-2">
                     <label className="text-xs font-medium" style={{ color: 'var(--color-foreground)' }}>Calle *
@@ -383,14 +391,20 @@ export default function NuevoRemito() {
               </div>
               <div className="flex items-center justify-between">
                 <span style={{ color: 'var(--color-muted-foreground)' }}>Descuento</span>
-                <input
-                  type="number"
-                  min={0}
-                  value={descuento ?? ''}
-                  onChange={e => setDescuento(e.target.value === '' ? undefined : Math.max(0, Number(e.target.value)))}
-                  className="w-24 px-2 py-1 rounded-lg border text-xs text-right font-mono outline-none"
-                  style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
-                />
+                <div className="flex items-center gap-1">
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={descuento}
+                    onChange={e => {
+                      const value = e.target.value.replace(',', '.');
+                      if (/^\d*(\.\d*)?$/.test(value)) setDescuento(value);
+                    }}
+                    className="w-16 px-2 py-1 rounded-lg border text-xs text-right font-mono outline-none"
+                    style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
+                  />
+                  <span style={{ color: 'var(--color-muted-foreground)' }}>%</span>
+                </div>
               </div>
               <div className="flex justify-between text-base font-bold pt-2 border-t" style={{ color: 'var(--color-foreground)', borderColor: 'var(--color-border)' }}>
                 <span>Total</span>
