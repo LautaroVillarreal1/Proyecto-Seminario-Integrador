@@ -6,11 +6,15 @@ import { RemitosService } from './remitos.service';
 describe('RemitosService', () => {
   const transaction = {
     producto: {
-      findUnique: jest.fn().mockResolvedValue({ precioUnitario: 1400, stockActual: 5, activo: true }),
+      findUnique: jest.fn().mockResolvedValue({ idProducto: 1, nombre: 'Granola', precioUnitario: 1400, stockActual: 5, activo: true }),
       update: jest.fn().mockResolvedValue({}),
+    },
+    detalleRemito: {
+      findMany: jest.fn().mockResolvedValue([]),
     },
     remito: {
       create: jest.fn().mockResolvedValue({ idRemito: 1, detalles: [] }),
+      update: jest.fn().mockResolvedValue({ idRemito: 1 }),
     },
   };
   const remitoRecord = {
@@ -50,5 +54,36 @@ describe('RemitosService', () => {
 
     await expect(service.create(createDto(1401), 2)).rejects.toThrow(BadRequestException);
     expect(transaction.remito.create).toHaveBeenCalledTimes(1);
+  });
+
+  it('creates a stock-shortage remito as pending without decrementing stock', async () => {
+    transaction.producto.findUnique.mockResolvedValue({ idProducto: 1, nombre: 'Granola', precioUnitario: 1400, stockActual: 2, activo: true });
+    const dto = { ...createDto(0), detalles: [{ idProducto: 1, cantidad: 5 }] };
+
+    await service.create(dto, 2);
+
+    expect(transaction.remito.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ idEstado: 4, observacion: 'Falta:\n3 Granola' }),
+    }));
+    expect(transaction.producto.update).not.toHaveBeenCalled();
+  });
+
+  it('does not confirm a stock-shortage remito until all products are available', async () => {
+    (prisma.remito.findUnique as jest.Mock).mockResolvedValueOnce({ ...remitoRecord, idEstado: 4, observacion: 'Falta:\n1 Granola' });
+    transaction.detalleRemito.findMany.mockResolvedValue([{ idProducto: 1, cantidad: 3, producto: { idProducto: 1, nombre: 'Granola', stockActual: 2 } }]);
+
+    await expect(service.update(1, { idEstado: 8 }, 2, 1)).rejects.toThrow('Stock insuficiente para Granola');
+    expect(transaction.producto.update).not.toHaveBeenCalled();
+    expect(transaction.remito.update).not.toHaveBeenCalled();
+  });
+
+  it('deducts stock when an administrator confirms a stock-shortage remito', async () => {
+    (prisma.remito.findUnique as jest.Mock).mockResolvedValueOnce({ ...remitoRecord, idEstado: 4, observacion: 'Falta:\n1 Granola' });
+    transaction.detalleRemito.findMany.mockResolvedValue([{ idProducto: 1, cantidad: 3, producto: { idProducto: 1, nombre: 'Granola', stockActual: 3 } }]);
+
+    await service.update(1, { idEstado: 8 }, 2, 1);
+
+    expect(transaction.producto.update).toHaveBeenCalledWith({ where: { idProducto: 1 }, data: { stockActual: { decrement: 3 } } });
+    expect(transaction.remito.update).toHaveBeenCalled();
   });
 });

@@ -24,7 +24,9 @@ export default function Remitos() {
   const isViajante = currentUser?.rol === 'viajante';
 
   let filtered = remitos;
-  if (isViajante) filtered = filtered.filter(r => r.viajanteId === currentUser?.id);
+  if (isViajante) filtered = filtered.filter(r =>
+    r.viajanteId === currentUser?.id && !(r.observaciones?.startsWith('Falta:\n') && !['en_camino', 'entregado', 'con_inconveniente'].includes(r.estado))
+  );
   if (estadoFiltro) filtered = filtered.filter(r => r.estado === estadoFiltro);
   if (search) {
     const q = search.toLowerCase();
@@ -125,6 +127,9 @@ export default function Remitos() {
                   </td>
                   <td className="px-4 py-3">
                     <EstadoBadge estado={r.estado as EstadoRemito} />
+                    {r.estado === 'pendiente' && r.observaciones?.startsWith('Falta:\n') && (
+                      <p className="mt-1 whitespace-pre-line text-xs" style={{ color: '#8A671F' }}>{r.observaciones}</p>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-xs" style={{ color: 'var(--color-muted-foreground)' }}>›</span>

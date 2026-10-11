@@ -24,6 +24,7 @@ export default function NuevoRemito() {
   const [descuento, setDescuento] = useState('0');
   const [observaciones, setObservaciones] = useState('');
   const [items, setItems] = useState<RemitoItem[]>([]);
+  const [quantityDrafts, setQuantityDrafts] = useState<Record<string, string>>({});
   const [productoSelId, setProductoSelId] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -69,14 +70,33 @@ export default function NuevoRemito() {
   };
 
   const updateQuantity = (productoId: string, nextQuantity: number) => {
-    const cantidadClamped = Math.max(1, nextQuantity);
+    const cantidadClamped = Math.max(1, Math.trunc(nextQuantity));
     setItems(items.map(item => item.productoId === productoId
       ? { ...item, cantidad: cantidadClamped, subtotal: cantidadClamped * item.precioUnitario }
       : item
     ));
   };
 
-  const removeItem = (productoId: string) => setItems(items.filter(i => i.productoId !== productoId));
+  const commitQuantity = (productoId: string) => {
+    const draft = quantityDrafts[productoId];
+    if (draft !== undefined && /^[1-9]\d*$/.test(draft) && Number.isSafeInteger(Number(draft))) {
+      updateQuantity(productoId, Number(draft));
+    }
+    setQuantityDrafts(drafts => {
+      const nextDrafts = { ...drafts };
+      delete nextDrafts[productoId];
+      return nextDrafts;
+    });
+  };
+
+  const removeItem = (productoId: string) => {
+    setItems(items.filter(i => i.productoId !== productoId));
+    setQuantityDrafts(drafts => {
+      const nextDrafts = { ...drafts };
+      delete nextDrafts[productoId];
+      return nextDrafts;
+    });
+  };
 
   const subtotal = items.reduce((s, i) => s + i.subtotal, 0);
   const descuentoImporte = Math.round(subtotal * ((Number(descuento) || 0) / 100) * 100) / 100;
@@ -330,7 +350,25 @@ export default function NuevoRemito() {
                       <td className="px-3 py-2.5 font-mono text-xs" style={{ color: 'var(--color-muted-foreground)' }}>
                         <span className="inline-flex items-center gap-2">
                           <button className="px-2 py-1 rounded border" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} onClick={() => updateQuantity(item.productoId, item.cantidad - 1)}>-</button>
-                          <span>{item.cantidad}</span>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[1-9][0-9]*"
+                            aria-label={`Cantidad de ${item.productoNombre}`}
+                            value={quantityDrafts[item.productoId] ?? String(item.cantidad)}
+                            onChange={event => {
+                              const value = event.target.value;
+                              if (/^\d*$/.test(value)) {
+                                setQuantityDrafts(drafts => ({ ...drafts, [item.productoId]: value }));
+                              }
+                            }}
+                            onBlur={() => commitQuantity(item.productoId)}
+                            onKeyDown={event => {
+                              if (event.key === 'Enter') event.currentTarget.blur();
+                            }}
+                            className="w-12 rounded border px-1 py-1 text-center font-mono text-xs outline-none"
+                            style={{ background: 'var(--color-muted)', borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
+                          />
                           <button className="px-2 py-1 rounded border" style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }} onClick={() => updateQuantity(item.productoId, item.cantidad + 1)}>+</button>
                         </span>
                       </td>

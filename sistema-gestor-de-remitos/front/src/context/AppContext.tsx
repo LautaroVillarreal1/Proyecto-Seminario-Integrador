@@ -15,7 +15,7 @@ interface AppContextType {
   remitos: Remito[];
   setRemitos: (r: Remito[]) => void;
   addRemito: (r: Remito) => Promise<Remito | null>;
-  updateRemito: (r: Remito) => void;
+  updateRemito: (r: Remito) => Promise<boolean>;
   productos: Producto[];
   setProductos: (p: Producto[]) => Promise<Producto | null>;
   insumos: Insumo[];
@@ -329,14 +329,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
       throw new Error('No se pudo guardar el remito en el servidor.');
     }
   };
-  const updateRemito = (r: Remito) => {
-    setRemitos(prev => prev.map(x => (x.id === r.id ? r : x)));
+  const updateRemito = async (r: Remito) => {
     const id = Number(r.id.replace('rem', ''));
-    void fetch(`/api/remitos/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ idEstado: estadoToId[r.estado], observacion: r.observaciones, inconveniente: r.inconveniente, formaPago: r.formaPago, fechaEntregaReal: r.fechaEntrega ? `${r.fechaEntrega}T${r.horaEntrega ?? '00:00'}:00` : undefined }),
-    });
+    try {
+      const response = await fetch(`/api/remitos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ idEstado: estadoToId[r.estado], observacion: r.observaciones, inconveniente: r.inconveniente, formaPago: r.formaPago, fechaEntregaReal: r.fechaEntrega ? `${r.fechaEntrega}T${r.horaEntrega ?? '00:00'}:00` : undefined }),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        const detail = Array.isArray(body?.message) ? body.message.join(', ') : body?.message;
+        notifyError(detail || 'No se pudo actualizar el remito.');
+        return false;
+      }
+      setRemitos(previous => previous.map(item => item.id === r.id ? r : item));
+      return true;
+    } catch {
+      notifyError('No se pudo actualizar el remito. Revisá la conexión e intentá nuevamente.');
+      return false;
+    }
   };
 
   return (

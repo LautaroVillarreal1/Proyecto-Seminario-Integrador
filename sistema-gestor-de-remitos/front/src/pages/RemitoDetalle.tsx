@@ -48,13 +48,13 @@ export default function RemitoDetalle() {
   const transitions = ESTADO_TRANSITIONS[remito.estado] || [];
   const fmt = (n: number) => `$${n.toLocaleString('es-AR')}`;
 
-  const handleTransition = (newEstado: EstadoRemito) => {
+  const handleTransition = async (newEstado: EstadoRemito) => {
     if (newEstado === 'cancelado' && !confirmCancel) {
       setConfirmCancel(true);
       return;
     }
     const now = new Date();
-    updateRemito({
+    const saved = await updateRemito({
       ...remito,
       estado: newEstado,
       ...(newEstado === 'entregado' && {
@@ -65,12 +65,13 @@ export default function RemitoDetalle() {
       }),
       ...(newEstado === 'con_inconveniente' && { inconveniente }),
     });
+    if (!saved) return;
     setShowEntregaForm(false);
     setConfirmCancel(false);
   };
 
-  const handleGuardarObservaciones = () => {
-    updateRemito({ ...remito, observaciones, inconveniente });
+  const handleGuardarObservaciones = async () => {
+    await updateRemito({ ...remito, observaciones, inconveniente });
   };
 
   const estadoLabel: Record<EstadoRemito, string> = {
@@ -120,6 +121,13 @@ export default function RemitoDetalle() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Left column */}
         <div className="lg:col-span-2 space-y-5">
+          {remito.estado === 'pendiente' && remito.observaciones?.startsWith('Falta:\n') && (
+            <section role="alert" className="rounded-xl border p-4" style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#78350F' }}>
+              <h2 className="text-sm font-semibold">Pendiente por falta de stock</h2>
+              <p className="mt-2 whitespace-pre-line text-sm">{remito.observaciones}</p>
+              <p className="mt-2 text-xs">Se podrá confirmar cuando haya stock suficiente.</p>
+            </section>
+          )}
           {/* Cliente */}
           <section className="rounded-2xl border p-5" style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
             <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-muted-foreground)' }}>
@@ -203,6 +211,7 @@ export default function RemitoDetalle() {
             <textarea
               value={observaciones}
               onChange={e => setObservaciones(e.target.value)}
+              readOnly={remito.estado === 'pendiente' && remito.observaciones?.startsWith('Falta:\n')}
               rows={3}
               placeholder="Agregar observaciones…"
               className="w-full px-3 py-2.5 rounded-xl border text-sm outline-none resize-none"
@@ -224,6 +233,7 @@ export default function RemitoDetalle() {
             )}
             <button
               onClick={handleGuardarObservaciones}
+              disabled={remito.estado === 'pendiente' && remito.observaciones?.startsWith('Falta:\n')}
               className="mt-3 px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80"
               style={{ background: 'var(--color-secondary)', color: 'var(--color-secondary-foreground)' }}>
               Guardar notas

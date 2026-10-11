@@ -33,15 +33,25 @@ export class RemitosService {
       const products = await Promise.all(dto.detalles.map(detail => tx.producto.findUnique({ where: { idProducto: detail.idProducto } })));
       if (products.some(product => !product)) throw new NotFoundException('Producto inexistente');
       if (products.some(product => !product!.activo)) throw new ConflictException('No se pueden incluir productos inactivos');
-      for (let index = 0; index < dto.detalles.length; index += 1) {
-        const product = products[index]!;
-        if (product.stockActual < dto.detalles[index].cantidad) throw new ConflictException(`Stock insuficiente para ${product.nombre}`);
-      }
+      const requestedByProduct = new Map<number, number>();
+      for (const detail of dto.detalles) requestedByProduct.set(detail.idProducto, (requestedByProduct.get(detail.idProducto) ?? 0) + detail.cantidad);
+      const productById = new Map(products.map(product => [product!.idProducto, product!]));
+      const shortageLines = Array.from(requestedByProduct, ([productId, quantity]) => {
+        const product = productById.get(productId)!;
+        const missing = quantity - product.stockActual;
+        return missing > 0 ? `${missing} ${product.nombre}` : null;
+      }).filter((line): line is string => line !== null);
+      const stockShortage = shortageLines.length > 0;
       const subtotal = dto.detalles.reduce((sum, detail, index) => sum + Number(products[index]!.precioUnitario) * detail.cantidad, 0);
       const descuento = dto.descuento ?? 0;
       if (descuento > subtotal) throw new BadRequestException('El descuento no puede superar el subtotal del remito');
-      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: dto.idResponsableEntrega ?? userId, idEstado: dto.idEstado, idCliente: dto.idCliente, observacion: dto.observacion, descuento, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
-      await Promise.all(dto.detalles.map(detail => tx.producto.update({ where: { idProducto: detail.idProducto }, data: { stockActual: { decrement: detail.cantidad } } })));
+      const observacion = stockShortage
+        ? [`Falta:\n${shortageLines.join('\n')}`, dto.observacion?.trim()].filter(Boolean).join('\n')
+        : dto.observacion;
+      const remito = await tx.remito.create({ data: { fechaEntrega: new Date(dto.fechaEntrega), horaEntrega: new Date(dto.horaEntrega), idUsuario: dto.idResponsableEntrega ?? userId, idEstado: stockShortage ? 4 : dto.idEstado, idCliente: dto.idCliente, observacion, descuento, detalles: { create: dto.detalles.map((detail, index) => ({ idProducto: detail.idProducto, cantidad: detail.cantidad, subTotal: Number(products[index]!.precioUnitario) * detail.cantidad })) } }, include: { detalles: true } });
+      if (!stockShortage) {
+        await Promise.all(dto.detalles.map(detail => tx.producto.update({ where: { idProducto: detail.idProducto }, data: { stockActual: { decrement: detail.cantidad } } })));
+      }
       return remito;
     });
     const complete = await this.find(created.idRemito);
@@ -52,7 +62,24 @@ export class RemitosService {
   async update(id: number, dto: UpdateRemitoDto, userId: number, roleId: number) {
     const current = await this.find(id);
     if (roleId === 3 && current.idUsuario !== userId) throw new ForbiddenException('El remito no esta asignado al viajante');
-    const updated = await this.prisma.remito.update({ where: { idRemito: id }, data: { ...dto, fechaEntregaReal: dto.fechaEntregaReal ? new Date(dto.fechaEntregaReal) : undefined }, include: { cliente: { include: { provincia: true } }, estado: true, usuario: true, detalles: { include: { producto: true } } } });
+    const data = { ...dto, fechaEntregaReal: dto.fechaEntregaReal ? new Date(dto.fechaEntregaReal) : undefined };
+    const isStockShortageConfirmation = current.idEstado === 4 && dto.idEstado === 8 && current.observacion?.startsWith('Falta:\n');
+    if (isStockShortageConfirmation && roleId === 3) throw new ForbiddenException('Solo un administrador puede confirmar un remito pendiente por falta de stock');
+    const updated = isStockShortageConfirmation
+      ? await this.prisma.$transaction(async tx => {
+        const details = await tx.detalleRemito.findMany({ where: { idRemito: id }, include: { producto: true } });
+        const requestedByProduct = new Map<number, { quantity: number; product: typeof details[number]['producto'] }>();
+        for (const detail of details) {
+          const requested = requestedByProduct.get(detail.idProducto);
+          requestedByProduct.set(detail.idProducto, { quantity: (requested?.quantity ?? 0) + detail.cantidad, product: detail.producto });
+        }
+        for (const { quantity, product } of requestedByProduct.values()) {
+          if (product.stockActual < quantity) throw new ConflictException(`Stock insuficiente para ${product.nombre}`);
+        }
+        await Promise.all(Array.from(requestedByProduct, ([idProducto, { quantity }]) => tx.producto.update({ where: { idProducto }, data: { stockActual: { decrement: quantity } } })));
+        return tx.remito.update({ where: { idRemito: id }, data, include: { cliente: { include: { provincia: true } }, estado: true, usuario: true, detalles: { include: { producto: true } } } });
+      })
+      : await this.prisma.remito.update({ where: { idRemito: id }, data, include: { cliente: { include: { provincia: true } }, estado: true, usuario: true, detalles: { include: { producto: true } } } });
     this.realtime.publishRemito(updated as unknown as Record<string, unknown>);
     return updated;
   }

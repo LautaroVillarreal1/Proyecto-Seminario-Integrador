@@ -30,8 +30,10 @@ export default function RemitosViajante() {
   const [filtro, setFiltro] = useState('');
   const [search, setSearch] = useState('');
 
-  const misRemitos = remitos
-    .filter(r => r.viajanteId === currentUser?.id)
+  const remitosAsignadosVisibles = remitos.filter(r =>
+    r.viajanteId === currentUser?.id && !(r.observaciones?.startsWith('Falta:\n') && !['en_camino', 'entregado', 'con_inconveniente'].includes(r.estado))
+  );
+  const misRemitos = remitosAsignadosVisibles
     .filter(r => !filtro || r.estado === filtro)
     .filter(r =>
       !search ||
@@ -46,10 +48,10 @@ export default function RemitosViajante() {
       return b.fecha.localeCompare(a.fecha);
     });
 
-  const pendientesCount = remitos.filter(r => r.viajanteId === currentUser?.id && (r.estado === 'pendiente' || r.estado === 'en_camino')).length;
+  const pendientesCount = remitosAsignadosVisibles.filter(r => r.estado === 'pendiente' || r.estado === 'en_camino').length;
   const entregadosHoy = (() => {
     const hoy = new Date().toISOString().split('T')[0];
-    return remitos.filter(r => r.viajanteId === currentUser?.id && r.estado === 'entregado' && r.fechaEntrega === hoy).length;
+    return remitosAsignadosVisibles.filter(r => r.estado === 'entregado' && r.fechaEntrega === hoy).length;
   })();
 
   return (
