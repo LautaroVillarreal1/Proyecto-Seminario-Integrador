@@ -1,65 +1,87 @@
 # Proyecto Seminario Integrador
 
-## Puesta en marcha
+El repositorio está separado en dos aplicaciones independientes:
 
-Estas instrucciones permiten ejecutar el proyecto después de clonarlo por primera vez.
+- `backend/`: API NestJS, módulos de negocio, pruebas y Prisma.
+- `front/`: aplicación React/Vite.
+- `archivos/`: documentación, diagramas y recursos de referencia del proyecto.
 
-### Requisitos
+## Requisitos
 
-- [Node.js](https://nodejs.org/) instalado, preferentemente la versión LTS.
-- [Docker](https://www.docker.com/) y Docker Compose instalados.
-- Git instalado para clonar el repositorio.
+- Node.js y npm.
+- Docker Desktop con Docker Compose.
 
-### Instalación
+## Backend
 
-1. Clonar el repositorio:
+Instalá las dependencias y levantá los servicios Docker desde `backend/`:
 
-   ```bash
-   git clone https://github.com/LautaroVillarreal1/Proyecto-Seminario-Integrador.git
-   ```
+```bash
+cd backend
+npm install
+docker compose up -d
+```
 
-2. Entrar a la carpeta del proyecto:
+El Compose inicia PostgreSQL, el backend y el frontend. En ese modo, la API queda disponible en `http://localhost:3000/api` y la aplicación web en `http://localhost:4200`. No ejecutes a la vez el backend local de desarrollo mientras el servicio `backend` de Compose esté activo, porque ambos usan el puerto 3000.
 
-   ```bash
-   cd Proyecto-Seminario-Integrador/sistema-gestor-de-remitos
-   ```
+Para trabajar con el backend local, iniciá únicamente PostgreSQL y luego el servidor NestJS:
 
-3. Instalar las dependencias (incluyendo Prisma):
+```bash
+cd backend
+docker compose up -d postgres
+npm run db:setup
+npm run start:dev
+```
 
-   ```bash
-   npm install
-   ```
+El servidor local queda disponible en `http://localhost:3000/api`. El archivo `backend/.env` contiene la configuración local de entorno y no se versiona; configurá `DATABASE_URL` y `JWT_SECRET` para tu entorno.
 
-4. Levantar la base de datos PostgreSQL con Docker:
+## Frontend
 
-   ```bash
-   docker-compose up -d
-   ```
+Para ejecutar Vite independientemente:
 
-   Este comando inicia un contenedor PostgreSQL en segundo plano. El puerto 5432 estará disponible localmente.
+```bash
+cd front
+npm install
+npm run start:dev
+```
 
-5. Generar el cliente de Prisma y aplicar las migraciones:
+El frontend usa el servidor de desarrollo de Vite en `http://localhost:8443`. También se puede compilar con `npm run build` desde `front/`.
 
-   ```bash
-   npx prisma migrate dev --name init
-   ```
+## Pruebas del backend
 
-   Esto genera el cliente de Prisma y sincroniza el esquema con la base de datos PostgreSQL.
+Desde `backend/`:
 
-6. Iniciar el servidor en modo desarrollo:
+```bash
+npm test
+npm run test:e2e
+```
 
-   ```bash
-   npm run start:dev
-   ```
+## Estructura
 
-El servidor queda disponible en [http://localhost:3000](http://localhost:3000). El modo desarrollo vuelve a cargar la aplicación automáticamente cuando se modifica el código.
+```text
+backend/
+  src/
+    auth/
+    catalog/
+    realtime/
+    recipes/
+    remitos/
+    reports/
+    shared/infrastructure/prisma/
+    users/
+  prisma/
+  test/
+front/
+  src/
+    assets/
+    components/
+    context/
+    data/
+    pages/
+    utils/
+```
 
-Para detener el servidor, presionar `Ctrl + C` en la terminal.
+Los modelos y las migraciones del ORM permanecen en `backend/prisma/`; no se duplican como entidades TypeScript. Los módulos NestJS mantienen sus responsabilidades y DTOs junto a cada módulo.
 
-### Importante
+## Archivos de referencia
 
-- El comando `npm run start:dev` debe ejecutarse desde la carpeta `sistema-gestor-de-remitos`, porque allí se encuentra el `package.json` que define ese script.
-- El contenedor PostgreSQL debe estar corriendo antes de ejecutar las migraciones y el servidor.
-- Para detener el contenedor: `docker-compose down`
-- Para ver los logs del contenedor: `docker-compose logs -f`
-- Las credenciales por defecto son: usuario `postgres`, contraseña `postgres`, base de datos `sistema_gestor_remitos`.
+La carpeta `archivos/` reúne la descripción del caso, los requisitos funcionales, los diagramas del sistema y el logo original de Frulatti. El frontend conserva su propia copia del logo en `front/src/assets/`.
