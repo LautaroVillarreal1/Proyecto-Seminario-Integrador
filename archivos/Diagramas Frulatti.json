@@ -1,0 +1,2934 @@
+{
+  "version": "32.6.4",
+  "pages": [
+    {
+      "id": "zKKplg5WKGRhOnJYv8sT",
+      "name": "Diagrama de Clases",
+      "cells": [
+        {
+          "id": "1",
+          "type": "layer"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-5",
+          "type": "node",
+          "parent": "1",
+          "label": "Pedido"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-36",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "idPedido"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-32",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "fechaEntrega"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-33",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "estado:Estado"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-31",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "responsableEntrega:Usuario"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-6",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "detallePedido:DetallePedido"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-25",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "cliente:Cliente"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-13",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "observacion"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-7",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-8",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "new()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-9",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "calcularTotal()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-10",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "agregarObservacion()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-11",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "modificarObservacion()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-12",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "calcularVencimiento()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-18",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "comenzarPreparacion()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-19",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "terminarPreparacion()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-20",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "rechazar()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-21",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "firmar()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-22",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "entregar()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-23",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "cancelar()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-24",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "cobrar()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-35",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "asignarResponsableEntrega()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-34",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "conocerEstado()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-12",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "conocerCliente()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-13",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "conocerUsuario()"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-18",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-5",
+          "label": "conocerDetallePedido()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-154",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-20",
+          "target": "tz4gQrnqsSQ46IX1IU_G-47"
+        },
+        {
+          "id": "D6ZzJLKX1Io06q3H7Z2R-2",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-154",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-155",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-23"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-10",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-155",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-156",
+          "type": "edge",
+          "parent": "1",
+          "target": "tz4gQrnqsSQ46IX1IU_G-65"
+        },
+        {
+          "id": "D6ZzJLKX1Io06q3H7Z2R-1",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-156",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-13",
+          "type": "node",
+          "parent": "1",
+          "label": "Producto"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-14",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "idProducto"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-15",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-16",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "precioUnitario"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-17",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "descripcion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-18",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "peso"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-19",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "precio"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-24",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "categoria:Categoria"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-23",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "receta:Receta"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-20",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "unidadDeMedida:UnidadDeMedida"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-21",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-22",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "new()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-2",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "fabricar()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-4",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "actualizarPrecio()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-3",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "conocerReceta()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-6",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "conocerUnidadDeMedida()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-8",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-13",
+          "label": "conocerCategoria()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-46",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-38",
+          "target": "tz4gQrnqsSQ46IX1IU_G-13"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-11",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-46",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-35",
+          "type": "node",
+          "parent": "1",
+          "label": "DetallePedido",
+          "html": "<span style=\"text-wrap-mode: nowrap;\">DetallePedido</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-36",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "idDetallePedido"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-37",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "subTotal"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-27",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "cantidad"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-38",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "producto:Producto"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-43",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-44",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "new()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-29",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "calcularSubTotal()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-11",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-35",
+          "label": "conocerProducto()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-47",
+          "type": "node",
+          "parent": "1",
+          "label": "UnidadDeMedida",
+          "html": "<span style=\"white-space: nowrap;\">UnidadDeMedida</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-48",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-47",
+          "label": "idUnidadDeMedida"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-49",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-47",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-57",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-47"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-58",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-47",
+          "label": "new()"
+        },
+        {
+          "id": "an135K1J5JUEkLxjlOS9-25",
+          "type": "edge",
+          "parent": "1",
+          "source": "an135K1J5JUEkLxjlOS9-6",
+          "target": "tz4gQrnqsSQ46IX1IU_G-35"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-7",
+          "type": "node",
+          "parent": "an135K1J5JUEkLxjlOS9-25",
+          "label": "1..*"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-157",
+          "type": "edge",
+          "parent": "1",
+          "source": "dA64nKU6AIFsU74iM7iP-1",
+          "target": "tz4gQrnqsSQ46IX1IU_G-70"
+        },
+        {
+          "id": "D6ZzJLKX1Io06q3H7Z2R-4",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-157",
+          "label": "1..*"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-59",
+          "type": "node",
+          "parent": "1",
+          "label": "Receta",
+          "html": "<span style=\"white-space: nowrap;\">Receta</span>"
+        },
+        {
+          "id": "dA64nKU6AIFsU74iM7iP-1",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "detalleReceta:DetalleReceta"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-61",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "descripcion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-62",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-63",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "new()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-6",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "agregarInsumo()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-7",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "quitarInsumo()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-8",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "mostrarReceta()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-3",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-59",
+          "label": "conocerDetalleReceta()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-65",
+          "type": "node",
+          "parent": "1",
+          "label": "Categoria",
+          "html": "<span style=\"white-space: nowrap;\">Categoria</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-66",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-65",
+          "label": "idCategoria"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-67",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-65",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-68",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-65"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-69",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-65",
+          "label": "new()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-158",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-85"
+        },
+        {
+          "id": "D6ZzJLKX1Io06q3H7Z2R-5",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-158",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-70",
+          "type": "node",
+          "parent": "1",
+          "label": "DetalleReceta",
+          "html": "<span style=\"white-space: nowrap;\">DetalleReceta</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-71",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70",
+          "label": "idDetalleReceta"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-72",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70",
+          "label": "cantidad"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-85",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70",
+          "label": "insumo:Insumo"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-73",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-74",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70",
+          "label": "new()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-11",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70",
+          "label": "modificarCantidad()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-4",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-70",
+          "label": "conocerInsumo()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-86",
+          "type": "node",
+          "parent": "1",
+          "label": "Insumo",
+          "html": "<span style=\"white-space: nowrap;\">Insumo</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-87",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86",
+          "label": "idInsumo"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-88",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-89",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86",
+          "label": "descripcion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-92",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86",
+          "label": "unidadDeMedida:UnidadDeMedida"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-90",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-91",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86",
+          "label": "new()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-5",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-86",
+          "label": "conocerUndidadDeMedida()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-93",
+          "type": "node",
+          "parent": "1",
+          "label": "Cliente",
+          "html": "<span style=\"white-space: nowrap;\">Cliente</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-94",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "idCliente"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-95",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-96",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "descripcion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-97",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "direccion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-101",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "correoElectronico"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-102",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "numeroDeTelefono"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-103",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "provincia:Provincia"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-98",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-99",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "new()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-2",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-93",
+          "label": "conocerProvincia()"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-16",
+          "type": "node",
+          "parent": "1",
+          "label": "Estado"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-17",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-16",
+          "label": "nombre"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-18",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-16"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-19",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-16",
+          "label": "new()"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-20",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-16",
+          "label": "getNombre()"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-12",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-16",
+          "label": "setNombre()"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-21",
+          "type": "edge",
+          "parent": "1",
+          "source": "an135K1J5JUEkLxjlOS9-33",
+          "target": "mSx-vWWbxV8ZbTfHItNs-16"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-6",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-21",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-117",
+          "type": "node",
+          "parent": "1",
+          "label": "Provincia",
+          "html": "<span style=\"white-space: nowrap;\">Provincia</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-118",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117",
+          "label": "idProvincia"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-119",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-120",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117",
+          "label": "descripcion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-121",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117",
+          "label": "ciudad:Ciudad"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-125",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-126",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117",
+          "label": "new()"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-1",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-117",
+          "label": "conocerCiudad()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-127",
+          "type": "node",
+          "parent": "1",
+          "label": "Ciudad",
+          "html": "<span style=\"white-space: nowrap;\">Ciudad</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-128",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-127",
+          "label": "idCiudad"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-129",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-127",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-130",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-127",
+          "label": "descripcion"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-132",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-127"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-133",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-127",
+          "label": "new()"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-153",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-139",
+          "target": "tz4gQrnqsSQ46IX1IU_G-145"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-3",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-153",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-134",
+          "type": "node",
+          "parent": "1",
+          "label": "Usuario",
+          "html": "<span style=\"white-space: nowrap;\">Usuario</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-135",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "idUsuario"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-136",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "nombreUsuario"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-138",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "contraseñaHash"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-14",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "correoElectronico"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-139",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "rol:Rol"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-12",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "empleado:Empleado"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-142",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-143",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "new()"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-15",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "conocerRol()"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-16",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-134",
+          "label": "conocerEmpleado()"
+        },
+        {
+          "id": "mSx-vWWbxV8ZbTfHItNs-23",
+          "type": "edge",
+          "parent": "1",
+          "source": "an135K1J5JUEkLxjlOS9-31",
+          "target": "tz4gQrnqsSQ46IX1IU_G-134"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-5",
+          "type": "node",
+          "parent": "mSx-vWWbxV8ZbTfHItNs-23",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-145",
+          "type": "node",
+          "parent": "1",
+          "label": "Rol",
+          "html": "<span style=\"white-space: nowrap;\">Rol</span>"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-146",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-145",
+          "label": "IdRol"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-147",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-145",
+          "label": "nombre"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-151",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-145"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-152",
+          "type": "node",
+          "parent": "tz4gQrnqsSQ46IX1IU_G-145",
+          "label": "new()"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-1",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-92",
+          "target": "tz4gQrnqsSQ46IX1IU_G-47"
+        },
+        {
+          "id": "D6ZzJLKX1Io06q3H7Z2R-3",
+          "type": "node",
+          "parent": "mDbfBiK3pFwRvojo8xxU-1",
+          "label": "1"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-12",
+          "type": "edge",
+          "parent": "1",
+          "source": "mSx-vWWbxV8ZbTfHItNs-25",
+          "target": "tz4gQrnqsSQ46IX1IU_G-94"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-8",
+          "type": "node",
+          "parent": "mDbfBiK3pFwRvojo8xxU-12",
+          "label": "1"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-14",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-93",
+          "target": "tz4gQrnqsSQ46IX1IU_G-117"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-9",
+          "type": "node",
+          "parent": "mDbfBiK3pFwRvojo8xxU-14",
+          "label": "1"
+        },
+        {
+          "id": "mDbfBiK3pFwRvojo8xxU-15",
+          "type": "edge",
+          "parent": "1",
+          "source": "tz4gQrnqsSQ46IX1IU_G-121",
+          "target": "tz4gQrnqsSQ46IX1IU_G-127"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-2",
+          "type": "node",
+          "parent": "mDbfBiK3pFwRvojo8xxU-15",
+          "label": "1..*"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-21",
+          "type": "node",
+          "parent": "1",
+          "label": "Estados:\nAceptado, EnPreparación, Cancelado, ListoParaEntrega, Firmado, Cobrado, Rechazado",
+          "html": "Estados:<div>Aceptado, EnPreparación, Cancelado, ListoParaEntrega, Firmado, Cobrado, Rechazado</div>"
+        },
+        {
+          "id": "WOWmeCtvi954nGhTJ1am-24",
+          "type": "edge",
+          "parent": "1",
+          "source": "mSx-vWWbxV8ZbTfHItNs-17",
+          "target": "WOWmeCtvi954nGhTJ1am-21"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-1",
+          "type": "node",
+          "parent": "1",
+          "label": "Empleado"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-2",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "idEmpleado"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-3",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "nombre"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-4",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "apellido"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-5",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "dni"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-7",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "numeroDeTelefono",
+          "html": "<div>numeroDeTelefono</div>"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-10",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "direccion"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-8",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-9",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-1",
+          "label": "new()"
+        },
+        {
+          "id": "IhIZUi06ceRIPdGtF1es-13",
+          "type": "edge",
+          "parent": "1",
+          "source": "IhIZUi06ceRIPdGtF1es-12",
+          "target": "IhIZUi06ceRIPdGtF1es-1"
+        },
+        {
+          "id": "EB-W7zI3-G1OO8ZcYT9P-4",
+          "type": "node",
+          "parent": "IhIZUi06ceRIPdGtF1es-13",
+          "label": "1"
+        },
+        {
+          "id": "tz4gQrnqsSQ46IX1IU_G-60",
+          "type": "node",
+          "parent": "1",
+          "label": "idReceta"
+        }
+      ]
+    },
+    {
+      "id": "C0zCKaihaPdcW1zs34l-",
+      "name": "DER",
+      "cells": [
+        {
+          "id": "1",
+          "type": "layer"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-1",
+          "type": "node",
+          "parent": "1",
+          "label": "Pedido"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-2",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-3",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-2",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-4",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-2",
+          "label": "idPedido"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-5",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-6",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-5",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-7",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-5",
+          "label": "idDetallePedido"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-8",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-9",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-8"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-10",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-8",
+          "label": "fechaEntrega"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-11",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-12",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-11"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-13",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-11",
+          "label": "horaEntrega"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-14",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-15",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-14",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-16",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-14",
+          "label": "idUsuario"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-17",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-18",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-17",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-19",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-17",
+          "label": "idEstado"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-20",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-1"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-21",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-20",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-22",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-20",
+          "label": "idCliente"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-23",
+          "type": "node",
+          "parent": "1",
+          "label": "DetallePedido"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-24",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-23"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-25",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-24",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-26",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-24",
+          "label": "idDetallePedido"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-27",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-23"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-28",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-27"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-29",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-27",
+          "label": "subTotal"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-30",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-23"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-31",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-30",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-32",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-30",
+          "label": "idProducto"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-33",
+          "type": "node",
+          "parent": "1",
+          "label": "Producto"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-34",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-35",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-34",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-36",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-34",
+          "label": "IdProducto"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-37",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-38",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-37"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-39",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-37",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-40",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-41",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-40"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-42",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-40",
+          "label": "precioUnitario"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-43",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-44",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-43"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-45",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-43",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-46",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-47",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-46"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-48",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-46",
+          "label": "peso"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-49",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-50",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-49"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-51",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-49"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-52",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-53",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-52",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-54",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-52",
+          "label": "idUnidadDeMedida"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-55",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-56",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-55",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-57",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-55",
+          "label": "idreceta"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-58",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-33"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-59",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-58",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-60",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-58",
+          "label": "idCategoria"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-61",
+          "type": "node",
+          "parent": "1",
+          "label": "Rol"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-62",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-61"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-63",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-62",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-64",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-62",
+          "label": "IdRol"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-65",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-61"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-66",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-65"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-67",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-65",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-68",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-85",
+          "target": "schcCUEw1xwQIa_NqHC5-62"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-69",
+          "type": "node",
+          "parent": "1",
+          "label": "Usuario"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-70",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-69"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-71",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-70",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-72",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-70",
+          "label": "idUsuario"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-73",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-69"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-74",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-73"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-75",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-73",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-76",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-69"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-77",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-76"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-78",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-76",
+          "label": "correoElectronico"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-79",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-69"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-80",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-79"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-81",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-79",
+          "label": "apellido"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-82",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-69"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-83",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-82"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-84",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-82",
+          "label": "contraseñaHash"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-85",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-69"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-86",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-85",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-87",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-85",
+          "label": "idRol"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-88",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-34",
+          "target": "schcCUEw1xwQIa_NqHC5-30"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-89",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-24",
+          "target": "schcCUEw1xwQIa_NqHC5-5"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-90",
+          "type": "node",
+          "parent": "1",
+          "label": "Categoria"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-91",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-90"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-92",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-91",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-93",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-91",
+          "label": "idCategoria"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-94",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-90"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-95",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-94"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-96",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-94",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-97",
+          "type": "node",
+          "parent": "1",
+          "label": "Receta"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-98",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-97"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-99",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-98",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-100",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-98",
+          "label": "idReceta"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-101",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-97"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-102",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-101"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-103",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-101",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-104",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-97"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-105",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-104",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-106",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-104",
+          "label": "idDetalleReceta"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-107",
+          "type": "node",
+          "parent": "1",
+          "label": "Insumo"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-108",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-107"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-109",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-108",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-110",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-108",
+          "label": "idInsumo"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-111",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-107"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-112",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-111"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-113",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-111",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-114",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-107"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-115",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-114"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-116",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-114",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-117",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-107"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-118",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-117",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-119",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-117",
+          "label": "idUnidadDeMedida"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-120",
+          "type": "node",
+          "parent": "1",
+          "label": "UnidadDeMedida"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-121",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-120"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-122",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-121",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-123",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-121",
+          "label": "idUnidadDeMedida"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-124",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-120"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-125",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-124"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-126",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-124",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-127",
+          "type": "node",
+          "parent": "1",
+          "label": "DetalleReceta"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-128",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-127"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-129",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-128",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-130",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-128",
+          "label": "idDetalleReceta"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-131",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-127"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-132",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-131"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-133",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-131",
+          "label": "cantidad"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-134",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-127"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-135",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-134",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-136",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-134",
+          "label": "idInsumo"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-137",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-52",
+          "target": "schcCUEw1xwQIa_NqHC5-121"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-138",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-55"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-139",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-58",
+          "target": "schcCUEw1xwQIa_NqHC5-91"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-140",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-104",
+          "target": "schcCUEw1xwQIa_NqHC5-128"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-141",
+          "type": "edge",
+          "parent": "1",
+          "target": "schcCUEw1xwQIa_NqHC5-121"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-142",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-134",
+          "target": "schcCUEw1xwQIa_NqHC5-108"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-143",
+          "type": "node",
+          "parent": "1",
+          "label": "Cliente"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-144",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-145",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-144",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-146",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-144",
+          "label": "idCliente"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-147",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-148",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-147"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-149",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-147",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-150",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-151",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-150"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-152",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-150",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-153",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-154",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-153"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-155",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-153",
+          "label": "direccion(callenumero)"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-156",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-157",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-156"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-158",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-156",
+          "label": "correoElectronico"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-159",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-160",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-159"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-161",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-159",
+          "label": "numeroDeTelefono"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-162",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-143"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-163",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-162",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-164",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-162",
+          "label": "idProvincia"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-165",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-20",
+          "target": "schcCUEw1xwQIa_NqHC5-144"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-166",
+          "type": "node",
+          "parent": "1",
+          "label": "Ciudad"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-167",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-166"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-168",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-167",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-169",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-167",
+          "label": "idCiudad"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-170",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-166"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-171",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-170"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-172",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-170",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-173",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-166"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-174",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-173"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-175",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-173",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-176",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-166"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-177",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-176"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-178",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-176",
+          "label": "codigoPostal"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-179",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-166"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-180",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-179"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-181",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-179",
+          "label": "idProvincia"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-182",
+          "type": "node",
+          "parent": "1",
+          "label": "Provincia"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-183",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-182"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-184",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-183",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-185",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-183",
+          "label": "idProvincia"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-186",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-182"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-187",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-186"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-188",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-186",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-189",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-182"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-190",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-189"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-191",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-189",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-192",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-182"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-193",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-192",
+          "label": "FK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-194",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-192",
+          "label": "idCiudad"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-195",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-192",
+          "target": "schcCUEw1xwQIa_NqHC5-167"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-196",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-162",
+          "target": "schcCUEw1xwQIa_NqHC5-183"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-197",
+          "type": "node",
+          "parent": "1",
+          "label": "Estado"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-198",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-197"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-199",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-198",
+          "label": "PK"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-200",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-198",
+          "label": "IdEstado"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-201",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-197"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-202",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-201"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-203",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-201",
+          "label": "nombre"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-204",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-197"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-205",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-204"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-206",
+          "type": "node",
+          "parent": "schcCUEw1xwQIa_NqHC5-204",
+          "label": "descripcion"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-207",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-17",
+          "target": "schcCUEw1xwQIa_NqHC5-197"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-208",
+          "type": "node",
+          "parent": "1",
+          "label": "Roles:\nAdministrador\nResponsable de pedido\nResponsable de entrega\nResponsable de producción",
+          "html": "Roles:<div>Administrador<br>Responsable de pedido</div><div><span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">Responsable de entrega</span></div><div><span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">Responsable de producción</span></div>"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-209",
+          "type": "node",
+          "parent": "1",
+          "label": "Estados:\nAceptado, EnPreparación, cancelado, ListoParaEntrega, Firmado, Cobrado, Rechazado",
+          "html": "Estados:<div>Aceptado, EnPreparación, cancelado, ListoParaEntrega, Firmado, Cobrado, Rechazado</div>"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-210",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-204",
+          "target": "schcCUEw1xwQIa_NqHC5-209"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-211",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-62",
+          "target": "schcCUEw1xwQIa_NqHC5-208"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-212",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-14",
+          "target": "schcCUEw1xwQIa_NqHC5-70"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-213",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-117",
+          "target": "schcCUEw1xwQIa_NqHC5-121"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-214",
+          "type": "node",
+          "parent": "1",
+          "label": "Categorias:\nYogur, Mermelada, Kefir, Dulce solido, Postre, Dulce de Leche",
+          "html": "<div><br></div>Categorias:<br>Yogur, Mermelada, Kefir,&nbsp;<span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">Dulce solido,&nbsp;</span><span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">Postre,&nbsp;</span><span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">Dulce de Leche</span><div><br></div>"
+        },
+        {
+          "id": "schcCUEw1xwQIa_NqHC5-215",
+          "type": "edge",
+          "parent": "1",
+          "source": "schcCUEw1xwQIa_NqHC5-94",
+          "target": "schcCUEw1xwQIa_NqHC5-214"
+        }
+      ]
+    },
+    {
+      "id": "HOeKrp9l7cFCYdPrLv2V",
+      "name": "Diagrama de CU",
+      "cells": [
+        {
+          "id": "1",
+          "type": "layer"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-1",
+          "type": "node",
+          "parent": "1",
+          "label": "Administrador"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-2",
+          "type": "node",
+          "parent": "1",
+          "label": "Responsable de Entrega"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-3",
+          "type": "node",
+          "parent": "1",
+          "label": "Responsable de Pedido"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-4",
+          "type": "node",
+          "parent": "1",
+          "label": "Usuario"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-5",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-2",
+          "target": "Jm87VjNXcYGhV3P-PXHy-4"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-6",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-4"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-7",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-4"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-8",
+          "type": "node",
+          "parent": "1",
+          "label": "19. Iniciar Seción"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-9",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-4",
+          "target": "Jm87VjNXcYGhV3P-PXHy-8"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-10",
+          "type": "node",
+          "parent": "1",
+          "label": "1. Registrar pedido",
+          "html": "<div>1. Registrar pedido</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-11",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-10"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-12",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-10",
+          "target": "Jm87VjNXcYGhV3P-PXHy-2"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-13",
+          "type": "node",
+          "parent": "1",
+          "label": "2. Cancelar pedido",
+          "html": "<div style=\"text-align: start;\">2. Cancelar pedido</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-14",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-13"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-15",
+          "type": "node",
+          "parent": "1",
+          "label": "3. Consultar pedidos",
+          "html": "<span id=\"docs-internal-guid-857d244c-7fff-5b65-71a6-2aa75b09a157\"><div style=\"text-align: start;\">3. Consultar pedidos</div></span>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-16",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-15"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-17",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-15",
+          "target": "Jm87VjNXcYGhV3P-PXHy-1"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-18",
+          "type": "node",
+          "parent": "1",
+          "label": "5. Registrar nuevo cliente",
+          "html": "<div style=\"text-align: start;\">5. Registrar nuevo cliente</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-19",
+          "type": "node",
+          "parent": "1",
+          "label": "4. Consultar clientes",
+          "html": "<span id=\"docs-internal-guid-857d244c-7fff-5b65-71a6-2aa75b09a157\"><div style=\"text-align: start;\"><div>4. Consultar clientes</div></div></span>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-20",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-19"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-21",
+          "type": "node",
+          "parent": "1",
+          "label": "6. Modificar cliente",
+          "html": "<span id=\"docs-internal-guid-96855c14-7fff-269c-e049-7fb6063d209a\"><span style=\"font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-variant: normal; vertical-align: baseline; white-space: pre-wrap;\">6. Modificar cliente</span></span>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-22",
+          "type": "node",
+          "parent": "1",
+          "label": "7. Registrar nuevo producto",
+          "html": "<font color=\"#212121\" face=\"Arial, sans-serif\"><span style=\"font-size: 14.6667px; white-space-collapse: preserve;\">7. Registrar nuevo producto</span></font>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-23",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-19",
+          "target": "Jm87VjNXcYGhV3P-PXHy-1"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-24",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-18"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-25",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-21"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-26",
+          "type": "node",
+          "parent": "1",
+          "label": "16. Registrar receta producto"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-27",
+          "type": "node",
+          "parent": "1",
+          "label": "20. Dar de baja cliente",
+          "html": "<div>20. Dar de baja cliente</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-28",
+          "type": "node",
+          "parent": "1",
+          "label": "17. Registrar insumos",
+          "html": "<div>17. Registrar insumos</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-29",
+          "type": "node",
+          "parent": "1",
+          "label": "14. Registrar observaciones pedido"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-30",
+          "type": "node",
+          "parent": "1",
+          "label": "18. Consultar insumos",
+          "html": "<div>18. Consultar insumos</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-31",
+          "type": "node",
+          "parent": "1",
+          "label": "21. Dar de baja empleado",
+          "html": "<div>21. Dar de baja empleado</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-32",
+          "type": "node",
+          "parent": "1",
+          "label": "15. Actualizar situación pedido",
+          "html": "<div>15. Actualizar situación pedido</div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-33",
+          "type": "node",
+          "parent": "1",
+          "label": "12. Registrar nuevo empleado"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-34",
+          "type": "node",
+          "parent": "1",
+          "label": "13. Consultar empleados"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-35",
+          "type": "node",
+          "parent": "1",
+          "label": "10. Consultar ubicación cliente en mapa",
+          "html": "<div><div>10. Consultar ubicación cliente en mapa</div></div>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-36",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-2",
+          "target": "Jm87VjNXcYGhV3P-PXHy-35"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-37",
+          "type": "node",
+          "parent": "1",
+          "label": "8. Modificar producto",
+          "html": "<span id=\"docs-internal-guid-96855c14-7fff-269c-e049-7fb6063d209a\"><span style=\"font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent; font-variant: normal; vertical-align: baseline; white-space: pre-wrap;\">8. Modificar producto</span></span>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-38",
+          "type": "node",
+          "parent": "1",
+          "label": "9. Consultar productos",
+          "html": "<font color=\"#212121\" face=\"Arial, sans-serif\"><span style=\"font-size: 14.6667px; white-space-collapse: preserve;\">9. Consultar productos</span></font>"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-39",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-37"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-40",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-22"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-41",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-38"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-42",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-38",
+          "target": "Jm87VjNXcYGhV3P-PXHy-3"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-43",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-33"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-44",
+          "type": "node",
+          "parent": "1",
+          "label": "11. Registrar situación de cobro pedido"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-45",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-34"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-46",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-2",
+          "target": "Jm87VjNXcYGhV3P-PXHy-44"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-47",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-44",
+          "target": "Jm87VjNXcYGhV3P-PXHy-3"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-48",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-2",
+          "target": "Jm87VjNXcYGhV3P-PXHy-29"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-49",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-29",
+          "target": "Jm87VjNXcYGhV3P-PXHy-3"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-50",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-32",
+          "target": "Jm87VjNXcYGhV3P-PXHy-3"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-51",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-2",
+          "target": "Jm87VjNXcYGhV3P-PXHy-32"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-52",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-26"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-53",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-28"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-54",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-30"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-55",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-1",
+          "target": "Jm87VjNXcYGhV3P-PXHy-31"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-56",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-3",
+          "target": "Jm87VjNXcYGhV3P-PXHy-27"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-57",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-27",
+          "target": "Jm87VjNXcYGhV3P-PXHy-1"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-58",
+          "type": "node",
+          "parent": "1",
+          "label": "Responsable de Entrega"
+        },
+        {
+          "id": "Jm87VjNXcYGhV3P-PXHy-59",
+          "type": "edge",
+          "parent": "1",
+          "source": "Jm87VjNXcYGhV3P-PXHy-35",
+          "target": "Jm87VjNXcYGhV3P-PXHy-58"
+        }
+      ]
+    },
+    {
+      "id": "SbLa4z0zcmUXBbSzsol_",
+      "name": "Maquina de Estados Pedido",
+      "cells": [
+        {
+          "id": "1",
+          "type": "layer"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-1",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-5",
+          "target": "sgkr34cGqDLSJj6kPVou-13"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-2",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-1",
+          "label": "comenzarPreparacion()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-3",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-5",
+          "target": "sgkr34cGqDLSJj6kPVou-15"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-4",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-3",
+          "label": "cancelar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-5",
+          "type": "node",
+          "parent": "1",
+          "label": "Aceptado"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-6",
+          "type": "node",
+          "parent": "1"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-7",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-6",
+          "target": "sgkr34cGqDLSJj6kPVou-5"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-8",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-7",
+          "label": "new()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-9",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-13",
+          "target": "sgkr34cGqDLSJj6kPVou-15"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-10",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-9",
+          "label": "cancelar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-11",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-13",
+          "target": "sgkr34cGqDLSJj6kPVou-24"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-12",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-11",
+          "label": "terminarPreparacion()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-13",
+          "type": "node",
+          "parent": "1",
+          "label": "EnPreparación"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-14",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-15",
+          "target": "sgkr34cGqDLSJj6kPVou-32"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-15",
+          "type": "node",
+          "parent": "1",
+          "label": "Cancelado"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-16",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-24",
+          "target": "sgkr34cGqDLSJj6kPVou-15"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-17",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-16",
+          "label": "cancelar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-18",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-24",
+          "target": "sgkr34cGqDLSJj6kPVou-26"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-19",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-18",
+          "label": "entregar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-20",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-24",
+          "target": "sgkr34cGqDLSJj6kPVou-29"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-21",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-20",
+          "label": "firmar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-22",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-24",
+          "target": "sgkr34cGqDLSJj6kPVou-31"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-23",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-22",
+          "label": "rechazar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-24",
+          "type": "node",
+          "parent": "1",
+          "label": "ListoParaEntrega"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-25",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-26",
+          "target": "sgkr34cGqDLSJj6kPVou-32"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-26",
+          "type": "node",
+          "parent": "1",
+          "label": "Cobrado"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-27",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-29",
+          "target": "sgkr34cGqDLSJj6kPVou-26"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-28",
+          "type": "node",
+          "parent": "sgkr34cGqDLSJj6kPVou-27",
+          "label": "cobrar()"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-29",
+          "type": "node",
+          "parent": "1",
+          "label": "Firmado",
+          "html": "<div>Firmado</div>"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-30",
+          "type": "edge",
+          "parent": "1",
+          "source": "sgkr34cGqDLSJj6kPVou-31",
+          "target": "sgkr34cGqDLSJj6kPVou-32"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-31",
+          "type": "node",
+          "parent": "1",
+          "label": "Rechazado"
+        },
+        {
+          "id": "sgkr34cGqDLSJj6kPVou-32",
+          "type": "node",
+          "parent": "1"
+        }
+      ]
+    }
+  ]
+}

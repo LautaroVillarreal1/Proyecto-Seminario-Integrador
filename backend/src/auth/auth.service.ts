@@ -7,11 +7,13 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
+  /** Recibe el repositorio de usuarios y el servicio para firmar tokens. */
   constructor(
     @Inject(USER_REPOSITORY) private readonly users: UserRepository,
     private readonly jwt: JwtService,
   ) {}
 
+  /** Verifica las credenciales y genera un token JWT para el usuario activo. */
   async login(dto: LoginDto) {
     const user = await this.users.findByEmail(dto.correoElectronico);
     if (!user || !user.activo || !(await bcrypt.compare(dto.password, user.passwordHash))) {
@@ -22,8 +24,10 @@ export class AuthService {
     return { accessToken: await this.jwt.signAsync(payload), user: this.publicUser(user) };
   }
 
+  /** Quita el hash de contraseña antes de devolver los datos públicos del usuario. */
   private publicUser(user: { passwordHash: string; [key: string]: unknown }) {
-    const { passwordHash: _passwordHash, ...safeUser } = user;
+    const safeUser = { ...user };
+    Reflect.deleteProperty(safeUser, 'passwordHash');
     return safeUser;
   }
 }

@@ -3,6 +3,9 @@ import { PrismaService } from '../shared/infrastructure/prisma/prisma.service';
 import { RealtimeService } from '../realtime/realtime.service';
 import { RemitosService } from './remitos.service';
 
+const partialMatch = (value: Record<string, unknown>): Record<string, unknown> =>
+  expect.objectContaining(value) as Record<string, unknown>;
+
 describe('RemitosService', () => {
   const transaction = {
     producto: {
@@ -48,8 +51,8 @@ describe('RemitosService', () => {
 
   it('persists the discount amount and rejects discounts above the subtotal', async () => {
     await service.create(createDto(350), 2);
-    expect(transaction.remito.create).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ descuento: 350 }),
+    expect(transaction.remito.create).toHaveBeenCalledWith(partialMatch({
+      data: partialMatch({ descuento: 350 }),
     }));
 
     await expect(service.create(createDto(1401), 2)).rejects.toThrow(BadRequestException);
@@ -62,8 +65,8 @@ describe('RemitosService', () => {
 
     const created = await service.create(dto, 2);
 
-    expect(transaction.remito.create).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ idEstado: 4, observacion: 'Falta:\n3 Granola' }),
+    expect(transaction.remito.create).toHaveBeenCalledWith(partialMatch({
+      data: partialMatch({ idEstado: 4, observacion: 'Falta:\n3 Granola' }),
     }));
     expect(created.faltantes).toEqual([{ idProducto: 1, nombre: 'Granola', cantidad: 3 }]);
     expect(transaction.producto.update).not.toHaveBeenCalled();

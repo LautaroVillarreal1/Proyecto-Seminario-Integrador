@@ -4,8 +4,10 @@ import { CreateRecipeDto } from './dto';
 
 @Injectable()
 export class RecipesService {
+  /** Recibe el cliente Prisma para consultar y modificar recetas. */
   constructor(private readonly prisma: PrismaService) {}
 
+  /** Convierte errores comunes de Prisma en excepciones HTTP comprensibles. */
   private async translateDatabaseError<T>(operation: () => Promise<T>): Promise<T> {
     try {
       return await operation();
@@ -18,8 +20,10 @@ export class RecipesService {
     }
   }
 
+  /** Lista recetas con sus ingredientes y productos asociados. */
   list() { return this.prisma.receta.findMany({ include: { detalles: { include: { insumo: { include: { unidadDeMedida: true } } } }, productos: true }, orderBy: { idReceta: 'desc' } }); }
 
+  /** Crea una receta con sus detalles y opcionalmente la vincula a un producto. */
   async create(dto: CreateRecipeDto) {
     const details = dto.detalles ?? [];
     const recipe = await this.translateDatabaseError(() => this.prisma.receta.create({
@@ -44,6 +48,7 @@ export class RecipesService {
     return recipe;
   }
 
+  /** Actualiza una receta existente y reemplaza sus ingredientes si se enviaron nuevos. */
   async update(id: number, dto: Partial<CreateRecipeDto>) {
     const recipe = await this.prisma.receta.findUnique({ where: { idReceta: id } });
     if (!recipe) throw new NotFoundException('Receta inexistente');
@@ -72,6 +77,7 @@ export class RecipesService {
     return updated;
   }
 
+  /** Calcula los lotes posibles según el ingrediente con menor disponibilidad relativa. */
   async capacity(id: number) {
     const recipe = await this.prisma.receta.findUnique({ where: { idReceta: id }, include: { detalles: { include: { insumo: true } } } });
     if (!recipe) throw new NotFoundException('Receta inexistente');

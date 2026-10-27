@@ -6,12 +6,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
+  /** Recibe el repositorio que persiste y consulta usuarios. */
   constructor(@Inject(USER_REPOSITORY) private readonly users: UserRepository) {}
 
+  /** Obtiene todos los usuarios sin exponer sus hashes de contraseña. */
   list() {
     return this.users.findAll();
   }
 
+  /** Verifica que el correo no exista, cifra la contraseña y crea el usuario. */
   async create(dto: CreateUserDto) {
     if (await this.users.findByEmail(dto.correoElectronico)) {
       throw new ConflictException('El correo ya esta registrado');

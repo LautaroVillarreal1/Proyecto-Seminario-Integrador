@@ -8,6 +8,9 @@ import { ReportsService } from './reports.service';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(1, 2)
 export class ReportsController {
+  /** Recibe el servicio que calcula los datos estadísticos de los informes. */
   constructor(private readonly reports: ReportsService) {}
+
+  /** Devuelve el resumen de remitos dentro del rango de fechas opcional. */
   @Get('resumen') summary(@Query('desde') desde?: string, @Query('hasta') hasta?: string) { return this.reports.summary(desde, hasta); }
 }

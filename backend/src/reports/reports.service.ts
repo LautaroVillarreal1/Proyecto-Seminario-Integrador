@@ -3,8 +3,10 @@ import { PrismaService } from '../shared/infrastructure/prisma/prisma.service';
 
 @Injectable()
 export class ReportsService {
+  /** Recibe Prisma para consultar los remitos incluidos en el informe. */
   constructor(private readonly prisma: PrismaService) {}
 
+  /** Resume cantidades y totales por estado, además de contar los remitos entregados. */
   async summary(desde?: string, hasta?: string) {
     const remitos = await this.prisma.remito.findMany({
       where: {
